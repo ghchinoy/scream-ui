@@ -144,40 +144,20 @@ export class SuiLiveWaveform extends LitElement {
         const endFreq = Math.floor(frequencies.length * 0.3); // End around 8kHz
         const relevantData = frequencies.slice(startFreq, endFreq);
 
-        const halfCount = Math.floor(barCount / 2);
-        const newBars: number[] = [];
+        const centerIndex = Math.floor(barCount / 2);
+        const newBars = new Array(barCount).fill(0.05);
 
-        // Helper to get average energy in a bin range
-        const getAverageEnergy = (startIndex: number, endIndex: number) => {
-          let sum = 0;
-          const start = Math.max(0, Math.floor(startIndex));
-          const end = Math.min(relevantData.length, Math.max(start + 1, Math.ceil(endIndex)));
-          for (let i = start; i < end; i++) {
-            sum += relevantData[i] || 0;
-          }
-          return sum / (end - start);
-        };
-
-        // Left side (mirrored)
-        for (let i = halfCount - 1; i >= 0; i--) {
-          const startIndex = (i / halfCount) * relevantData.length;
-          const endIndex = ((i + 1) / halfCount) * relevantData.length;
-          const val = getAverageEnergy(startIndex, endIndex);
-          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
-        }
-
-        // If barCount is odd, add the center bar
-        if (barCount % 2 !== 0) {
-          const val = getAverageEnergy(0, relevantData.length / halfCount);
-          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
-        }
-
-        // Right side
-        for (let i = 0; i < halfCount; i++) {
-          const startIndex = (i / halfCount) * relevantData.length;
-          const endIndex = ((i + 1) / halfCount) * relevantData.length;
-          const val = getAverageEnergy(startIndex, endIndex);
-          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
+        for (let i = 0; i <= centerIndex; i++) {
+          const freqIndex = Math.floor((i / centerIndex) * relevantData.length);
+          const val = relevantData[freqIndex] || 0;
+          const scaledVal = Math.max(0.05, Math.min(1, val * this.sensitivity));
+          
+          // Mirror from center outward
+          const rightBar = centerIndex + i;
+          const leftBar = centerIndex - i;
+          
+          if (rightBar < barCount) newBars[rightBar] = scaledVal;
+          if (leftBar >= 0) newBars[leftBar] = scaledVal;
         }
 
         this._currentBars = newBars;
@@ -189,12 +169,11 @@ export class SuiLiveWaveform extends LitElement {
       this._processingTime += 0.03;
       this._transitionProgress = Math.min(1, this._transitionProgress + 0.02);
 
-      const processingData = [];
-      const halfCount = Math.floor(barCount / 2);
+      const processingData = new Array(barCount).fill(0.05);
+      const centerIndex = Math.floor(barCount / 2);
 
       for (let i = 0; i < barCount; i++) {
-        // Create a sine wave animation effect based on the position
-        const normalizedPosition = (i - halfCount) / halfCount;
+        const normalizedPosition = (i - centerIndex) / (centerIndex || 1);
         const centerWeight = 1 - Math.abs(normalizedPosition) * 0.4;
 
         const wave1 = Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
@@ -203,7 +182,6 @@ export class SuiLiveWaveform extends LitElement {
         const combinedWave = wave1 + wave2 + wave3;
         const processingValue = (0.2 + combinedWave) * centerWeight;
 
-        // Smoothly blend from the last active frame into the processing sine wave
         let finalValue = processingValue;
         if (this._lastActiveData.length > 0 && this._transitionProgress < 1) {
           const lastDataIndex = Math.min(i, this._lastActiveData.length - 1);
@@ -211,7 +189,7 @@ export class SuiLiveWaveform extends LitElement {
           finalValue = lastValue * (1 - this._transitionProgress) + processingValue * this._transitionProgress;
         }
 
-        processingData.push(Math.max(0.05, Math.min(1, finalValue)));
+        processingData[i] = Math.max(0.05, Math.min(1, finalValue));
       }
       this._currentBars = processingData;
     }
@@ -267,8 +245,8 @@ export class SuiLiveWaveform extends LitElement {
       }
     }
 
-    if (this.fadeEdges) {
-      applyCanvasEdgeFade(ctx, rect.width, rect.height, this.fadeWidth);
+    if (false && this.fadeEdges) {
+      applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth);
     }
     ctx.globalAlpha = 1;
   }
