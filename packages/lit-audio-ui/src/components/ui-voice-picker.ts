@@ -32,10 +32,7 @@ export interface VoiceLabel {
 }
 
 export interface VoiceItem {
-  voiceId: string;
-  name: string;
-  previewUrl?: string;
-  labels?: VoiceLabel;
+  [key: string]: any; // Allow any extra keys
 }
 
 /**
@@ -44,9 +41,15 @@ export interface VoiceItem {
  */
 @customElement('ui-voice-picker')
 export class UiVoicePicker extends LitElement {
-  @property({type: Array}) voices: VoiceItem[] = [];
+  @property({type: Array}) voices: any[] = []; // Changed to any[] to accept generic data
   @property({type: String}) value?: string;
   @property({type: String}) placeholder = 'Select a voice...';
+  
+  // Data mapping keys for generic objects
+  @property({type: String}) idKey = 'voiceId';
+  @property({type: String}) titleKey = 'name';
+  @property({type: String}) subtitleKey = 'category';
+  @property({type: String}) previewUrlKey = 'previewUrl';
 
   @state() private _searchQuery = '';
 
@@ -223,7 +226,7 @@ export class UiVoicePicker extends LitElement {
 
       const q = this._searchQuery.toLowerCase();
       return (
-        voice.name.toLowerCase().includes(q) ||
+        voice[this.titleKey].toLowerCase().includes(q) ||
         voice.labels?.accent?.toLowerCase().includes(q) ||
         voice.labels?.gender?.toLowerCase().includes(q) ||
         voice.labels?.age?.toLowerCase().includes(q)
@@ -292,8 +295,8 @@ export class UiVoicePicker extends LitElement {
           : filteredVoices.map(
               voice => html`
                 <md-menu-item
-                  @click=${() => this._selectVoice(voice.voiceId)}
-                  ?selected=${this.value === voice.voiceId}
+                  @click=${() => this._selectVoice(voice[this.idKey])}
+                  ?selected=${this.value === voice[this.idKey]}
                 >
                   <div slot="headline" class="voice-item-content">
                     <!-- Avatar / Preview Button -->
@@ -302,16 +305,16 @@ export class UiVoicePicker extends LitElement {
                       @click=${(e: Event) => this._togglePreview(e, voice)}
                     >
                       <md-icon style="font-size: 18px;">face</md-icon>
-                      ${voice.previewUrl
+                      ${voice[this.previewUrlKey]
                         ? html`
                             <div
                               class="play-overlay ${this._previewingVoiceId ===
-                              voice.voiceId
+                              voice[this.idKey]
                                 ? 'active'
                                 : ''}"
                             >
                               <md-icon style="font-size: 16px;">
-                                ${this._previewingVoiceId === voice.voiceId
+                                ${this._previewingVoiceId === voice[this.idKey]
                                   ? 'pause'
                                   : 'play_arrow'}
                               </md-icon>
@@ -322,32 +325,27 @@ export class UiVoicePicker extends LitElement {
 
                     <!-- Voice Info -->
                     <div class="voice-info">
-                      <span class="voice-name">${voice.name}</span>
-                      ${voice.labels
+                      <span class="voice-name">${voice[this.titleKey]}</span>
+                      ${voice[this.subtitleKey] || voice.labels
                         ? html`
                             <div class="voice-labels">
-                              ${voice.labels.accent
-                                ? html`<span>${voice.labels.accent}</span>`
-                                : ''}
-                              ${voice.labels.gender
-                                ? html`<span class="label-dot">•</span>
-                                    <span style="text-transform: capitalize"
-                                      >${voice.labels.gender}</span
-                                    >`
-                                : ''}
-                              ${voice.labels.age
-                                ? html`<span class="label-dot">•</span>
-                                    <span style="text-transform: capitalize"
-                                      >${voice.labels.age}</span
-                                    >`
-                                : ''}
+                              ${voice[this.subtitleKey] 
+                                  ? html`<span class="voice-badge">${voice[this.subtitleKey]}</span>`
+                                  : Object.values(voice.labels || {})
+                                  .filter(Boolean)
+                                  .map(
+                                    label =>
+                                      html`<span class="voice-badge"
+                                        >${label}</span
+                                      >`
+                                  )}
                             </div>
                           `
                         : ''}
                     </div>
                   </div>
 
-                  ${this.value === voice.voiceId
+                  ${this.value === voice[this.idKey]
                     ? html`<md-icon slot="end">check</md-icon>`
                     : ''}
                 </md-menu-item>
@@ -384,14 +382,14 @@ export class UiVoicePicker extends LitElement {
     e.stopPropagation();
     e.preventDefault();
 
-    if (!voice.previewUrl || !this._audioEl) return;
+    if (!voice[this.previewUrlKey] || !this._audioEl) return;
 
-    if (this._previewingVoiceId === voice.voiceId) {
+    if (this._previewingVoiceId === voice[this.idKey]) {
       this._stopPreview();
     } else {
-      this._audioEl.src = voice.previewUrl;
+      this._audioEl.src = voice[this.previewUrlKey];
       this._audioEl.play().catch(console.error);
-      this._previewingVoiceId = voice.voiceId;
+      this._previewingVoiceId = voice[this.idKey];
     }
   }
 
