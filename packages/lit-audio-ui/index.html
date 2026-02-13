@@ -168,11 +168,11 @@
         
         <!-- Theme Color Picker -->
         <div id="color-picker" style="display: flex; gap: 0.5rem; align-items: center; padding-right: 1rem; border-right: 1px solid var(--md-sys-color-outline-variant);">
-          <button class="color-swatch" data-primary="#0066cc" data-onprimary="#ffffff" style="background: #0066cc; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--md-sys-color-on-surface); cursor: pointer;" title="Blue"></button>
-          <button class="color-swatch" data-primary="#6750a4" data-onprimary="#ffffff" style="background: #6750a4; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Purple"></button>
-          <button class="color-swatch" data-primary="#386a20" data-onprimary="#ffffff" style="background: #386a20; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Green"></button>
-          <button class="color-swatch" data-primary="#b3261e" data-onprimary="#ffffff" style="background: #b3261e; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Red"></button>
-          <button class="color-swatch" data-primary="#fbbc04" data-onprimary="#1e1e1e" style="background: #fbbc04; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Yellow"></button>
+          <button class="color-swatch" data-primary="#0066cc" data-secondary="#A0B9D1" data-onprimary="#ffffff" style="background: #0066cc; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--md-sys-color-on-surface); cursor: pointer;" title="Blue"></button>
+          <button class="color-swatch" data-primary="#6750a4" data-secondary="#d0bcff" data-onprimary="#ffffff" style="background: #6750a4; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Purple"></button>
+          <button class="color-swatch" data-primary="#386a20" data-secondary="#b6f297" data-onprimary="#ffffff" style="background: #386a20; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Green"></button>
+          <button class="color-swatch" data-primary="#b3261e" data-secondary="#ffb4ab" data-onprimary="#ffffff" style="background: #b3261e; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Red"></button>
+          <button class="color-swatch" data-primary="#fbbc04" data-secondary="#fde293" data-onprimary="#1e1e1e" style="background: #fbbc04; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Yellow"></button>
         </div>
 
         <a href="https://github.com/ghchinoy/scream-ui" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;">
@@ -535,6 +535,8 @@
   titleKey="displayName"
   subtitleKey="trait"
   previewUrlKey="sampleAudio"
+  useOrbs="true"
+  colorKey="orbColor"
   @voice-change="${handleSelection}"&gt;
 &lt;/ui-voice-picker&gt;</div>
       </ui-showcase-card>
@@ -852,30 +854,42 @@
         voicePicker.previewUrlKey = "sampleAudio";
 
         // Demonstrating the new Generic Data Mapping feature!
+        voicePicker.idKey = "customId";
+        voicePicker.titleKey = "displayName";
+        voicePicker.subtitleKey = "trait";
+        voicePicker.previewUrlKey = "sampleAudio";
+        voicePicker.useOrbs = true;
+        voicePicker.colorKey = "orbColor";
+
+        // Demonstrating the new Generic Data Mapping feature with Orbs!
         voicePicker.voices = [
           {
             customId: "v1",
             displayName: "Aoede",
             sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav",
-            trait: "American • Female"
+            trait: "American • Female",
+            orbColor: ["#F28B82", "#E57373"] // Red
           },
           {
             customId: "v2",
             displayName: "Zephyr",
             sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav",
-            trait: "British • Female"
+            trait: "British • Female",
+            orbColor: ["#81C995", "#66BB6A"] // Green
           },
           {
             customId: "v3",
             displayName: "Lyria Lo-Fi Beat",
             sampleAudio: "https://storage.googleapis.com/scream-ui-samples/music_sample.wav",
-            trait: "Upbeat lo-fi hip hop"
+            trait: "Upbeat lo-fi hip hop",
+            orbColor: ["#FDE293", "#FFF176"] // Yellow
           },
           {
             customId: "v4",
             displayName: "Orus",
             sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav",
-            trait: "Australian • Male"
+            trait: "Australian • Male",
+            orbColor: ["#AECBFA", "#64B5F6"] // Blue
           }
         ];
         
@@ -991,8 +1005,8 @@
           swatch.addEventListener('click', (e) => {
              const primary = e.target.dataset.primary;
              // Lighten the primary color to create a secondary color for the gradient
-             const lighter = primary + '88'; 
-             if(orb) orb.colors = [primary, lighter];
+             const secondary = e.target.dataset.secondary;
+             if(orb) orb.colors = [primary, secondary];
           });
         });
 

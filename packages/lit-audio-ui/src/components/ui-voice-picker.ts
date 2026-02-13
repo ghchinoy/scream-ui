@@ -51,6 +51,10 @@ export class UiVoicePicker extends LitElement {
   @property({type: String}) subtitleKey = 'category';
   @property({type: String}) previewUrlKey = 'previewUrl';
 
+  // Orb Avatar Config
+  @property({type: Boolean}) useOrbs = false;
+  @property({type: String}) colorKey = 'colors';
+
   @state() private _searchQuery = '';
 
   // Track which voice is currently previewing
@@ -66,9 +70,31 @@ export class UiVoicePicker extends LitElement {
       font-family: inherit;
     }
 
-    md-outlined-button {
+    .anchor-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       width: 100%;
-      --md-outlined-button-container-shape: 8px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--md-sys-color-outline, #79747e);
+      border-radius: 8px;
+      color: var(--md-sys-color-on-surface, #1e1e1e);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      min-height: 48px;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    
+    .anchor-button:hover {
+      background: var(--md-sys-color-surface-container-highest, #e3e3e3);
+    }
+    
+    .anchor-button:focus-visible {
+      outline: none;
+      border-color: var(--md-sys-color-primary, #0066cc);
+      box-shadow: 0 0 0 1px var(--md-sys-color-primary, #0066cc);
     }
 
     .trigger-content {
@@ -76,6 +102,7 @@ export class UiVoicePicker extends LitElement {
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      min-width: 100%;
       padding: 4px 0;
     }
 
@@ -218,7 +245,7 @@ export class UiVoicePicker extends LitElement {
   `;
 
   render() {
-    const selectedVoice = this.voices.find(v => v.voiceId === this.value);
+    const selectedVoice = this.voices.find(v => v[this.idKey] === this.value);
 
     // Filter voices based on search query
     const filteredVoices = this.voices.filter(voice => {
@@ -242,17 +269,17 @@ export class UiVoicePicker extends LitElement {
       ></audio>
 
       <!-- Anchor Button -->
-      <md-outlined-button id="voice-anchor" @click=${this._toggleMenu}>
+      <button class="anchor-button" part="button" id="voice-anchor" @click=${this._toggleMenu}>
         <div class="trigger-content">
           <div class="trigger-left">
             ${selectedVoice
               ? html`
-                  <div class="trigger-icon">
-                    <md-icon style="font-size: 16px;"
-                      >record_voice_over</md-icon
-                    >
+                  <div class="trigger-icon" style="${this.useOrbs ? 'overflow: hidden;' : ''}">
+                    ${this.useOrbs 
+                      ? html`<ui-orb agentState="listening" .colors="${selectedVoice[this.colorKey] || ['#CADCFC', '#A0B9D1']}"></ui-orb>`
+                      : html`<md-icon style="font-size: 16px;">record_voice_over</md-icon>`}
                   </div>
-                  <span class="trigger-text">${selectedVoice.name}</span>
+                  <span class="trigger-text">${selectedVoice[this.titleKey] || selectedVoice.name}</span>
                 `
               : html`
                   <span
@@ -266,7 +293,7 @@ export class UiVoicePicker extends LitElement {
             >unfold_more</md-icon
           >
         </div>
-      </md-outlined-button>
+      </button>
 
       <!-- Dropdown Menu -->
       <md-menu
@@ -304,7 +331,9 @@ export class UiVoicePicker extends LitElement {
                       class="voice-avatar"
                       @click=${(e: Event) => this._togglePreview(e, voice)}
                     >
-                      <md-icon style="font-size: 18px;">face</md-icon>
+                      ${this.useOrbs 
+                         ? html`<ui-orb agentState="${this._previewingVoiceId === voice[this.idKey] ? 'talking' : 'listening'}" .colors="${voice[this.colorKey] || ['#CADCFC', '#A0B9D1']}"></ui-orb>`
+                         : html`<md-icon style="font-size: 18px;">face</md-icon>`}
                       ${voice[this.previewUrlKey]
                         ? html`
                             <div
