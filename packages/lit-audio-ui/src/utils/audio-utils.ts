@@ -116,12 +116,12 @@ export function applyCanvasEdgeFade(
   const gradient = ctx.createLinearGradient(0, 0, width, 0);
   const fadePercent = Math.min(0.2, fadeWidth / width);
 
-  gradient.addColorStop(0, 'rgba(255,255,255,1)');
-  gradient.addColorStop(fadePercent, 'rgba(255,255,255,0)');
-  gradient.addColorStop(1 - fadePercent, 'rgba(255,255,255,0)');
-  gradient.addColorStop(1, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(fadePercent, 'rgba(0,0,0,1)');
+  gradient.addColorStop(1 - fadePercent, 'rgba(0,0,0,1)');
+  gradient.addColorStop(1, 'rgba(0,0,0,0)');
 
-  ctx.globalCompositeOperation = 'destination-out';
+  ctx.globalCompositeOperation = 'destination-in';
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
   ctx.globalCompositeOperation = 'source-over';
