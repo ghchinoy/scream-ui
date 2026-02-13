@@ -210,7 +210,7 @@ export class UiScrollingWaveform extends LitElement {
         if (bar.x < rect.width && bar.x + this.barWidth > 0) {
           const barHeight = Math.max(
             this.barHeight,
-            bar.height * rect.height * 0.6,
+            bar.height * rect.height * 0.8,
           );
           const y = centerY - barHeight / 2;
 

@@ -131,7 +131,8 @@ export class UiAudioPlayer extends LitElement {
 
   render() {
     return html`
-      <audio crossorigin="anonymous"
+      <audio
+        crossorigin="anonymous"
         src="${this.item?.src || ''}"
         preload="metadata"
         @loadedmetadata="${this._handleLoadedMetadata}"
