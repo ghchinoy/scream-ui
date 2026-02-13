@@ -48,15 +48,39 @@ export class SuiAudioPlayer extends LitElement {
     }
 
     md-filled-icon-button {
-      --md-filled-icon-button-container-color: var(--md-sys-color-primary, #0066cc);
-      --md-filled-icon-button-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      --md-filled-icon-button-hover-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      --md-filled-icon-button-focus-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      --md-filled-icon-button-pressed-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      
-      --md-filled-icon-button-toggle-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      --md-filled-icon-button-selected-container-color: var(--md-sys-color-primary, #0066cc);
-      --md-filled-icon-button-selected-icon-color: var(--md-sys-color-on-primary, #ffffff);
+      --md-filled-icon-button-container-color: var(
+        --md-sys-color-primary,
+        #0066cc
+      );
+      --md-filled-icon-button-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-hover-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-focus-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-pressed-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+
+      --md-filled-icon-button-toggle-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-selected-container-color: var(
+        --md-sys-color-primary,
+        #0066cc
+      );
+      --md-filled-icon-button-selected-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
       color: var(--md-sys-color-on-primary, #ffffff);
     }
 
