@@ -51,6 +51,12 @@ export class UiShimmeringText extends LitElement {
       );
       
       background-image: var(--shimmer-bg), linear-gradient(var(--base-color), var(--base-color));
+      background-size: 250% 100%, auto; /* Important: this defines the size of the animated gradient */
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-repeat: no-repeat, padding-box;
       background-position: 100% center;
       opacity: 0;
       transition: opacity 0.3s ease;
@@ -59,13 +65,11 @@ export class UiShimmeringText extends LitElement {
     /* When active, trigger the keyframe animation */
     span.active {
       opacity: 1;
-      /* Animation properties are dynamically injected via inline styles 
-         to support the custom duration, delay, and repeat logic */
     }
 
     @keyframes shimmer {
-      from { background-position: 100% center; }
-      to { background-position: 0% center; }
+      0% { background-position: 100% center; }
+      100% { background-position: 0% center; }
     }
   `;
 

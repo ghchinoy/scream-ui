@@ -72,7 +72,23 @@
         transition: background-color 0.3s, color 0.3s;
       }
       
-            .component-card {
+      
+      .side-nav {
+        display: none;
+        width: 200px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 7rem;
+        height: fit-content;
+        border-right: 1px solid var(--md-sys-color-outline-variant);
+        padding-right: 1rem;
+      }
+      @media(min-width: 1000px) {
+        .side-nav {
+          display: block;
+        }
+      }
+      .component-card {
         background: var(--md-sys-color-surface);
         color: var(--md-sys-color-on-surface);
         border-radius: 12px;
@@ -166,9 +182,16 @@
       </div>
     </nav>
 
-    <div class="demo-container">
+    <div class="demo-container" style="display: flex; gap: 2rem; max-width: 1200px; margin: 0 auto; align-items: flex-start;">
+      <aside class="side-nav">
+        <h3 style="margin-top: 0; font-size: 1rem; font-weight: 600; color: var(--md-sys-color-on-surface); margin-bottom: 1rem;">Components</h3>
+        <ul id="nav-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+          <!-- Dynamically populated -->
+        </ul>
+      </aside>
       
       <!-- Static Waveform Demo -->
+      <div class="main-content" style="flex: 1; max-width: 800px; display: flex; flex-direction: column; gap: 2rem;">
       <ui-showcase-card title="ui-waveform (Static Timeline)" description="A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.">
         <div class="control-panel" style="margin-bottom: 1rem;">
           <button id="btn-regenerate-static" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px;">
@@ -297,6 +320,7 @@
   @voice-button-click="${handleClick}"&gt;
 &lt;/ui-voice-button&gt;</div>
       </ui-showcase-card>
+      </div>
     </div>
     
     <!-- Polyfill for older browsers -->
@@ -356,6 +380,37 @@
         });
       });
 
+
+
+      // 0. Auto-generate Side Navigation
+      const navList = document.getElementById('nav-list');
+      const showcaseCards = document.querySelectorAll('ui-showcase-card');
+      
+      showcaseCards.forEach((card, index) => {
+        // Create an ID for the card if it doesn't have one
+        const anchorId = 'component-' + index;
+        card.id = anchorId;
+        card.style.scrollMarginTop = "7rem"; // Make sure sticky nav doesn't cover it
+        
+        const rawTitle = card.getAttribute('title');
+        // Extract just the "ui-xxx" part
+        const cleanTitle = rawTitle.split(' ')[0];
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + anchorId;
+        a.textContent = cleanTitle;
+        a.style.textDecoration = 'none';
+        a.style.color = 'var(--md-sys-color-on-surface-variant)';
+        a.style.fontSize = '0.9rem';
+        a.style.transition = 'color 0.2s';
+        
+        a.addEventListener('mouseover', () => a.style.color = 'var(--md-sys-color-primary)');
+        a.addEventListener('mouseout', () => a.style.color = 'var(--md-sys-color-on-surface-variant)');
+        
+        li.appendChild(a);
+        navList.appendChild(li);
+      });
 
       // 1. Setup Static Waveform
       document.addEventListener('DOMContentLoaded', () => {
