@@ -8,64 +8,99 @@
     <!-- Material Symbols for icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <style>
+      
       :root {
         font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-        color-scheme: light dark;
+        
+        /* Light Theme Tokens */
+        --md-sys-color-primary: #0066cc;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-surface: #ffffff;
+        --md-sys-color-on-surface: #1e1e1e;
+        --md-sys-color-surface-container-high: #e2e2e2;
+        --md-sys-color-surface-container-highest: #e3e3e3;
+        --md-sys-color-on-surface-variant: #444444;
+        --md-sys-color-outline-variant: #c4c7c5;
+        --md-sys-color-error: #ba1a1a;
+        --md-sys-color-on-error: #ffffff;
+        --md-sys-color-error-container: #ffdad6;
+        --md-sys-color-on-error-container: #410002;
+        --md-sys-color-secondary-container: #cce5ff;
+        --md-sys-color-on-secondary-container: #001d36;
+        --md-sys-color-primary-container: #d1e4ff;
+        --md-sys-color-on-primary-container: #001d36;
+        
+        --bg-color: #f5f5f5;
+        --text-color: #1e1e1e;
       }
+
+      html.dark {
+        /* Dark Theme Tokens */
+        --md-sys-color-primary: #a8c7fa;
+        --md-sys-color-on-primary: #003062;
+        --md-sys-color-surface: #1e1e1e;
+        --md-sys-color-on-surface: #e3e3e3;
+        --md-sys-color-surface-container-high: #2b2b2b;
+        --md-sys-color-surface-container-highest: #333333;
+        --md-sys-color-on-surface-variant: #c4c7c5;
+        --md-sys-color-outline-variant: #444746;
+        --md-sys-color-error: #ffb4ab;
+        --md-sys-color-on-error: #690005;
+        --md-sys-color-error-container: #93000a;
+        --md-sys-color-on-error-container: #ffdad6;
+        --md-sys-color-secondary-container: #004a7a;
+        --md-sys-color-on-secondary-container: #cce5ff;
+        --md-sys-color-primary-container: #004a7a;
+        --md-sys-color-on-primary-container: #d1e4ff;
+
+        --bg-color: #121212;
+        --text-color: #e3e3e3;
+      }
+
       body {
         margin: 0;
         padding: 2rem;
-        background-color: #f5f5f5;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
       }
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: #121212;
-          color: white;
-        }
-      }
-      .demo-container {
-        max-width: 800px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-      }
+      
       .component-card {
-        background: var(--md-sys-color-surface, #ffffff);
-        color: var(--md-sys-color-on-surface, #1e1e1e);
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
         border-radius: 12px;
         padding: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, color 0.3s;
       }
-      @media (prefers-color-scheme: dark) {
-        .component-card {
-          background: #1e1e1e;
-          color: white;
-        }
-      }
-      .component-title {
-        margin-top: 0;
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
-        font-weight: 600;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 0.5rem;
-      }
-      
-      .control-panel {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
-        align-items: center;
-      }
-      
+
       .waveform-container {
         margin-top: 1rem;
         padding: 1rem;
-        background: #f0f0f0;
+        background: var(--md-sys-color-surface-container-highest);
         border-radius: 8px;
-        height: 120px;
+        transition: background-color 0.3s;
       }
+      
+      .theme-toggle-btn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: inherit;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 100;
+      }
+
       
       @media (prefers-color-scheme: dark) {
         .waveform-container {
@@ -75,6 +110,7 @@
     </style>
   </head>
   <body>
+    <button id="theme-toggle" class="theme-toggle-btn"><span class="material-symbols-outlined">dark_mode</span> Toggle Theme</button>
     <div class="demo-container">
       <h1>Lit Audio UI Components</h1>
       <p>A pure Lit WebComponents library for audio visualization and control.</p>
@@ -138,6 +174,26 @@
     <script type="module" src="/src/index.ts"></script>
     
     <script>
+
+      // Theme Toggle Logic
+      const themeToggle = document.getElementById('theme-toggle');
+      const htmlEl = document.documentElement;
+      
+      // Check system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlEl.classList.add('dark');
+        themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span> Light Mode';
+      }
+      
+      themeToggle.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        if (htmlEl.classList.contains('dark')) {
+          themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span> Light Mode';
+        } else {
+          themeToggle.innerHTML = '<span class="material-symbols-outlined">dark_mode</span> Dark Mode';
+        }
+      });
+
       // 1. Setup Static Waveform
       document.addEventListener('DOMContentLoaded', () => {
         const staticWaveform = document.getElementById('demo-static-waveform');
