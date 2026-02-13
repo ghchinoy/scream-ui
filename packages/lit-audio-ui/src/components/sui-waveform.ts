@@ -1,18 +1,18 @@
-import { LitElement, html, css, type PropertyValues } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { applyCanvasEdgeFade } from '../utils/audio-utils';
+import {LitElement, html, css, type PropertyValues} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
+import {applyCanvasEdgeFade} from '../utils/audio-utils';
 
 @customElement('sui-waveform')
 export class SuiWaveform extends LitElement {
-  @property({ type: Array }) data: number[] = [];
-  @property({ type: Number }) barWidth: number = 4;
-  @property({ type: Number }) barHeight: number = 4;
-  @property({ type: Number }) barGap: number = 2;
-  @property({ type: Number }) barRadius: number = 2;
-  @property({ type: String }) barColor?: string;
-  @property({ type: Boolean }) fadeEdges: boolean = true;
-  @property({ type: Number }) fadeWidth: number = 24;
-  @property({ type: Number }) height: number = 128;
+  @property({type: Array}) data: number[] = [];
+  @property({type: Number}) barWidth: number = 4;
+  @property({type: Number}) barHeight: number = 4;
+  @property({type: Number}) barGap: number = 2;
+  @property({type: Number}) barRadius: number = 2;
+  @property({type: String}) barColor?: string;
+  @property({type: Boolean}) fadeEdges: boolean = true;
+  @property({type: Number}) fadeWidth: number = 24;
+  @property({type: Number}) height: number = 128;
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
   @query('.container') private _container!: HTMLDivElement;
@@ -69,7 +69,7 @@ export class SuiWaveform extends LitElement {
 
   private _handleResize() {
     if (!this._canvas || !this._container) return;
-    
+
     const rect = this._container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 

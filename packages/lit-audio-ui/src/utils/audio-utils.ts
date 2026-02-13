@@ -25,13 +25,13 @@ export interface AudioAnalyserResult {
  */
 export function createAudioAnalyser(
   mediaStream: MediaStream,
-  options: AudioAnalyserOptions = {}
+  options: AudioAnalyserOptions = {},
 ): AudioAnalyserResult {
   // Use standard AudioContext with webkit fallback
   const AudioContextClass =
     window.AudioContext ||
     ((window as any).webkitAudioContext as typeof AudioContext);
-  
+
   const audioContext = new AudioContextClass();
   const source = audioContext.createMediaStreamSource(mediaStream);
   const analyser = audioContext.createAnalyser();
@@ -58,7 +58,7 @@ export function createAudioAnalyser(
     }
   };
 
-  return { analyser, audioContext, cleanup };
+  return {analyser, audioContext, cleanup};
 }
 
 /**
@@ -70,7 +70,7 @@ export function createAudioAnalyser(
  */
 export function getNormalizedFrequencyData(
   analyser: AnalyserNode,
-  dataArray: Uint8Array<ArrayBuffer>
+  dataArray: Uint8Array,
 ): number[] {
   analyser.getByteFrequencyData(dataArray);
   const normalizedData: number[] = [];
@@ -89,7 +89,10 @@ export function getNormalizedFrequencyData(
  * @param modifier A multiplier to limit the random scale (e.g. 0.5)
  * @returns Array of random normalized numbers
  */
-export function generateRandomAudioData(count: number, modifier: number = 0.5): number[] {
+export function generateRandomAudioData(
+  count: number,
+  modifier: number = 0.5,
+): number[] {
   const data: number[] = [];
   for (let i = 0; i < count; i++) {
     data.push(Math.random() * modifier);
@@ -109,14 +112,14 @@ export function applyCanvasEdgeFade(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  fadeWidth: number
+  fadeWidth: number,
 ): void {
   if (fadeWidth <= 0 || width <= 0) return;
 
   const gradient = ctx.createLinearGradient(0, 0, width, 0);
   const fadePercent = Math.min(0.2, fadeWidth / width);
 
-    gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
   gradient.addColorStop(fadePercent, 'rgba(0,0,0,1)');
   gradient.addColorStop(1 - fadePercent, 'rgba(0,0,0,1)');
   gradient.addColorStop(1, 'rgba(0,0,0,0)');
