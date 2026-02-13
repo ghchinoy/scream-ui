@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/scream-ui/',
   build: {
     outDir: 'dist',
     lib: {

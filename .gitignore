@@ -102,3 +102,4 @@ test-*.js
 fix-*.js
 append_gemini.js
 packages/lit-audio-ui/scripts/testing/
+dist-demo
