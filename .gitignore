@@ -96,6 +96,7 @@ Thumbs.db
 # Ignore sources
 sources/
 drivectl-mcp.log
+plans/
 
 # Ignore our test scripts
 test-*.js
@@ -103,3 +104,4 @@ fix-*.js
 append_gemini.js
 packages/lit-audio-ui/scripts/testing/
 dist-demo
+
