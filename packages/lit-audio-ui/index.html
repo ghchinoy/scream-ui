@@ -196,6 +196,91 @@
       <div class="main-content" style="flex: 1; max-width: 800px; display: flex; flex-direction: column; gap: 2rem;">
       <div class="demo-section" data-title="Examples" style="display: flex; flex-direction: column; gap: 2rem;">
         <h2 style="margin-top: 0; margin-bottom: -1rem; border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 0.5rem;">Examples</h2>
+      <!-- Compound Speech Input Architecture Demo -->
+      <ui-showcase-card title="Compound Speech Input Architecture" description="A highly customized, compound recording widget. It uses the atomic ui-voice-button alongside custom layout logic to simulate a real-time transcription experience (similar to ElevenLabs SpeechInput).">
+        
+        <style>
+          .speech-input-card {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 24px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            max-width: 100%;
+          }
+          
+          .speech-input-card[state="recording"] {
+             border: 1px solid var(--md-sys-color-primary);
+             box-shadow: 0 4px 12px rgba(0,102,204,0.15);
+          }
+          
+          .speech-preview {
+            font-size: 14px;
+            color: var(--md-sys-color-on-surface-variant);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 0;
+            opacity: 0;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+          }
+          
+          .speech-input-card[state="recording"] .speech-preview,
+          .speech-input-card[state="processing"] .speech-preview {
+            width: 180px;
+            opacity: 1;
+          }
+          
+          .speech-cancel-btn {
+            background: transparent;
+            border: none;
+            color: var(--md-sys-color-on-surface-variant);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .speech-cancel-btn:hover {
+            background: var(--md-sys-color-surface-container-highest);
+          }
+          
+          .speech-input-card[state="recording"] .speech-cancel-btn {
+            display: flex;
+          }
+        </style>
+
+        <div class="speech-input-card" id="demo-speech-card" state="idle">
+          
+          <ui-voice-button id="demo-speech-btn" state="idle"></ui-voice-button>
+          
+          <div class="speech-preview">
+            <span id="demo-speech-text">Listening...</span>
+          </div>
+          
+          <button class="speech-cancel-btn" id="demo-speech-cancel" title="Cancel recording">
+            <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+          </button>
+          
+        </div>
+
+        <div slot="code">&lt;!-- HTML Layout --&gt;
+&lt;div class="speech-input-card" state="recording"&gt;
+  &lt;ui-voice-button state="recording"&gt;&lt;/ui-voice-button&gt;
+  &lt;div class="speech-preview"&gt;
+    &lt;span&gt;Transcribing...&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;button class="speech-cancel-btn"&gt;X&lt;/button&gt;
+&lt;/div&gt;</div>
+      </ui-showcase-card>
+
       <!-- Compound Audio Player Architecture Demo -->
       <ui-showcase-card title="Compound Audio Architecture" description="An audio player is a combination of atomic WebComponents powered by @lit/context, use HTML to construct an entirely custom layout that share the same underlying audio stream!">
         
@@ -751,6 +836,63 @@
            voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
         });
       });
+
+        // 7. Setup Compound Speech Input
+        const speechCard = document.getElementById('demo-speech-card');
+        const speechBtn = document.getElementById('demo-speech-btn');
+        const speechCancel = document.getElementById('demo-speech-cancel');
+        const speechText = document.getElementById('demo-speech-text');
+        
+        let transcriptInterval;
+        const fakeTranscript = ["I", " am", " recording", " a", " message", " right", " now..."];
+        
+        speechBtn.addEventListener('voice-button-click', () => {
+          const currentState = speechBtn.getAttribute('state');
+          
+          if (currentState === 'idle') {
+            // Start recording
+            speechBtn.setAttribute('state', 'recording');
+            speechCard.setAttribute('state', 'recording');
+            if (typeof analyser !== 'undefined') speechBtn.analyserNode = analyser;
+            
+            // Simulate live transcription
+            speechText.textContent = "Listening...";
+            let wordIndex = 0;
+            transcriptInterval = setInterval(() => {
+              if (wordIndex < fakeTranscript.length) {
+                if (wordIndex === 0) speechText.textContent = '';
+                speechText.textContent += fakeTranscript[wordIndex];
+                wordIndex++;
+              }
+            }, 400);
+            
+          } else if (currentState === 'recording') {
+            // Stop recording, start processing
+            clearInterval(transcriptInterval);
+            speechBtn.setAttribute('state', 'processing');
+            speechCard.setAttribute('state', 'processing');
+            speechBtn.analyserNode = undefined;
+            
+            // Simulate processing finishing
+            setTimeout(() => {
+              speechBtn.setAttribute('state', 'success');
+              speechCard.setAttribute('state', 'success');
+              setTimeout(() => {
+                 speechCard.setAttribute('state', 'idle');
+                 speechText.textContent = "Listening...";
+              }, 1500); // Wait for the button to auto-reset
+            }, 2000);
+          }
+        });
+        
+        speechCancel.addEventListener('click', () => {
+           clearInterval(transcriptInterval);
+           speechBtn.setAttribute('state', 'idle');
+           speechCard.setAttribute('state', 'idle');
+           speechBtn.analyserNode = undefined;
+           speechText.textContent = "Listening...";
+        });
+
     </script>
   </body>
 </html>
