@@ -65,7 +65,7 @@ export class UiAudioProvider extends LitElement {
     `;
   }
 
-  updated(changed: Map<string, any>) {
+  willUpdate(changed: Map<string, any>) {
     if (changed.has('src')) {
       this._updateState({ src: this.src, isPlaying: false, currentTime: 0, error: undefined });
       if (this._audioEl) {
