@@ -146,80 +146,117 @@
       <p>A pure Lit WebComponents library for audio visualization and control.</p>
       
       <!-- Static Waveform Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-waveform (Static Timeline)</h2>
-        <p>A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.</p>
-        
+      <ui-showcase-card title="ui-waveform (Static Timeline)" description="A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.">
         <div class="waveform-container" style="height: 64px;">
-          <ui-waveform id="demo-static-waveform" height="64"  fadeEdges="true"></ui-waveform>
+          <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
         </div>
-      </div>
+        <div slot="code">
+&lt;ui-waveform 
+  height="64"
+  fadeEdges="true"
+  .data="${myMockDataArray}"&gt;
+&lt;/ui-waveform&gt;</div>
+      </ui-showcase-card>
+
+      <!-- Scrolling Waveform Demo -->
+      <ui-showcase-card title="ui-scrolling-waveform (Animated)" description="A smooth, infinitely scrolling audio visualization animation. Perfect for active &quot;listening&quot; states where a live AnalyserNode is unavailable.">
+        <div class="waveform-container" style="height: 64px;">
+          <ui-scrolling-waveform speed="50" barWidth="4" barGap="2" fadeEdges="true"></ui-scrolling-waveform>
+        </div>
+        <div slot="code">
+&lt;ui-scrolling-waveform 
+  speed="50" 
+  barWidth="4" 
+  barGap="2" 
+  fadeEdges="true"&gt;
+&lt;/ui-scrolling-waveform&gt;</div>
+      </ui-showcase-card>
       
       <!-- Live Waveform Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-live-waveform (Real-time Audio)</h2>
-        <p>A live visualizer that responds to an active <code>AudioContext</code>. Click "Play Sample" to feed the <strong>Gemini TTS</strong> speech sample into the visualizer.</p>
-        
+      <ui-showcase-card title="ui-live-waveform (Real-time Audio)" description="A live visualizer that responds to an active AudioContext. Click play to feed the Gemini TTS speech sample into the visualizer.">
         <div class="control-panel">
           <audio id="demo-audio-player" crossorigin="anonymous" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
           
           <div style="flex: 1"></div>
           
-          <button id="btn-processing" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer;">
-            Toggle "Processing" State
+          <button id="btn-processing" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; font-family: inherit;">
+            Toggle "Processing"
           </button>
         </div>
         
         <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
-           <ui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5" ></ui-live-waveform>
+           <ui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5"></ui-live-waveform>
         </div>
-      </div>
+        <div slot="code">
+&lt;ui-live-waveform 
+  height="80" 
+  sensitivity="2.5" 
+  .analyserNode="${myAudioAnalyser}"&gt;
+&lt;/ui-live-waveform&gt;</div>
+      </ui-showcase-card>
 
       <!-- Audio Player Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-audio-player</h2>
-        <p>A highly polished, customized audio player utilizing Material Web Components under the hood.</p>
-        
+      <ui-showcase-card title="ui-audio-player" description="A highly polished, customized audio player utilizing Material Web Components under the hood.">
         <div style="margin-top: 1rem;">
           <ui-audio-player id="demo-player"></ui-audio-player>
         </div>
-      </div>
+        <div slot="code">
+&lt;ui-audio-player 
+  .item="${{ 
+    id: 'sample1', 
+    src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' 
+  }}"&gt;
+&lt;/ui-audio-player&gt;</div>
+      </ui-showcase-card>
 
       <!-- Mic Selector Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-mic-selector</h2>
-        <p>A native WebComponent that handles hardware microphone enumeration, permissions, and displays a live audio preview in the dropdown using the <code>navigator.mediaDevices</code> API.</p>
-        
+      <ui-showcase-card title="ui-mic-selector" description="A native WebComponent that handles hardware microphone enumeration, permissions, and displays a live audio preview in the dropdown using the navigator.mediaDevices API.">
         <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
           <ui-mic-selector id="demo-mic-selector"></ui-mic-selector>
           <span id="demo-mic-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected ID: (none)</span>
         </div>
-      </div>
+        <div slot="code">
+&lt;ui-mic-selector 
+  @device-change="${handleDeviceChange}"
+  @mute-change="${handleMuteChange}"&gt;
+&lt;/ui-mic-selector&gt;</div>
+      </ui-showcase-card>
       
       <!-- Voice Picker Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-voice-picker</h2>
-        <p>A searchable dropdown menu that handles rendering complex persona objects, including real-time audio previews injected into the menu items.</p>
-        
+      <ui-showcase-card title="ui-voice-picker" description="A searchable dropdown menu that handles rendering complex persona objects, including real-time audio previews injected into the menu items.">
         <div style="margin-top: 1rem; max-width: 400px; display: flex; flex-direction: column; gap: 1rem;">
           <ui-voice-picker id="demo-voice-picker"></ui-voice-picker>
           <span id="demo-voice-picker-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected Voice: (none)</span>
         </div>
-      </div>
+        <div slot="code">
+&lt;ui-voice-picker 
+  .voices="${[
+    {
+      voiceId: 'v1',
+      name: 'Aoede',
+      previewUrl: 'https://...',
+      labels: { accent: 'American', gender: 'female' }
+    }
+  ]}"
+  @voice-change="${handleSelection}"&gt;
+&lt;/ui-voice-picker&gt;</div>
+      </ui-showcase-card>
       
       <!-- Voice Button Demo -->
-      <div class="component-card">
-        <h2 class="component-title">ui-voice-button</h2>
-        <p>A compound interactive button that dynamically mounts the live visualizer depending on its state. Click to cycle through the states: Idle -> Recording -> Processing -> Success -> Error.</p>
-        
-        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
+      <ui-showcase-card title="ui-voice-button" description="A compound interactive button that dynamically mounts the live visualizer depending on its state. Click to cycle through the states: Idle -> Recording -> Processing -> Success -> Error.">
+        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center; max-width: 400px;">
           <ui-voice-button id="demo-voice-btn" state="idle" label="Start Recording" trailing="⌥Space"></ui-voice-button>
           
-          <span id="demo-voice-btn-state" style="font-family: monospace; font-size: 14px; background: #e0e0e0; padding: 4px 8px; border-radius: 4px; color: #333;">State: idle</span>
+          <span id="demo-voice-btn-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">State: idle</span>
         </div>
-      </div>
-
-
+        <div slot="code">
+&lt;ui-voice-button 
+  state="idle | recording | processing | success | error"
+  label="Start Recording"
+  .analyserNode="${myAudioAnalyser}"
+  @voice-button-click="${handleClick}"&gt;
+&lt;/ui-voice-button&gt;</div>
+      </ui-showcase-card>
     </div>
     
     <!-- Polyfill for older browsers -->

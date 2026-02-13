@@ -1,6 +1,6 @@
-import { LitElement, html, css} from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { applyCanvasEdgeFade } from '../utils/audio-utils';
+import {LitElement, html, css} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
+import {applyCanvasEdgeFade} from '../utils/audio-utils';
 
 interface BarData {
   x: number;
@@ -13,17 +13,17 @@ interface BarData {
  */
 @customElement('ui-scrolling-waveform')
 export class UiScrollingWaveform extends LitElement {
-  @property({ type: Number }) speed: number = 50; // pixels per second
-  @property({ type: Number }) barCount: number = 60;
-  @property({ type: Number }) barWidth: number = 4;
-  @property({ type: Number }) barHeight: number = 4;
-  @property({ type: Number }) barGap: number = 2;
-  @property({ type: Number }) barRadius: number = 2;
-  @property({ type: String }) barColor?: string;
-  @property({ type: Boolean }) fadeEdges: boolean = true;
-  @property({ type: Number }) fadeWidth: number = 24;
-  @property({ type: Number }) height: number = 128;
-  @property({ type: Array }) data?: number[]; // Optional data source array
+  @property({type: Number}) speed: number = 50; // pixels per second
+  @property({type: Number}) barCount: number = 60;
+  @property({type: Number}) barWidth: number = 4;
+  @property({type: Number}) barHeight: number = 4;
+  @property({type: Number}) barGap: number = 2;
+  @property({type: Number}) barRadius: number = 2;
+  @property({type: String}) barColor?: string;
+  @property({type: Boolean}) fadeEdges: boolean = true;
+  @property({type: Number}) fadeWidth: number = 24;
+  @property({type: Number}) height: number = 128;
+  @property({type: Array}) data?: number[]; // Optional data source array
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
   @query('.container') private _container!: HTMLDivElement;
@@ -31,7 +31,7 @@ export class UiScrollingWaveform extends LitElement {
   private _resizeObserver?: ResizeObserver;
   private _animationFrameId: number = 0;
   private _lastTime: number = 0;
-  
+
   // Component State
   private _bars: BarData[] = [];
   private _seed = Math.random();
@@ -73,9 +73,9 @@ export class UiScrollingWaveform extends LitElement {
 
     // Initial populate of bars across the screen
     if (this._canvas && this._container) {
-       this._populateInitialBars();
+      this._populateInitialBars();
     }
-    
+
     this._startAnimation();
   }
 
@@ -116,9 +116,9 @@ export class UiScrollingWaveform extends LitElement {
     const step = this.barWidth + this.barGap;
     let currentX = rect.width;
     let index = 0;
-    
+
     this._bars = [];
-    
+
     // Fill from right to left
     while (currentX > -step) {
       this._bars.push({
@@ -133,13 +133,15 @@ export class UiScrollingWaveform extends LitElement {
 
   private _startAnimation() {
     this._lastTime = performance.now();
-    
+
     const animate = (currentTime: number) => {
       if (!this._canvas) return;
       const ctx = this._canvas.getContext('2d');
       if (!ctx) return;
 
-      const deltaTime = this._lastTime ? (currentTime - this._lastTime) / 1000 : 0;
+      const deltaTime = this._lastTime
+        ? (currentTime - this._lastTime) / 1000
+        : 0;
       this._lastTime = currentTime;
 
       const rect = this._canvas.getBoundingClientRect();
@@ -149,19 +151,21 @@ export class UiScrollingWaveform extends LitElement {
       let computedBarColor = this.barColor;
       if (!computedBarColor) {
         const styles = getComputedStyle(this);
-        const primary = styles.getPropertyValue('--md-sys-color-primary').trim();
+        const primary = styles
+          .getPropertyValue('--md-sys-color-primary')
+          .trim();
         computedBarColor = primary || '#0066cc';
       }
 
       const step = this.barWidth + this.barGap;
-      
+
       // Move all bars to the left
       for (let i = 0; i < this._bars.length; i++) {
         this._bars[i].x -= this.speed * deltaTime;
       }
 
       // Remove bars that have fallen off the left edge
-      this._bars = this._bars.filter((bar) => bar.x + this.barWidth > -step);
+      this._bars = this._bars.filter(bar => bar.x + this.barWidth > -step);
 
       // Add new bars on the right side if we have empty space
       while (
@@ -172,7 +176,7 @@ export class UiScrollingWaveform extends LitElement {
         const nextX = lastBar ? lastBar.x + step : rect.width;
 
         let newHeight: number;
-        
+
         // If an explicit data array is passed in, loop through it
         if (this.data && this.data.length > 0) {
           newHeight = this.data[this._dataIndex % this.data.length] || 0.1;
@@ -184,14 +188,17 @@ export class UiScrollingWaveform extends LitElement {
           const wave1 = Math.sin(uniqueIndex * 0.1) * 0.2;
           const wave2 = Math.cos(uniqueIndex * 0.05) * 0.15;
           const randomComponent = this._seededRandom(uniqueIndex) * 0.4;
-          newHeight = Math.max(0.1, Math.min(0.9, 0.3 + wave1 + wave2 + randomComponent));
+          newHeight = Math.max(
+            0.1,
+            Math.min(0.9, 0.3 + wave1 + wave2 + randomComponent),
+          );
         }
 
         this._bars.push({
           x: nextX,
           height: newHeight,
         });
-        
+
         // Safety valve
         if (this._bars.length > this.barCount * 2) break;
       }
@@ -203,7 +210,7 @@ export class UiScrollingWaveform extends LitElement {
         if (bar.x < rect.width && bar.x + this.barWidth > 0) {
           const barHeight = Math.max(
             this.barHeight,
-            bar.height * rect.height * 0.6
+            bar.height * rect.height * 0.6,
           );
           const y = centerY - barHeight / 2;
 

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 
 export default defineConfig({
   build: {
@@ -6,13 +6,10 @@ export default defineConfig({
     lib: {
       entry: 'src/index.ts',
       name: 'ScreamAudioUI',
-      fileName: (format) => `scream-audio-ui.${format}.js`
+      fileName: format => `scream-audio-ui.${format}.js`,
     },
     rollupOptions: {
-      external: [
-        /^lit/,
-        /^@material\/web/
-      ]
-    }
-  }
+      external: [/^lit/, /^@material\/web/],
+    },
+  },
 });
