@@ -5,3 +5,4 @@ export * from './components/sui-waveform';
 export * from './components/sui-live-waveform';
 export * from './components/sui-audio-player';
 export * from './components/sui-mic-selector';
+export * from './components/sui-voice-picker';

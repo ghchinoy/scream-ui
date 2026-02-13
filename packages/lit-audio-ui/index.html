@@ -194,6 +194,17 @@
         </div>
       </div>
       
+      <!-- Voice Picker Demo -->
+      <div class="component-card">
+        <h2 class="component-title">sui-voice-picker</h2>
+        <p>A searchable dropdown menu that handles rendering complex persona objects, including real-time audio previews injected into the menu items.</p>
+        
+        <div style="margin-top: 1rem; max-width: 400px; display: flex; flex-direction: column; gap: 1rem;">
+          <sui-voice-picker id="demo-voice-picker"></sui-voice-picker>
+          <span id="demo-voice-picker-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected Voice: (none)</span>
+        </div>
+      </div>
+      
       <!-- Voice Button Demo -->
       <div class="component-card">
         <h2 class="component-title">sui-voice-button</h2>
@@ -397,6 +408,40 @@
         
         micSelector.addEventListener('mute-change', (e) => {
            console.log("Mic muted state:", e.detail.muted);
+        });
+
+        // 6. Setup Voice Picker
+        const voicePicker = document.getElementById('demo-voice-picker');
+        const voicePickerState = document.getElementById('demo-voice-picker-state');
+        
+        // Mock data matching the ElevenLabs Voice array structure
+        voicePicker.voices = [
+          {
+            voiceId: "v1",
+            name: "Aoede",
+            previewUrl: "/samples/speech_sample-Aoede-20260212-183352.wav",
+            labels: { accent: "American", gender: "female", age: "young", use_case: "narration" }
+          },
+          {
+            voiceId: "v2",
+            name: "Zephyr",
+            labels: { accent: "British", gender: "male", age: "middle_aged", use_case: "news" }
+          },
+          {
+            voiceId: "v3",
+            name: "Lyria Lo-Fi Beat",
+            previewUrl: "/samples/music_sample.wav",
+            labels: { description: "Upbeat lo-fi hip hop" }
+          },
+          {
+            voiceId: "v4",
+            name: "Orus",
+            labels: { accent: "Australian", gender: "male", age: "old", use_case: "storytelling" }
+          }
+        ];
+        
+        voicePicker.addEventListener('voice-change', (e) => {
+           voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
         });
       });
     </script>
