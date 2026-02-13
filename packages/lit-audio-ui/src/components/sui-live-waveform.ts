@@ -144,30 +144,28 @@ export class SuiLiveWaveform extends LitElement {
         const endFreq = Math.floor(frequencies.length * 0.4); // End around 8kHz
         const relevantData = frequencies.slice(startFreq, endFreq);
 
+        
         const centerIndex = Math.floor(barCount / 2);
         const newBars = new Array(barCount).fill(0.05);
 
+        // Simple, guaranteed mirroring mapping the exact width of the data to the half width of the bars.
+        const maxDataIndex = relevantData.length - 1;
         for (let i = 0; i <= centerIndex; i++) {
-          // Add some non-linear scaling to the frequency mapping so the center is detailed
-          // and the edges stretch across the higher, quieter frequencies.
-          const normalizedPosition = i / centerIndex; // 0 at center, 1 at edge
-          const freqIndex = Math.floor(Math.pow(normalizedPosition, 1.5) * relevantData.length);
+          // Linear mapping from center to edge
+          const dataPercent = i / centerIndex;
+          const dataIndex = Math.floor(dataPercent * maxDataIndex);
           
-          let val = relevantData[freqIndex] || 0;
+          let val = relevantData[dataIndex] || 0;
           
-          // Apply a "bell curve" weight so the edges naturally taper off 
-          // even if there's high-frequency noise.
-          const edgeWeight = 1 - Math.pow(normalizedPosition, 2);
-          
-          // Add an aggressive noise gate (subtract 0.1, max 0) so room noise doesn't make a solid fat block
-          val = Math.max(0, val - 0.15) * edgeWeight;
+          // Slight taper on the extreme edges so the bars fade cleanly before the CSS gradient
+          if (dataPercent > 0.8) {
+            val = val * (1 - (dataPercent - 0.8) * 5);
+          }
           
           const scaledVal = Math.max(0.05, Math.min(1, val * this.sensitivity));
           
-          // Mirror from center outward
           const rightBar = centerIndex + i;
           const leftBar = centerIndex - i;
-          
           if (rightBar < barCount) newBars[rightBar] = scaledVal;
           if (leftBar >= 0) newBars[leftBar] = scaledVal;
         }
@@ -182,10 +180,12 @@ export class SuiLiveWaveform extends LitElement {
       this._transitionProgress = Math.min(1, this._transitionProgress + 0.02);
 
       const processingData = new Array(barCount).fill(0.05);
-      const centerIndex = Math.floor(barCount / 2);
+      
 
+      const halfCount = Math.floor(barCount / 2);
       for (let i = 0; i < barCount; i++) {
-        const normalizedPosition = (i - centerIndex) / (centerIndex || 1);
+        // Restore the exact ElevenLabs sine wave math that worked in your first screenshot
+        const normalizedPosition = (i - halfCount) / halfCount;
         const centerWeight = 1 - Math.abs(normalizedPosition) * 0.4;
 
         const wave1 = Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
