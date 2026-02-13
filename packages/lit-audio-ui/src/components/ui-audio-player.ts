@@ -124,6 +124,8 @@ export class UiAudioPlayer extends LitElement {
 
     md-slider {
       width: 100%;
+      /* Give the slider track better contrast against the pill background */
+      --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e);
     }
   `;
 
