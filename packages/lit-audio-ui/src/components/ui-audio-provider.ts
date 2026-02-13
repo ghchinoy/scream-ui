@@ -30,8 +30,8 @@ export class UiAudioProvider extends LitElement {
     volume: 1,
     muted: false,
     analyserNode: undefined,
-    play: () => this._play(),
-    pause: () => this._pause(),
+    play: () => this.play(),
+    pause: () => this.pause(),
     togglePlay: () => this._togglePlay(),
     seek: (time: number) => this._seek(time),
     setVolume: (volume: number) => this._setVolume(volume),
@@ -68,9 +68,13 @@ export class UiAudioProvider extends LitElement {
   willUpdate(changed: Map<string, any>) {
     if (changed.has('src')) {
       this._updateState({ src: this.src, isPlaying: false, currentTime: 0, error: undefined });
-      if (this._audioEl) {
-        this._audioEl.currentTime = 0;
-      }
+    }
+  }
+
+  updated(changed: Map<string, any>) {
+    if (changed.has('src') && this._audioEl) {
+      // Force the browser to load the new audio file!
+      this._audioEl.load();
     }
   }
 
@@ -120,7 +124,7 @@ export class UiAudioProvider extends LitElement {
     }
   }
 
-  private _play() {
+  public play() {
     if (!this._audioEl.src) return;
     this._setupAudioContext();
     if (this._audioContext?.state === 'suspended') {
@@ -132,16 +136,16 @@ export class UiAudioProvider extends LitElement {
     });
   }
 
-  private _pause() {
+  public pause() {
     if (!this._audioEl) return;
     this._audioEl.pause();
   }
 
   private _togglePlay() {
     if (this.state.isPlaying) {
-      this._pause();
+      this.pause();
     } else {
-      this._play();
+      this.play();
     }
   }
 

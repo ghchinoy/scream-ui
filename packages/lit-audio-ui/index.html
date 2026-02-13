@@ -98,12 +98,19 @@
       }
 
       .demo-container {
-        display: flex; 
-        flex-direction: row; /* FORCE ROW */
-        gap: 2rem; 
-        max-width: 1200px; 
-        margin: 0 auto; 
-        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      @media(min-width: 1000px) {
+        .demo-container {
+          flex-direction: row;
+          max-width: 1200px;
+          align-items: flex-start;
+        }
       }
 
       .component-title {
@@ -199,83 +206,7 @@
       <!-- Compound Speech Input Architecture Demo -->
       <ui-showcase-card title="Dynamic Speech Input Widget" description="A highly customized, compound recording widget. It uses the atomic ui-voice-button alongside custom layout logic to simulate a real-time transcription experience (similar to ElevenLabs SpeechInput).">
         
-        <style>
-          .speech-input-card {
-            background: var(--md-sys-color-surface-container);
-            border-radius: 24px;
-            padding: 8px 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            max-width: 100%;
-          }
-          
-          .speech-input-card[state="recording"] {
-             border: 1px solid var(--md-sys-color-primary);
-             box-shadow: 0 4px 12px rgba(0,102,204,0.15);
-          }
-          
-          .speech-preview {
-            font-size: 14px;
-            color: var(--md-sys-color-on-surface-variant);
-            overflow: hidden;
-            white-space: nowrap;
-            width: 0;
-            opacity: 0;
-            transition: width 0.3s ease, opacity 0.3s ease;
-            display: flex;
-            align-items: center;
-          }
-          
-          .speech-input-card[state="recording"] .speech-preview,
-          .speech-input-card[state="processing"] .speech-preview {
-            width: 180px;
-            opacity: 1;
-          }
-          
-          .speech-cancel-btn {
-            background: transparent;
-            border: none;
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-          }
-          
-          .speech-cancel-btn:hover {
-            background: var(--md-sys-color-surface-container-highest);
-          }
-          
-          .speech-input-card[state="recording"] .speech-cancel-btn {
-            display: flex;
-          }
-        </style>
-
-                <div class="speech-input-card" id="demo-speech-card" state="idle">
-          
-          <!-- Mimicking the ElevenLabs ghost icon button -->
-          <button id="demo-speech-btn" style="background: transparent; border: none; padding: 6px; cursor: pointer; color: var(--md-sys-color-on-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
-            <span class="material-symbols-outlined" id="demo-speech-icon" style="font-size: 20px;">mic</span>
-            <div id="demo-speech-pulse" style="position: absolute; inset: 0; background: var(--md-sys-color-primary); border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s ease; z-index: -1;"></div>
-          </button>
-          
-          <div class="speech-preview" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-            <span id="demo-speech-text" style="flex: 1; white-space: nowrap; overflow: hidden; mask-image: linear-gradient(to right, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, black 80%, transparent);">Listening...</span>
-            <div id="demo-speech-wave-container" style="width: 32px; height: 20px; opacity: 0; transition: opacity 0.3s ease;">
-              <ui-live-waveform id="demo-speech-wave" height="20" barWidth="2" barGap="1" sensitivity="2.5"></ui-live-waveform>
-            </div>
-          </div>
-          
-          <button class="speech-cancel-btn" id="demo-speech-cancel" title="Cancel recording">
-            <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
-          </button>
-          
-        </div>
+        <demo-speech-input></demo-speech-input>
 
         <div slot="code">&lt;!-- HTML Layout --&gt;
 &lt;div class="speech-input-card" state="recording"&gt;
@@ -288,84 +219,9 @@
       </ui-showcase-card>
 
       <!-- Compound Audio Player Architecture Demo -->
-      <ui-showcase-card title="Podcast Player Example" description="An audio player is a combination of atomic WebComponents powered by @lit/context, use HTML to construct an entirely custom layout that share the same underlying audio stream!">
+      <ui-showcase-card title="Podcast Player Example" description="An audio player is a combination of atomic WebComponents powered by @lit/context. Use HTML to construct an entirely custom layout that shares the same underlying audio stream!">
         
-        <style>
-          .custom-podcast-card {
-            background: var(--md-sys-color-surface-container);
-            border-radius: 16px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-width: 320px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          }
-          .custom-podcast-header {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-          }
-          .custom-podcast-art {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-secondary-container));
-            border-radius: 8px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-          }
-          .custom-podcast-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-          }
-          .custom-podcast-title {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--md-sys-color-on-surface);
-            line-height: 1.2;
-          }
-          .custom-podcast-author {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--md-sys-color-on-surface-variant);
-          }
-          .custom-podcast-scrubber {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-          }
-        </style>
-
-        <ui-audio-provider id="demo-podcast-provider" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav">
-          <div class="custom-podcast-card">
-            
-            <div class="custom-podcast-header">
-              <div class="custom-podcast-art" style="overflow: hidden; background: transparent;">
-                <ui-orb id="podcast-orb" agentState="idle"></ui-orb>
-              </div>
-              <div class="custom-podcast-info">
-                <h4 class="custom-podcast-title">Episode 4: The WebComponent Revolution</h4>
-                <p class="custom-podcast-author">By Orus The Storyteller</p>
-              </div>
-              <ui-audio-play-button></ui-audio-play-button>
-            </div>
-
-            <div class="custom-podcast-scrubber">
-              <ui-audio-time-display format="elapsed"></ui-audio-time-display>
-              <div style="flex: 1;">
-                <ui-audio-progress-slider></ui-audio-progress-slider>
-              </div>
-              <ui-audio-time-display format="remaining"></ui-audio-time-display>
-            </div>
-            
-          </div>
-        </ui-audio-provider>
+        <demo-podcast-player id="demo-podcast-player-element"></demo-podcast-player>
 
         <div slot="code">&lt;!-- Bind the state-change event to the Orb's agentState --&gt;
 &lt;script&gt;
@@ -396,6 +252,31 @@
   &lt;/div&gt;
 &lt;/ui-audio-provider&gt;</div>
       </ui-showcase-card>
+
+      <!-- Full Music Player Demo -->
+      <ui-showcase-card title="Lyria Music Player" description="A comprehensive media player utilizing the new &lt;ui-audio-volume-slider&gt; and an interactive &lt;ui-scrolling-waveform&gt; that reacts to the live track data via an injected AnalyserNode. Track changes instantly orchestrate the headless provider.">
+        
+        <demo-lyria-player id="demo-lyria-player-element"></demo-lyria-player>
+
+        <div slot="code">&lt;ui-audio-provider src="track1.wav"&gt;
+  &lt;div class="music-player-card"&gt;
+    
+    &lt;!-- Reacts to live audio from the provider! --&gt;
+    &lt;!-- Tip: Use barColor="#ff0000" to override the default theme color --&gt;
+    &lt;ui-scrolling-waveform .analyserNode="${liveAnalyser}"&gt;&lt;/ui-scrolling-waveform&gt;
+
+    &lt;ui-audio-progress-slider&gt;&lt;/ui-audio-progress-slider&gt;
+
+    &lt;div class="controls"&gt;
+      &lt;ui-audio-play-button&gt;&lt;/ui-audio-play-button&gt;
+      &lt;!-- New Volume Slider Atom --&gt;
+      &lt;ui-audio-volume-slider&gt;&lt;/ui-audio-volume-slider&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/ui-audio-provider&gt;</div>
+      </ui-showcase-card>
+
 
 
       </div>
@@ -572,6 +453,7 @@
     
     <!-- Polyfill for older browsers -->
     <script type="module" src="/src/index.ts"></script>
+    <script type="module" src="/src/demo-layouts.ts"></script>
     
     <script>
 
@@ -908,78 +790,7 @@
         });
       });
 
-                // 7. Setup Compound Speech Input
-        const speechCard = document.getElementById('demo-speech-card');
-        const speechBtn = document.getElementById('demo-speech-btn');
-        const speechIcon = document.getElementById('demo-speech-icon');
-        const speechPulse = document.getElementById('demo-speech-pulse');
-        const speechCancel = document.getElementById('demo-speech-cancel');
-        const speechText = document.getElementById('demo-speech-text');
-        const speechWave = document.getElementById('demo-speech-wave');
-        const speechWaveContainer = document.getElementById('demo-speech-wave-container');
-        
-        let transcriptInterval;
-        const fakeTranscript = ["I", " am", " recording", " a", " message", " right", " now..."];
-        let isSpeechRecording = false;
-        
-        speechBtn.addEventListener('click', () => {
-          
-          if (!isSpeechRecording) {
-            // Start recording
-            isSpeechRecording = true;
-            speechCard.setAttribute('state', 'recording');
-            
-            // Transform icon to stop button
-            speechIcon.textContent = 'stop';
-            speechIcon.style.transform = 'scale(0.8)';
-            speechBtn.style.color = 'var(--md-sys-color-on-primary)';
-            
-            // Activate mini waveform
-            speechWaveContainer.style.opacity = '1';
-            if (typeof analyser !== 'undefined') {
-              speechWave.analyserNode = analyser;
-              speechWave.active = true;
-            }
-            
-            // Show background pulse
-            speechPulse.style.opacity = '1';
-            speechPulse.style.transform = 'scale(1)';
-            
-            // Simulate live transcription
-            speechText.textContent = "Listening...";
-            let wordIndex = 0;
-            transcriptInterval = setInterval(() => {
-              if (wordIndex < fakeTranscript.length) {
-                if (wordIndex === 0) speechText.textContent = '';
-                speechText.textContent += fakeTranscript[wordIndex];
-                wordIndex++;
-              }
-            }, 400);
-            
-          } else {
-            // Stop recording
-            clearInterval(transcriptInterval);
-            isSpeechRecording = false;
-            speechCard.setAttribute('state', 'processing');
-            
-            // Transform back to mic (simulating loading/processing)
-            speechIcon.textContent = 'mic';
-            speechIcon.style.transform = 'scale(1)';
-            speechBtn.style.color = 'var(--md-sys-color-on-surface)';
-            
-            // Deactivate mini waveform
-            speechWaveContainer.style.opacity = '0';
-            speechWave.active = false;
-            speechPulse.style.opacity = '0';
-            speechPulse.style.transform = 'scale(0)';
-            
-            // Simulate processing finishing
-            setTimeout(() => {
-                 speechCard.setAttribute('state', 'idle');
-                 speechText.textContent = "Listening...";
-            }, 1000);
-          }
-        });
+                
         
         speechCancel.addEventListener('click', () => {
            clearInterval(transcriptInterval);
@@ -1018,6 +829,10 @@
              const secondary = e.target.dataset.secondary;
              if(orb) orb.colors = [primary, secondary];
              if(podcastOrb) podcastOrb.colors = [primary, secondary];
+             
+             // Redraw the music scroller explicitly
+             const musicScroller = document.getElementById('music-scroller');
+             if(musicScroller) musicScroller.requestUpdate();
           });
         });
         // 9. Link Podcast Provider to its Orb

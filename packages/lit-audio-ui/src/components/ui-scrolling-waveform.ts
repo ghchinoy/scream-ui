@@ -24,6 +24,8 @@ export class UiScrollingWaveform extends LitElement {
   @property({type: Number}) fadeWidth: number = 24;
   @property({type: Number}) height: number = 128;
   @property({type: Array}) data?: number[]; // Optional data source array
+  @property({attribute: false}) analyserNode?: AnalyserNode;
+  @property({type: Boolean}) active: boolean = true;
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
   @query('.container') private _container!: HTMLDivElement;
@@ -31,6 +33,7 @@ export class UiScrollingWaveform extends LitElement {
   private _resizeObserver?: ResizeObserver;
   private _animationFrameId: number = 0;
   private _lastTime: number = 0;
+  private _dataArray?: Uint8Array;
 
   // Component State
   private _bars: BarData[] = [];
@@ -159,9 +162,15 @@ export class UiScrollingWaveform extends LitElement {
 
       const step = this.barWidth + this.barGap;
 
-      // Move all bars to the left
+      const actualSpeed = this.active ? this.speed : 0;
+
+      // Move bars to the left and decay height if inactive
       for (let i = 0; i < this._bars.length; i++) {
-        this._bars[i].x -= this.speed * deltaTime;
+        this._bars[i].x -= actualSpeed * deltaTime;
+        if (!this.active) {
+          // Rapidly decay existing bars to a flat line when paused
+          this._bars[i].height += (0.05 - this._bars[i].height) * 0.15;
+        }
       }
 
       // Remove bars that have fallen off the left edge
@@ -181,6 +190,23 @@ export class UiScrollingWaveform extends LitElement {
         if (this.data && this.data.length > 0) {
           newHeight = this.data[this._dataIndex % this.data.length] || 0.1;
           this._dataIndex = (this._dataIndex + 1) % this.data.length;
+        } else if (this.analyserNode) {
+          // Live analyser node
+          if (!this._dataArray || this._dataArray.length !== this.analyserNode.frequencyBinCount) {
+             this._dataArray = new Uint8Array(this.analyserNode.frequencyBinCount);
+          }
+          this.analyserNode.getByteFrequencyData(this._dataArray);
+          
+          let sum = 0;
+          const limit = Math.min(this._dataArray.length, 50); // average lower bands
+          for(let i = 0; i < limit; i++) {
+             sum += this._dataArray[i];
+          }
+          const avg = sum / limit;
+          const normalized = avg / 255;
+          
+          // Apply curve
+          newHeight = Math.max(0.1, Math.pow(normalized, 1.5) * 1.5);
         } else {
           // Otherwise, procedurally generate a bouncy, randomized wave
           const time = Date.now() / 1000;
