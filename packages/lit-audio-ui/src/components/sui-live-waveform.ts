@@ -42,11 +42,12 @@ export class SuiLiveWaveform extends LitElement {
     }
     .container {
       position: relative;
-      display: flex;
-      align-items: center;
       width: 100%;
     }
     canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       display: block;
       height: 100%;
       width: 100%;
@@ -139,32 +140,43 @@ export class SuiLiveWaveform extends LitElement {
         const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
         
         // We typically only want the low/mid frequencies for a voice visualizer (e.g. 5% to 40% of the spectrum)
-        const startFreq = Math.floor(frequencies.length * 0.02);
-        const endFreq = Math.floor(frequencies.length * 0.5);
+        const startFreq = 1; // Start at bin 1 (skip DC offset)
+        const endFreq = Math.floor(frequencies.length * 0.3); // End around 8kHz
         const relevantData = frequencies.slice(startFreq, endFreq);
 
         const halfCount = Math.floor(barCount / 2);
         const newBars: number[] = [];
 
-        // In static mode, elevenlabs symmetrically mirrored the data on left and right.
-        
+        // Helper to get average energy in a bin range
+        const getAverageEnergy = (startIndex: number, endIndex: number) => {
+          let sum = 0;
+          const start = Math.max(0, Math.floor(startIndex));
+          const end = Math.min(relevantData.length, Math.max(start + 1, Math.ceil(endIndex)));
+          for (let i = start; i < end; i++) {
+            sum += relevantData[i] || 0;
+          }
+          return sum / (end - start);
+        };
+
         // Left side (mirrored)
         for (let i = halfCount - 1; i >= 0; i--) {
-          const dataIndex = Math.floor((i / halfCount) * relevantData.length);
-          const val = relevantData[dataIndex] || 0;
+          const startIndex = (i / halfCount) * relevantData.length;
+          const endIndex = ((i + 1) / halfCount) * relevantData.length;
+          const val = getAverageEnergy(startIndex, endIndex);
           newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
         }
 
         // If barCount is odd, add the center bar
         if (barCount % 2 !== 0) {
-          const val = relevantData[0] || 0;
+          const val = getAverageEnergy(0, relevantData.length / halfCount);
           newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
         }
 
         // Right side
         for (let i = 0; i < halfCount; i++) {
-          const dataIndex = Math.floor((i / halfCount) * relevantData.length);
-          const val = relevantData[dataIndex] || 0;
+          const startIndex = (i / halfCount) * relevantData.length;
+          const endIndex = ((i + 1) / halfCount) * relevantData.length;
+          const val = getAverageEnergy(startIndex, endIndex);
           newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
         }
 

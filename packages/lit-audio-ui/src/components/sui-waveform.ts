@@ -26,11 +26,12 @@ export class SuiWaveform extends LitElement {
     }
     .container {
       position: relative;
-      display: flex;
-      align-items: center;
       width: 100%;
     }
     canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       display: block;
       height: 100%;
       width: 100%;
