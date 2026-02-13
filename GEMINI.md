@@ -16,6 +16,8 @@ bd close <id>         # Complete work
 bd sync               # Sync with git
 ```
 
+
+
 ## Landing the Plane (Session Completion)
 
 **When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
@@ -67,3 +69,11 @@ Visual components are difficult to verify blindly. Instead of relying solely on 
 - **Write local Puppeteer tests**: Create temporary Node.js scripts using `puppeteer` and `express` in a `/scripts/testing/` directory. (Ensure this directory is in `.gitignore`).
 - **Evaluate Internal State**: Use `page.evaluate()` to dump the internal Lit component arrays (e.g., `el._currentBars`) to the terminal.
 - **Mock Interactions**: Programmatically trigger component states (e.g., `page.click('#btn-processing')`) and log the resulting math output. This drastically accelerates debugging for geometry and data mapping issues without needing visual confirmation for every small math tweak.
+
+### 4. Architectural Patterns: Lit compound components via @lit/context
+The `packages/lit-audio-ui` sub-project demonstrates an advanced Web Components architectural pattern for moving from "Monolithic" elements to "Compound" atomic elements.
+If you need to build highly flexible layouts (like the `ui-audio-player`), follow this pattern:
+1.  **Define a Protocol:** Create an interface for your state (e.g., `AudioPlayerState`) and export a `createContext()` token from `@lit/context`.
+2.  **Create a Headless Provider:** Build a `<ui-audio-provider>` component that manages the internal logic (e.g. the `<audio>` tag and its event listeners). It should have `:host { display: contents; }` and use the `@provide({ context: myContextToken })` decorator on its state object. **Crucially, the provider must completely overwrite the state object reference (`this.state = {...this.state, newValues}`) to trigger reactive updates in consumers.**
+3.  **Create Atomic Consumers:** Build small, single-purpose components (e.g., `<ui-audio-play-button>`, `<ui-audio-progress-slider>`). They use the `@consume({ context: myContextToken, subscribe: true })` decorator to receive the state and render UI.
+This allows developers to write custom HTML layouts while sharing a single underlying state machine!
