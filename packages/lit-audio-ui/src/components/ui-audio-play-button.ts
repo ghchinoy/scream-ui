@@ -45,7 +45,7 @@ export class UiAudioPlayButton extends LitElement {
     const isBuffering = this.playerState?.isBuffering ?? false;
 
     return html`
-      <md-filled-icon-button 
+      <md-filled-icon-button part="button" 
         @click="${this._handleClick}"
         ?disabled="${!this.playerState?.src}"
       >

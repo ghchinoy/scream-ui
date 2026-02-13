@@ -51,7 +51,7 @@ export class UiAudioPlayer extends LitElement {
   render() {
     return html`
       <ui-audio-provider .src="${this.item?.src || ''}">
-        <div class="player-pill">
+        <div class="player-pill" part="container">
           
           <!-- Atomic Play/Pause Button -->
           <ui-audio-play-button></ui-audio-play-button>
