@@ -139,25 +139,33 @@ export class SuiLiveWaveform extends LitElement {
         const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
         
         // We typically only want the low/mid frequencies for a voice visualizer (e.g. 5% to 40% of the spectrum)
-        const startFreq = 0;
+        const startFreq = Math.floor(frequencies.length * 0.02);
         const endFreq = Math.floor(frequencies.length * 0.5);
         const relevantData = frequencies.slice(startFreq, endFreq);
 
         const halfCount = Math.floor(barCount / 2);
         const newBars: number[] = [];
 
+        // In static mode, elevenlabs symmetrically mirrored the data on left and right.
+        
         // Left side (mirrored)
         for (let i = halfCount - 1; i >= 0; i--) {
           const dataIndex = Math.floor((i / halfCount) * relevantData.length);
-          const value = Math.min(1, relevantData[dataIndex] * this.sensitivity);
-          newBars.push(Math.max(0.05, value)); // Minimum base height
+          const val = relevantData[dataIndex] || 0;
+          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
+        }
+
+        // If barCount is odd, add the center bar
+        if (barCount % 2 !== 0) {
+          const val = relevantData[0] || 0;
+          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
         }
 
         // Right side
         for (let i = 0; i < halfCount; i++) {
           const dataIndex = Math.floor((i / halfCount) * relevantData.length);
-          const value = Math.min(1, relevantData[dataIndex] * this.sensitivity);
-          newBars.push(Math.max(0.05, value));
+          const val = relevantData[dataIndex] || 0;
+          newBars.push(Math.max(0.05, Math.min(1, val * this.sensitivity)));
         }
 
         this._currentBars = newBars;
