@@ -28,3 +28,9 @@ export * from './components/ui-scrolling-waveform';
 export * from './components/ui-showcase-card';
 
 export * from './components/ui-shimmering-text';
+
+export * from './components/ui-audio-provider';
+export * from './components/ui-audio-play-button';
+export * from './components/ui-audio-progress-slider';
+export * from './components/ui-audio-time-display';
+export * from './utils/audio-context';
