@@ -1,0 +1,3 @@
+!sources/
+!packages/lit-audio-ui/scripts/*
+!fix-*.js
