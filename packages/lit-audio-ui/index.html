@@ -179,6 +179,17 @@
         </div>
       </div>
 
+      <!-- Mic Selector Demo -->
+      <div class="component-card">
+        <h2 class="component-title">sui-mic-selector</h2>
+        <p>A native WebComponent that handles hardware microphone enumeration, permissions, and displays a live audio preview in the dropdown using the <code>navigator.mediaDevices</code> API.</p>
+        
+        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
+          <sui-mic-selector id="demo-mic-selector"></sui-mic-selector>
+          <span id="demo-mic-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected ID: (none)</span>
+        </div>
+      </div>
+      
       <!-- Voice Button Demo -->
       <div class="component-card">
         <h2 class="component-title">sui-voice-button</h2>
@@ -347,6 +358,18 @@
         });
         observer.observe(voiceBtn, { attributes: true });
         
+
+        // 5. Setup Mic Selector
+        const micSelector = document.getElementById('demo-mic-selector');
+        const micStateText = document.getElementById('demo-mic-state');
+        
+        micSelector.addEventListener('device-change', (e) => {
+           micStateText.textContent = `Selected ID: ${e.detail.deviceId}`;
+        });
+        
+        micSelector.addEventListener('mute-change', (e) => {
+           console.log("Mic muted state:", e.detail.muted);
+        });
       });
     </script>
   </body>
