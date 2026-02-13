@@ -26,3 +26,5 @@ export * from './components/ui-voice-picker';
 export * from './components/ui-scrolling-waveform';
 
 export * from './components/ui-showcase-card';
+
+export * from './components/ui-shimmering-text';
