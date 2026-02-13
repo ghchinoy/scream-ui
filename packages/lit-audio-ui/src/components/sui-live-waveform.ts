@@ -140,16 +140,28 @@ export class SuiLiveWaveform extends LitElement {
         const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
         
         // We typically only want the low/mid frequencies for a voice visualizer (e.g. 5% to 40% of the spectrum)
-        const startFreq = 1; // Start at bin 1 (skip DC offset)
-        const endFreq = Math.floor(frequencies.length * 0.3); // End around 8kHz
+        const startFreq = Math.floor(frequencies.length * 0.05); // Start at bin 1 (skip DC offset)
+        const endFreq = Math.floor(frequencies.length * 0.4); // End around 8kHz
         const relevantData = frequencies.slice(startFreq, endFreq);
 
         const centerIndex = Math.floor(barCount / 2);
         const newBars = new Array(barCount).fill(0.05);
 
         for (let i = 0; i <= centerIndex; i++) {
-          const freqIndex = Math.floor((i / centerIndex) * relevantData.length);
-          const val = relevantData[freqIndex] || 0;
+          // Add some non-linear scaling to the frequency mapping so the center is detailed
+          // and the edges stretch across the higher, quieter frequencies.
+          const normalizedPosition = i / centerIndex; // 0 at center, 1 at edge
+          const freqIndex = Math.floor(Math.pow(normalizedPosition, 1.5) * relevantData.length);
+          
+          let val = relevantData[freqIndex] || 0;
+          
+          // Apply a "bell curve" weight so the edges naturally taper off 
+          // even if there's high-frequency noise.
+          const edgeWeight = 1 - Math.pow(normalizedPosition, 2);
+          
+          // Add an aggressive noise gate (subtract 0.1, max 0) so room noise doesn't make a solid fat block
+          val = Math.max(0, val - 0.15) * edgeWeight;
+          
           const scaledVal = Math.max(0.05, Math.min(1, val * this.sensitivity));
           
           // Mirror from center outward
@@ -245,7 +257,7 @@ export class SuiLiveWaveform extends LitElement {
       }
     }
 
-    if (false && this.fadeEdges) {
+    if (this.fadeEdges) {
       applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth);
     }
     ctx.globalAlpha = 1;
