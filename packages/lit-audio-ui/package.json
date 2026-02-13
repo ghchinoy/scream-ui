@@ -1,7 +1,24 @@
 {
-  "name": "lit-audio-ui",
-  "private": true,
-  "version": "0.0.0",
+  "name": "scream-audio-ui",
+  "version": "1.0.0",
+  "description": "A pure Lit WebComponents port of modern audio UI components",
+  "author": "Google LLC",
+  "license": "Apache-2.0",
+  "main": "dist/scream-audio-ui.umd.js",
+  "module": "dist/scream-audio-ui.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/scream-audio-ui.es.js",
+      "require": "./dist/scream-audio-ui.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
