@@ -193,85 +193,8 @@
       
       <!-- Static Waveform Demo -->
       <div class="main-content" style="flex: 1; max-width: 800px; display: flex; flex-direction: column; gap: 2rem;">
-      <ui-showcase-card title="ui-waveform (Static Timeline)" description="A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.">
-        <div class="control-panel" style="margin-bottom: 1rem;">
-          <button id="btn-regenerate-static" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 18px;">refresh</span> Regenerate Data
-          </button>
-        </div>
-        <div class="waveform-container" style="height: 64px;">
-          <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
-        </div>
-        <div slot="code">
-&lt;ui-waveform 
-  height="64"
-  fadeEdges="true"
-  .data="${myMockDataArray}"&gt;
-&lt;/ui-waveform&gt;</div>
-      </ui-showcase-card>
-
-      <!-- Scrolling Waveform Demo -->
-      <ui-showcase-card title="ui-scrolling-waveform (Animated)" description="A smooth, infinitely scrolling audio visualization animation. Perfect for active &quot;listening&quot; states where a live AnalyserNode is unavailable.">
-        <div class="waveform-container" style="height: 64px;">
-          <ui-scrolling-waveform height="64" speed="50" barWidth="4" barGap="2" fadeEdges="true"></ui-scrolling-waveform>
-        </div>
-        <div slot="code">
-&lt;ui-scrolling-waveform 
-  height="64"
-  speed="50" 
-  barWidth="4" 
-  barGap="2" 
-  fadeEdges="true"&gt;
-&lt;/ui-scrolling-waveform&gt;</div>
-      </ui-showcase-card>
-      
-      <!-- Shimmering Text Demo -->
-      <ui-showcase-card title="ui-shimmering-text" description="A pure CSS, dependency-free text loading effect. Translates Framer Motion gradients into native @keyframes and IntersectionObservers.">
-        <div style="font-size: 2rem; font-weight: 700;">
-          <ui-shimmering-text text="Transcribing audio..." duration="2"></ui-shimmering-text>
-        </div>
-        <div slot="code">&lt;ui-shimmering-text 
-  text="Transcribing audio..." 
-  duration="2"&gt;
-&lt;/ui-shimmering-text&gt;</div>
-      </ui-showcase-card>
-
-      <!-- Live Waveform Demo -->
-      <ui-showcase-card title="ui-live-waveform (Real-time Audio)" description="A live visualizer that responds to an active AudioContext. Click play to feed the Gemini TTS speech sample into the visualizer.">
-        <div class="control-panel">
-          <audio id="demo-audio-player" crossorigin="anonymous" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
-          
-          <div style="flex: 1"></div>
-          
-          <button id="btn-processing" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; font-family: inherit;">
-            Toggle "Processing"
-          </button>
-        </div>
-        
-        <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
-           <ui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5"></ui-live-waveform>
-        </div>
-        <div slot="code">
-&lt;ui-live-waveform 
-  height="80" 
-  sensitivity="2.5" 
-  .analyserNode="${myAudioAnalyser}"&gt;
-&lt;/ui-live-waveform&gt;</div>
-      </ui-showcase-card>
-
-      <!-- Audio Player Demo (Classic Preset) -->
-      <ui-showcase-card title="ui-audio-player (Classic)" description="The original pill-shaped monolithic layout. It is now completely powered by the headless ui-audio-provider internally.">
-        <div style="margin-top: 1rem;">
-          <ui-audio-player id="demo-player"></ui-audio-player>
-        </div>
-        <div slot="code">&lt;ui-audio-player 
-  .item="${{ 
-    id: 'sample1', 
-    src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' 
-  }}"&gt;
-&lt;/ui-audio-player&gt;</div>
-      </ui-showcase-card>
-
+      <div class="demo-section" data-title="Examples" style="display: flex; flex-direction: column; gap: 2rem;">
+        <h2 style="margin-top: 0; margin-bottom: -1rem; border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 0.5rem;">Examples</h2>
       <!-- Compound Audio Player Architecture Demo -->
       <ui-showcase-card title="Compound Audio Architecture" description="Because the player is now broken into atomic WebComponents powered by @lit/context, you can use HTML to construct entirely custom layouts that share the same underlying audio stream!">
         
@@ -372,6 +295,90 @@
 &lt;/ui-audio-provider&gt;</div>
       </ui-showcase-card>
 
+
+      </div>
+      <div class="demo-section" data-title="Components" style="display: flex; flex-direction: column; gap: 2rem;">
+        <h2 style="margin-top: 2rem; margin-bottom: -1rem; border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 0.5rem;">Components</h2>
+
+      <ui-showcase-card title="ui-waveform (Static Timeline)" description="A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.">
+        <div class="control-panel" style="margin-bottom: 1rem;">
+          <button id="btn-regenerate-static" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 18px;">refresh</span> Regenerate Data
+          </button>
+        </div>
+        <div class="waveform-container" style="height: 64px;">
+          <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
+        </div>
+        <div slot="code">
+&lt;ui-waveform 
+  height="64"
+  fadeEdges="true"
+  .data="${myMockDataArray}"&gt;
+&lt;/ui-waveform&gt;</div>
+      </ui-showcase-card>
+
+      <!-- Scrolling Waveform Demo -->
+      <ui-showcase-card title="ui-scrolling-waveform (Animated)" description="A smooth, infinitely scrolling audio visualization animation. Perfect for active &quot;listening&quot; states where a live AnalyserNode is unavailable.">
+        <div class="waveform-container" style="height: 64px;">
+          <ui-scrolling-waveform height="64" speed="50" barWidth="4" barGap="2" fadeEdges="true"></ui-scrolling-waveform>
+        </div>
+        <div slot="code">
+&lt;ui-scrolling-waveform 
+  height="64"
+  speed="50" 
+  barWidth="4" 
+  barGap="2" 
+  fadeEdges="true"&gt;
+&lt;/ui-scrolling-waveform&gt;</div>
+      </ui-showcase-card>
+      
+      <!-- Shimmering Text Demo -->
+      <ui-showcase-card title="ui-shimmering-text" description="A pure CSS, dependency-free text loading effect. Translates Framer Motion gradients into native @keyframes and IntersectionObservers.">
+        <div style="font-size: 2rem; font-weight: 700;">
+          <ui-shimmering-text text="Transcribing audio..." duration="2"></ui-shimmering-text>
+        </div>
+        <div slot="code">&lt;ui-shimmering-text 
+  text="Transcribing audio..." 
+  duration="2"&gt;
+&lt;/ui-shimmering-text&gt;</div>
+      </ui-showcase-card>
+
+      <!-- Live Waveform Demo -->
+      <ui-showcase-card title="ui-live-waveform (Real-time Audio)" description="A live visualizer that responds to an active AudioContext. Click play to feed the Gemini TTS speech sample into the visualizer.">
+        <div class="control-panel">
+          <audio id="demo-audio-player" crossorigin="anonymous" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
+          
+          <div style="flex: 1"></div>
+          
+          <button id="btn-processing" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; font-family: inherit;">
+            Toggle "Processing"
+          </button>
+        </div>
+        
+        <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
+           <ui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5"></ui-live-waveform>
+        </div>
+        <div slot="code">
+&lt;ui-live-waveform 
+  height="80" 
+  sensitivity="2.5" 
+  .analyserNode="${myAudioAnalyser}"&gt;
+&lt;/ui-live-waveform&gt;</div>
+      </ui-showcase-card>
+
+      <!-- Audio Player Demo (Classic Preset) -->
+      <ui-showcase-card title="ui-audio-player (Classic)" description="The original pill-shaped monolithic layout. It is now completely powered by the headless ui-audio-provider internally.">
+        <div style="margin-top: 1rem;">
+          <ui-audio-player id="demo-player"></ui-audio-player>
+        </div>
+        <div slot="code">&lt;ui-audio-player 
+  .item="${{ 
+    id: 'sample1', 
+    src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' 
+  }}"&gt;
+&lt;/ui-audio-player&gt;</div>
+      </ui-showcase-card>
+
       <!-- Mic Selector Demo -->
       <ui-showcase-card title="ui-mic-selector" description="A native WebComponent that handles hardware microphone enumeration, permissions, and displays a live audio preview in the dropdown using the navigator.mediaDevices API.">
         <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
@@ -420,7 +427,8 @@
   @voice-button-click="${handleClick}"&gt;
 &lt;/ui-voice-button&gt;</div>
       </ui-showcase-card>
-      </div>
+            </div>
+</div>
     </div>
     
     <!-- Polyfill for older browsers -->
@@ -484,32 +492,48 @@
 
       // 0. Auto-generate Side Navigation
       const navList = document.getElementById('nav-list');
-      const showcaseCards = document.querySelectorAll('ui-showcase-card');
+      const sections = document.querySelectorAll('.demo-section');
       
-      showcaseCards.forEach((card, index) => {
-        // Create an ID for the card if it doesn't have one
-        const anchorId = 'component-' + index;
-        card.id = anchorId;
-        card.style.scrollMarginTop = "7rem"; // Make sure sticky nav doesn't cover it
+      sections.forEach((section, secIndex) => {
+        const secTitle = section.dataset.title;
         
-        const rawTitle = card.getAttribute('title');
-        // Extract just the "ui-xxx" part
-        const cleanTitle = rawTitle.split(' ')[0];
-        
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#' + anchorId;
-        a.textContent = cleanTitle;
-        a.style.textDecoration = 'none';
-        a.style.color = 'var(--md-sys-color-on-surface-variant)';
-        a.style.fontSize = '0.9rem';
-        a.style.transition = 'color 0.2s';
-        
-        a.addEventListener('mouseover', () => a.style.color = 'var(--md-sys-color-primary)');
-        a.addEventListener('mouseout', () => a.style.color = 'var(--md-sys-color-on-surface-variant)');
-        
-        li.appendChild(a);
-        navList.appendChild(li);
+        // Add section header to nav
+        const secHeader = document.createElement('li');
+        secHeader.style.fontWeight = '700';
+        secHeader.style.fontSize = '0.75rem';
+        secHeader.style.textTransform = 'uppercase';
+        secHeader.style.letterSpacing = '0.05em';
+        secHeader.style.color = 'var(--md-sys-color-primary)';
+        secHeader.style.marginTop = secIndex === 0 ? '0' : '1.5rem';
+        secHeader.style.marginBottom = '0.5rem';
+        secHeader.textContent = secTitle;
+        navList.appendChild(secHeader);
+
+        const showcaseCards = section.querySelectorAll('ui-showcase-card');
+        showcaseCards.forEach((card, cardIndex) => {
+          const anchorId = 'component-' + secIndex + '-' + cardIndex;
+          card.id = anchorId;
+          card.style.scrollMarginTop = "7rem";
+          
+          const rawTitle = card.getAttribute('title');
+          // If it's a component, just use the first word (e.g. ui-waveform). Otherwise use the whole title.
+          const cleanTitle = rawTitle.includes('ui-') ? rawTitle.split(' ')[0] : rawTitle;
+          
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = '#' + anchorId;
+          a.textContent = cleanTitle;
+          a.style.textDecoration = 'none';
+          a.style.color = 'var(--md-sys-color-on-surface-variant)';
+          a.style.fontSize = '0.9rem';
+          a.style.transition = 'color 0.2s';
+          
+          a.addEventListener('mouseover', () => a.style.color = 'var(--md-sys-color-primary)');
+          a.addEventListener('mouseout', () => a.style.color = 'var(--md-sys-color-on-surface-variant)');
+          
+          li.appendChild(a);
+          navList.appendChild(li);
+        });
       });
 
       // 1. Setup Static Waveform
