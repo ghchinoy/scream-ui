@@ -66,6 +66,7 @@
       body {
         margin: 0;
         padding: 2rem;
+        padding-top: 6rem; /* space for fixed nav */
         background-color: var(--bg-color);
         color: var(--text-color);
         transition: background-color 0.3s, color 0.3s;
@@ -140,13 +141,40 @@
     </style>
   </head>
   <body>
-    <button id="theme-toggle" class="theme-toggle-btn"><span class="material-symbols-outlined">dark_mode</span> Toggle Theme</button>
+        <nav style="position: fixed; top: 0; left: 0; right: 0; background: var(--md-sys-color-surface-container-high); border-bottom: 1px solid var(--md-sys-color-outline-variant); padding: 0.75rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <div style="display: flex; align-items: baseline; gap: 1rem;">
+        <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700;">Lit Audio UI</h1>
+        <span style="font-size: 0.9rem; color: var(--md-sys-color-on-surface-variant); display: none; @media(min-width: 800px){ display: inline; }">A pure WebComponents library for audio visualization.</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        
+        <!-- Theme Color Picker -->
+        <div id="color-picker" style="display: flex; gap: 0.5rem; align-items: center; padding-right: 1rem; border-right: 1px solid var(--md-sys-color-outline-variant);">
+          <button class="color-swatch" data-primary="#0066cc" data-onprimary="#ffffff" style="background: #0066cc; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--md-sys-color-on-surface); cursor: pointer;" title="Blue"></button>
+          <button class="color-swatch" data-primary="#6750a4" data-onprimary="#ffffff" style="background: #6750a4; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Purple"></button>
+          <button class="color-swatch" data-primary="#386a20" data-onprimary="#ffffff" style="background: #386a20; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Green"></button>
+          <button class="color-swatch" data-primary="#b3261e" data-onprimary="#ffffff" style="background: #b3261e; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Red"></button>
+          <button class="color-swatch" data-primary="#fbbc04" data-onprimary="#1e1e1e" style="background: #fbbc04; width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;" title="Yellow"></button>
+        </div>
+
+        <a href="https://github.com/ghchinoy/scream-ui" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;">
+          <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/ghchinoy/scream-ui?style=social">
+        </a>
+        <button id="theme-toggle" class="theme-toggle-btn" style="position: static; box-shadow: none; border: 1px solid var(--md-sys-color-outline-variant);">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
+    </nav>
+
     <div class="demo-container">
-      <h1>Lit Audio UI Components</h1>
-      <p>A pure Lit WebComponents library for audio visualization and control.</p>
       
       <!-- Static Waveform Demo -->
       <ui-showcase-card title="ui-waveform (Static Timeline)" description="A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.">
+        <div class="control-panel" style="margin-bottom: 1rem;">
+          <button id="btn-regenerate-static" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 18px;">refresh</span> Regenerate Data
+          </button>
+        </div>
         <div class="waveform-container" style="height: 64px;">
           <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
         </div>
@@ -265,6 +293,16 @@
     
     <script>
 
+      
+      function forceStaticWaveformRedraw() {
+        const staticWaveform = document.getElementById('demo-static-waveform');
+        if (staticWaveform && staticWaveform.data) {
+          // Re-assigning a new array reference forces the Lit component to trigger 
+          // a re-render, which allows the canvas to pick up the new CSS variables!
+          staticWaveform.data = [...staticWaveform.data];
+        }
+      }
+
       // Theme Toggle Logic
       const themeToggle = document.getElementById('theme-toggle');
       const htmlEl = document.documentElement;
@@ -272,24 +310,60 @@
       // Check system preference
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         htmlEl.classList.add('dark');
-        themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span> Light Mode';
+        themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span>';
       }
       
       themeToggle.addEventListener('click', () => {
         htmlEl.classList.toggle('dark');
         if (htmlEl.classList.contains('dark')) {
-          themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span> Light Mode';
+          themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span>';
         } else {
           themeToggle.innerHTML = '<span class="material-symbols-outlined">dark_mode</span> Dark Mode';
         }
+        forceStaticWaveformRedraw();
       });
+
+      // Color Picker Logic
+      const swatches = document.querySelectorAll('.color-swatch');
+      swatches.forEach(swatch => {
+        swatch.addEventListener('click', (e) => {
+          const primary = e.target.dataset.primary;
+          const onPrimary = e.target.dataset.onprimary;
+          
+          // Applying directly to documentElement overrides the class-based CSS variables
+          // due to the higher specificity of inline styles!
+          document.documentElement.style.setProperty('--md-sys-color-primary', primary);
+          document.documentElement.style.setProperty('--md-sys-color-on-primary', onPrimary);
+          
+          // Also update the waveform's dynamically resolved color for the canvas
+          document.documentElement.style.setProperty('color', primary);
+          
+          // Update selected UI state
+          swatches.forEach(s => s.style.borderColor = 'transparent');
+          e.target.style.borderColor = 'var(--md-sys-color-on-surface)';
+          forceStaticWaveformRedraw();
+        });
+      });
+
 
       // 1. Setup Static Waveform
       document.addEventListener('DOMContentLoaded', () => {
         const staticWaveform = document.getElementById('demo-static-waveform');
-        // Generate 150 random data points to simulate an audio track
-        const mockData = Array.from({length: 150}, () => Math.random() * 0.8 + 0.1);
-        staticWaveform.data = mockData;
+        const regenerateStaticBtn = document.getElementById('btn-regenerate-static');
+        
+        function generateStaticData() {
+          // Generate 200 random data points to simulate an audio track
+          const mockData = Array.from({length: 200}, () => Math.random() * 0.8 + 0.1);
+          if (staticWaveform) {
+            staticWaveform.data = mockData;
+          }
+        }
+        
+        generateStaticData(); // Initial generation
+        
+        if (regenerateStaticBtn) {
+          regenerateStaticBtn.addEventListener('click', generateStaticData);
+        }
         
         
         // 2. Setup Live Waveform
