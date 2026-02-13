@@ -17,6 +17,8 @@
         --md-sys-color-on-primary: #ffffff;
         --md-sys-color-surface: #ffffff;
         --md-sys-color-on-surface: #1e1e1e;
+        --md-sys-color-surface-container: #f3f3f3;
+        --md-sys-color-surface-variant: #e1e2e1;
         --md-sys-color-surface-container-high: #e2e2e2;
         --md-sys-color-surface-container-highest: #e3e3e3;
         --md-sys-color-on-surface-variant: #444444;
@@ -40,6 +42,8 @@
         --md-sys-color-on-primary: #003062;
         --md-sys-color-surface: #1e1e1e;
         --md-sys-color-on-surface: #e3e3e3;
+        --md-sys-color-surface-container: #212121;
+        --md-sys-color-surface-variant: #444746;
         --md-sys-color-surface-container-high: #2b2b2b;
         --md-sys-color-surface-container-highest: #333333;
         --md-sys-color-on-surface-variant: #c4c7c5;
@@ -316,25 +320,49 @@
         const stateCycle = ['recording', 'processing', 'success', 'error'];
         let cycleIndex = -1;
         
+        let successToggle = true; // Alternate between success and error
         voiceBtn.addEventListener('voice-button-click', () => {
            // We cycle to the next state
            cycleIndex = (cycleIndex + 1) % stateCycle.length;
-           const newState = stateCycle[cycleIndex];
            
+           // Skip success and error in manual clicking, let processing transition automatically
+           if (stateCycle[cycleIndex] === 'success' || stateCycle[cycleIndex] === 'error') {
+               cycleIndex = 0; // jump back to idle
+           }
+           
+           const newState = stateCycle[cycleIndex];
            voiceBtn.setAttribute('state', newState);
            
            // If we enter recording, inject the analyser node so the mini-waveform bounces!
-           if (newState === 'recording' && analyser) {
+           if (newState === 'recording' && typeof analyser !== 'undefined') {
              voiceBtn.analyserNode = analyser;
            } else {
              voiceBtn.analyserNode = undefined;
            }
            
            // Update labels to make the demo pretty
-           if (newState === 'idle') voiceBtn.label = 'Start Recording';
-           else if (newState === 'recording') voiceBtn.label = 'Stop Recording';
-           else if (newState === 'processing') voiceBtn.label = 'Analyzing...';
-           else voiceBtn.label = ''; // Hide label for success/error dots
+           if (newState === 'idle') {
+               voiceBtn.label = 'Start Recording';
+           }
+           else if (newState === 'recording') {
+               voiceBtn.label = 'Stop Recording';
+           }
+           else if (newState === 'processing') {
+               voiceBtn.label = 'Analyzing...';
+               
+               // Simulate a network request taking 2.5 seconds, then resolving
+               setTimeout(() => {
+                 if (voiceBtn.getAttribute('state') === 'processing') {
+                     const finalState = successToggle ? 'success' : 'error';
+                     successToggle = !successToggle; // flip for next time
+                     
+                     cycleIndex = stateCycle.indexOf(finalState);
+                     voiceBtn.setAttribute('state', finalState);
+                     voiceBtn.label = ''; // Hide label
+                     voiceStateText.textContent = `State: ${finalState}`;
+                 }
+               }, 2500);
+           }
            
            voiceStateText.textContent = `State: ${newState}`;
         });

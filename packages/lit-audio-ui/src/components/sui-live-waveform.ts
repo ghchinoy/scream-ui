@@ -242,11 +242,14 @@ export class SuiLiveWaveform extends LitElement {
     ctx.clearRect(0, 0, rect.width, rect.height);
 
     // Provide a sensible default color if none provided, looking up the CSS variable cascade
-    const computedBarColor =
-      this.barColor ||
-      getComputedStyle(this).getPropertyValue('--md-sys-color-primary') ||
-      getComputedStyle(this).getPropertyValue('color') ||
-      '#000';
+    // Get the computed color, trimming whitespace that getPropertyValue often returns
+    const styles = getComputedStyle(this);
+    let computedBarColor = this.barColor;
+    if (!computedBarColor) {
+      const primary = styles.getPropertyValue('--md-sys-color-primary').trim();
+      const color = styles.getPropertyValue('color').trim();
+      computedBarColor = primary || color || '#0066cc'; // Solid fallback
+    }
 
     const step = this.barWidth + this.barGap;
     const barCount = Math.floor(rect.width / step);

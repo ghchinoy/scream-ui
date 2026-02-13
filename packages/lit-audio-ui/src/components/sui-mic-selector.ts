@@ -79,7 +79,7 @@ export class SuiMicSelector extends LitElement {
     }
 
     md-menu {
-      --md-menu-container-color: var(--md-sys-color-surface-container, #f3f3f3);
+      --md-menu-container-color: var(--md-sys-color-surface-container, var(--md-sys-color-surface, #ffffff));
       --md-menu-container-shape: 12px;
       min-width: 280px;
     }
@@ -95,7 +95,7 @@ export class SuiMicSelector extends LitElement {
     .preview-waveform {
       flex: 1;
       height: 24px;
-      background: var(--md-sys-color-surface-variant, #e1e2e1);
+      background: var(--md-sys-color-surface-variant, var(--md-sys-color-surface-container-highest, #e1e2e1));
       border-radius: 6px;
       overflow: hidden;
       display: flex;
