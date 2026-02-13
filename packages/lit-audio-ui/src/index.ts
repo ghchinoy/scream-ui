@@ -22,3 +22,5 @@ export * from './components/ui-live-waveform';
 export * from './components/ui-audio-player';
 export * from './components/ui-mic-selector';
 export * from './components/ui-voice-picker';
+
+export * from './components/ui-scrolling-waveform';
