@@ -1,4 +1,4 @@
 sources/
 drivectl-mcp.log
-packages/lit-audio-ui/scripts/testing/
+packages/lit-audio-ui/scripts/
 fix-*.js
