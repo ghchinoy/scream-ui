@@ -1,14 +1,12 @@
 # scream-ui
 
-This project contains two primary areas:
-1. `sources/ui/`: An open source UI library of React/Tailwind/Radix audio components, created by ElevenLabs.
-2. `packages/lit-audio-ui/`: A pure Lit WebComponents port of the ElevenLabs audio UI components, designed for framework-agnostic use in projects like the sister application `../scream`.
+This project contains `packages/lit-audio-ui/`: A pure Lit WebComponents port of the ElevenLabs audio UI components, designed for framework-agnostic use in Lit WebComponents projects.
 
 ## Purpose of the Lit WebComponents Port
 
 The `packages/lit-audio-ui` directory contains a framework-agnostic port of modern audio UI components. It translates complex React-based audio visualizers, 3D WebGL elements, and recording controls into native browser Web Components using [Lit](https://lit.dev/). By doing so, these components can be dropped into **any** web project—whether you use React, Vue, Angular, Svelte, or plain HTML—without requiring a Virtual DOM or specific CSS framework like Tailwind.
 
-## Gracious Attribution 
+## Thanks to ElevenLabs UI 
 
 This project is deeply inspired by and serves as a direct port of the incredible open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
 
