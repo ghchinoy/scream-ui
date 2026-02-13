@@ -139,8 +139,8 @@ export class SuiLiveWaveform extends LitElement {
         const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
         
         // We typically only want the low/mid frequencies for a voice visualizer (e.g. 5% to 40% of the spectrum)
-        const startFreq = Math.floor(frequencies.length * 0.05);
-        const endFreq = Math.floor(frequencies.length * 0.4);
+        const startFreq = 0;
+        const endFreq = Math.floor(frequencies.length * 0.5);
         const relevantData = frequencies.slice(startFreq, endFreq);
 
         const halfCount = Math.floor(barCount / 2);
