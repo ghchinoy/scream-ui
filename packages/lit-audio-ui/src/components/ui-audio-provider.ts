@@ -90,6 +90,15 @@ export class UiAudioProvider extends LitElement {
     // We must create a new object reference so @lit/context detects the change 
     // and re-renders consumers!
     this.state = { ...this.state, ...updates };
+    
+    // Dispatch a standard DOM event so vanilla HTML/JS users can react to the player!
+    this.dispatchEvent(
+      new CustomEvent('state-change', {
+        detail: this.state,
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   private _setupAudioContext() {

@@ -342,12 +342,12 @@
           }
         </style>
 
-        <ui-audio-provider src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav">
+        <ui-audio-provider id="demo-podcast-provider" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav">
           <div class="custom-podcast-card">
             
             <div class="custom-podcast-header">
-              <div class="custom-podcast-art">
-                <span class="material-symbols-outlined" style="font-size: 32px;">graphic_eq</span>
+              <div class="custom-podcast-art" style="overflow: hidden; background: transparent;">
+                <ui-orb id="podcast-orb" agentState="idle"></ui-orb>
               </div>
               <div class="custom-podcast-info">
                 <h4 class="custom-podcast-title">Episode 4: The WebComponent Revolution</h4>
@@ -367,20 +367,30 @@
           </div>
         </ui-audio-provider>
 
-        <div slot="code">&lt;ui-audio-provider src="my-podcast.mp3"&gt;
+        <div slot="code">&lt;!-- Bind the state-change event to the Orb's agentState --&gt;
+&lt;script&gt;
+  const player = document.getElementById('player');
+  const orb = document.getElementById('orb');
+  player.addEventListener('state-change', e =&gt; {
+    orb.agentState = e.detail.isPlaying ? 'talking' : 'idle';
+  });
+&lt;/script&gt;
+
+&lt;ui-audio-provider id="player" src="my-podcast.mp3"&gt;
   &lt;div class="custom-podcast-card"&gt;
     
     &lt;!-- Top Row: Art, Text, Button --&gt;
     &lt;div class="header"&gt;
+      &lt;div class="custom-podcast-art"&gt;
+        &lt;ui-orb id="orb" agentState="idle"&gt;&lt;/ui-orb&gt;
+      &lt;/div&gt;
       &lt;h4&gt;Episode 4&lt;/h4&gt;
       &lt;ui-audio-play-button&gt;&lt;/ui-audio-play-button&gt;
     &lt;/div&gt;
 
     &lt;!-- Bottom Row: Scrubber --&gt;
     &lt;div class="scrubber"&gt;
-      &lt;ui-audio-time-display format="elapsed"&gt;&lt;/ui-audio-time-display&gt;
       &lt;ui-audio-progress-slider&gt;&lt;/ui-audio-progress-slider&gt;
-      &lt;ui-audio-time-display format="remaining"&gt;&lt;/ui-audio-time-display&gt;
     &lt;/div&gt;
 
   &lt;/div&gt;
@@ -1007,8 +1017,22 @@
              // Lighten the primary color to create a secondary color for the gradient
              const secondary = e.target.dataset.secondary;
              if(orb) orb.colors = [primary, secondary];
+             if(podcastOrb) podcastOrb.colors = [primary, secondary];
           });
         });
+        // 9. Link Podcast Provider to its Orb
+        const podcastProvider = document.getElementById('demo-podcast-provider');
+        const podcastOrb = document.getElementById('podcast-orb');
+        if (podcastProvider && podcastOrb) {
+          podcastProvider.addEventListener('state-change', (e) => {
+             const state = e.detail;
+             if (state.isPlaying) {
+               podcastOrb.agentState = "talking";
+             } else {
+               podcastOrb.agentState = "idle";
+             }
+          });
+        }
 
     </script>
   </body>
