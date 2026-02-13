@@ -1,0 +1,24 @@
+{
+  "name": "lit-audio-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@material/web": "^2.0.0",
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.0",
+    "eslint-plugin-lit": "^1.15.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.24.0",
+    "vite": "^8.0.0-beta.13"
+  }
+}

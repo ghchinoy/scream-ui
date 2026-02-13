@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lit Audio UI</title>
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+      :root {
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        padding: 2rem;
+        background-color: #f5f5f5;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #121212;
+          color: white;
+        }
+      }
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+      .component-card {
+        background: var(--md-sys-color-surface, #ffffff);
+        color: var(--md-sys-color-on-surface, #1e1e1e);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      @media (prefers-color-scheme: dark) {
+        .component-card {
+          background: #1e1e1e;
+          color: white;
+        }
+      }
+      .component-title {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-container">
+      <h1>Lit Audio UI Components</h1>
+      <p>A pure Lit WebComponents library for audio visualization and control.</p>
+      
+      <div class="component-card">
+        <h2 class="component-title">Basic Audio Button Demo</h2>
+        <!-- Future components will go here -->
+        <scream-voice-button state="idle"></scream-voice-button>
+      </div>
+    </div>
+    
+    <!-- Polyfill for older browsers -->
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>
