@@ -1,18 +1,24 @@
-# scream-ui
+# Lit Audio UI
 
-This project contains `packages/lit-audio-ui/`: A pure Lit WebComponents port of the ElevenLabs audio UI components, designed for framework-agnostic use in Lit WebComponents projects.
+A lightweight, framework-agnostic Web Components library for high-performance audio visualization and control, built natively for the browser using [Lit](https://lit.dev/).
 
-## Purpose of the Lit WebComponents Port
+## Why Lit Web Components?
 
-The `packages/lit-audio-ui` directory contains a framework-agnostic port of modern audio UI components. It translates complex React-based audio visualizers, 3D WebGL elements, and recording controls into native browser Web Components using [Lit](https://lit.dev/). By doing so, these components can be dropped into **any** web project—whether you use React, Vue, Angular, Svelte, or plain HTML—without requiring a Virtual DOM or specific CSS framework like Tailwind.
+When building complex, high-frequency audio visualizers (like real-time canvas waveforms), performance and bundle size are critical. Traditional React/ShadcnUI libraries often bring significant overhead due to Virtual DOM reconciliation loops and heavy CSS framework dependencies (like Tailwind).
 
-## Thanks to ElevenLabs UI 
+By leveraging **Lit** and native Web Components, this library offers distinct advantages:
 
-This project is deeply inspired by and serves as a direct port of the incredible open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
+* **Microscopic Footprint:** No massive framework runtimes. Lit simply provides lightweight, reactive syntactic sugar over standard browser APIs.
+* **Blazing Fast Canvas & Audio:** Direct DOM access means no Virtual DOM bottlenecks when piping 60fps `AnalyserNode` data directly into `<canvas>` elements.
+* **Framework Agnostic:** Because they compile to standard HTML tags (e.g., `<ui-live-waveform>`), you can drop these components into **any** frontend stack—React, Vue, Angular, Svelte, or vanilla HTML—with zero friction.
+* **Scoped Styling:** Uses standard CSS variables and Material Design 3 tokens. No Tailwind installation, complex class merging, or CSS-in-JS runtime required.
+* **Atomic Composition:** Powered by `@lit/context`, the complex monolithic audio players are broken down into atomic, highly composable state machines.
 
-We are incredibly grateful for their contribution to the open-source community. Their original React components provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth and professionally polished.
+## Acknowledgements
 
-While ElevenLabs UI is focused on React, shadcn/ui, and Tailwind, this project takes inspiration from those designs and uses standard browser APIs and Material Design 3 design tokens.
+This project is deeply inspired by the beautiful, open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
+
+We are incredibly grateful for their contribution to the open-source community. Their original repository provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth. While their library focuses heavily on the React ecosystem, this project reimagines those beautiful designs as standard, universal browser APIs.
 
 ## How to Use the Lit Components (For Users)
 
@@ -71,7 +77,10 @@ The library currently ships with the following native WebComponents:
 *   🎙️ **`<ui-voice-button>`**: A compound interactive button that dynamically mounts a live visualizer depending on its state. Cycles gracefully through `idle`, `recording`, `processing`, `success`, and `error` states.
 *   📊 **`<ui-waveform>`**: A static, pre-computed scrubbable waveform timeline for audio playback visualization.
 *   🌊 **`<ui-live-waveform>`**: A real-time visualizer that responds to an active `AudioContext`. Includes aggressive noise-gating, center-out mirroring, and a synthetic "processing" animation state.
-*   🎵 **`<ui-audio-player>`**: A highly polished, customized audio player utilizing Material Web Components (`<md-slider>`, `<md-filled-icon-button>`) under the hood for a seamless playback experience.
+*   〰️ **`<ui-scrolling-waveform>`**: An infinitely scrolling procedural audio visualization animation. Perfect for active "listening" states where a live `AnalyserNode` is unavailable.
+*   🎵 **`<ui-audio-player>`**: A classic monolithic pill-shaped audio player.
+*   🧩 **Compound Audio Architecture**: Use `<ui-audio-provider>`, `<ui-audio-play-button>`, `<ui-audio-progress-slider>`, and `<ui-audio-time-display>` to construct entirely custom audio layouts powered by a headless state machine via `@lit/context`.
+*   ✨ **`<ui-shimmering-text>`**: A pure CSS, dependency-free text loading effect translating complex gradients into native `@keyframes`.
 *   🎛️ **`<ui-mic-selector>`**: Handles hardware microphone enumeration (`navigator.mediaDevices`), permissions, and displays a live audio preview directly inside a dropdown menu.
 *   🎭 **`<ui-voice-picker>`**: A searchable dropdown menu (combobox) that handles rendering complex persona objects, including real-time audio previews injected directly into the menu items.
 
