@@ -109,6 +109,29 @@
         </div>
       </div>
 
+      <!-- Audio Player Demo -->
+      <div class="component-card">
+        <h2 class="component-title">sui-audio-player</h2>
+        <p>A highly polished, customized audio player utilizing Material Web Components under the hood.</p>
+        
+        <div style="margin-top: 1rem;">
+          <sui-audio-player id="demo-player"></sui-audio-player>
+        </div>
+      </div>
+
+      <!-- Voice Button Demo -->
+      <div class="component-card">
+        <h2 class="component-title">sui-voice-button</h2>
+        <p>A compound interactive button that dynamically mounts the live visualizer depending on its state. Click to cycle through the states: Idle -> Recording -> Processing -> Success -> Error.</p>
+        
+        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
+          <sui-voice-button id="demo-voice-btn" state="idle" label="Start Recording" trailing="⌥Space"></sui-voice-button>
+          
+          <span id="demo-voice-btn-state" style="font-family: monospace; font-size: 14px; background: #e0e0e0; padding: 4px 8px; border-radius: 4px; color: #333;">State: idle</span>
+        </div>
+      </div>
+
+
     </div>
     
     <!-- Polyfill for older browsers -->
@@ -185,6 +208,64 @@
             processingBtn.textContent = 'Toggle "Processing" State';
           }
         });
+
+        // 3. Setup Audio Player
+        const demoPlayer = document.getElementById('demo-player');
+        // Setting the property object natively in JS since HTML attributes don't parse JSON nicely
+        demoPlayer.item = { id: 'music-1', src: '/samples/music_sample.wav' };
+        
+        // 4. Setup Voice Button State Cycle
+        const voiceBtn = document.getElementById('demo-voice-btn');
+        const voiceStateText = document.getElementById('demo-voice-btn-state');
+        
+        // Share the analyser node from the live demo just to prove it works!
+        // In a real app this would come from navigator.mediaDevices.getUserMedia()
+        
+        const stateCycle = ['idle', 'recording', 'processing', 'success', 'error'];
+        let cycleIndex = 0;
+        
+        voiceBtn.addEventListener('voice-button-click', () => {
+           // We cycle to the next state
+           cycleIndex = (cycleIndex + 1) % stateCycle.length;
+           const newState = stateCycle[cycleIndex];
+           
+           voiceBtn.state = newState;
+           
+           // If we enter recording, inject the analyser node so the mini-waveform bounces!
+           if (newState === 'recording' && analyser) {
+             voiceBtn.analyserNode = analyser;
+           } else {
+             voiceBtn.analyserNode = undefined;
+           }
+           
+           // Update labels to make the demo pretty
+           if (newState === 'idle') voiceBtn.label = 'Start Recording';
+           else if (newState === 'recording') voiceBtn.label = 'Stop Recording';
+           else if (newState === 'processing') voiceBtn.label = 'Analyzing...';
+           else voiceBtn.label = ''; // Hide label for success/error dots
+           
+           voiceStateText.textContent = `State: ${newState}`;
+        });
+        
+        // We also want to listen for the transient states resolving themselves back to idle
+        // The lit component automatically resets state to 'idle' after 1500ms of success/error feedback
+        // But we need to sync our demo's label/index state!
+        
+        // Let's create an observer for the `state` property
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'state') {
+              const currentState = voiceBtn.getAttribute('state');
+              if (currentState === 'idle') {
+                 cycleIndex = 0;
+                 voiceBtn.label = 'Start Recording';
+                 voiceStateText.textContent = 'State: idle (auto-reset)';
+              }
+            }
+          });
+        });
+        observer.observe(voiceBtn, { attributes: true });
+        
       });
     </script>
   </body>
