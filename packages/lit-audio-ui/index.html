@@ -424,6 +424,22 @@
 &lt;/ui-scrolling-waveform&gt;</div>
       </ui-showcase-card>
       
+      <!-- 3D Orb Visualizer Demo -->
+      <ui-showcase-card title="ui-orb" description="A native WebGL Three.js implementation of the conversational agent Orb. Powered by custom GLSL shaders without requiring React Three Fiber.">
+        <div class="control-panel">
+          <button id="orb-state-btn" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit;">
+            Cycle State: idle
+          </button>
+        </div>
+        <div style="width: 250px; height: 250px; margin: 0 auto; background: var(--md-sys-color-surface-container-highest); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <ui-orb id="demo-orb"></ui-orb>
+        </div>
+        <div slot="code">&lt;ui-orb 
+  agentState="idle | listening | thinking | talking"
+  .colors="${['#CADCFC', '#A0B9D1']}"&gt;
+&lt;/ui-orb&gt;</div>
+      </ui-showcase-card>
+
       <!-- Shimmering Text Demo -->
       <ui-showcase-card title="ui-shimmering-text" description="A pure CSS, dependency-free text loading effect. Translates Framer Motion gradients into native @keyframes and IntersectionObservers.">
         <div style="font-size: 2rem; font-weight: 700;">
@@ -956,6 +972,28 @@
            speechPulse.style.transform = 'scale(0)';
            
            speechText.textContent = "Listening...";
+        });
+        // 8. Setup Orb Demo
+        const orb = document.getElementById('demo-orb');
+        const orbBtn = document.getElementById('orb-state-btn');
+        const orbStates = [null, 'listening', 'thinking', 'talking'];
+        let orbStateIndex = 0;
+        
+        orbBtn.addEventListener('click', () => {
+          orbStateIndex = (orbStateIndex + 1) % orbStates.length;
+          const nextState = orbStates[orbStateIndex];
+          orb.agentState = nextState;
+          orbBtn.textContent = `Cycle State: ${nextState === null ? 'idle' : nextState}`;
+        });
+        
+        // Connect the generic color picker to the orb colors too!
+        swatches.forEach(swatch => {
+          swatch.addEventListener('click', (e) => {
+             const primary = e.target.dataset.primary;
+             // Lighten the primary color to create a secondary color for the gradient
+             const lighter = primary + '88'; 
+             if(orb) orb.colors = [primary, lighter];
+          });
         });
 
     </script>

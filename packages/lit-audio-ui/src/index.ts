@@ -34,3 +34,5 @@ export * from './components/ui-audio-play-button';
 export * from './components/ui-audio-progress-slider';
 export * from './components/ui-audio-time-display';
 export * from './utils/audio-context';
+
+export * from './components/ui-orb';
