@@ -65,13 +65,37 @@
         transition: background-color 0.3s, color 0.3s;
       }
       
-      .component-card {
+            .component-card {
         background: var(--md-sys-color-surface);
         color: var(--md-sys-color-on-surface);
         border-radius: 12px;
         padding: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s, color 0.3s;
+      }
+
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .component-title {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-bottom: 1px solid var(--md-sys-color-outline-variant);
+        padding-bottom: 0.5rem;
+      }
+
+      .control-panel {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        align-items: center;
       }
 
       .waveform-container {
@@ -121,7 +145,7 @@
         <p>A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.</p>
         
         <div class="waveform-container" style="height: 64px;">
-          <sui-waveform id="demo-static-waveform" height="64" barColor="var(--md-sys-color-primary, #0066cc)" fadeEdges="true"></sui-waveform>
+          <sui-waveform id="demo-static-waveform" height="64"  fadeEdges="true"></sui-waveform>
         </div>
       </div>
       
@@ -141,7 +165,7 @@
         </div>
         
         <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
-           <sui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5" barColor="var(--md-sys-color-primary, #0066cc)"></sui-live-waveform>
+           <sui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5" ></sui-live-waveform>
         </div>
       </div>
 
@@ -277,15 +301,16 @@
         // Share the analyser node from the live demo just to prove it works!
         // In a real app this would come from navigator.mediaDevices.getUserMedia()
         
-        const stateCycle = ['idle', 'recording', 'processing', 'success', 'error'];
-        let cycleIndex = 0;
+
+        const stateCycle = ['recording', 'processing', 'success', 'error'];
+        let cycleIndex = -1;
         
         voiceBtn.addEventListener('voice-button-click', () => {
            // We cycle to the next state
            cycleIndex = (cycleIndex + 1) % stateCycle.length;
            const newState = stateCycle[cycleIndex];
            
-           voiceBtn.state = newState;
+           voiceBtn.setAttribute('state', newState);
            
            // If we enter recording, inject the analyser node so the mini-waveform bounces!
            if (newState === 'recording' && analyser) {
@@ -313,7 +338,7 @@
             if (mutation.type === 'attributes' && mutation.attributeName === 'state') {
               const currentState = voiceBtn.getAttribute('state');
               if (currentState === 'idle') {
-                 cycleIndex = 0;
+                 // Do NOT reset cycleIndex, let the user keep clicking through the states!
                  voiceBtn.label = 'Start Recording';
                  voiceStateText.textContent = 'State: idle (auto-reset)';
               }

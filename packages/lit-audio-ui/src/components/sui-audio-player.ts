@@ -1,6 +1,6 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
-import '@material/web/iconbutton/icon-button.js';
+import {LitElement, html, css} from 'lit';
+import {customElement, property, query, state} from 'lit/decorators.js';
+import '@material/web/iconbutton/filled-icon-button.js';
 import '@material/web/icon/icon.js';
 import '@material/web/slider/slider.js';
 import '@material/web/progress/circular-progress.js';
@@ -16,7 +16,7 @@ export interface AudioPlayerItem {
  */
 @customElement('sui-audio-player')
 export class SuiAudioPlayer extends LitElement {
-  @property({ type: Object }) item?: AudioPlayerItem;
+  @property({type: Object}) item?: AudioPlayerItem;
 
   @query('audio') private _audioEl!: HTMLAudioElement;
 
@@ -47,11 +47,16 @@ export class SuiAudioPlayer extends LitElement {
       justify-content: center;
     }
 
-    md-icon-button {
-      background: var(--md-sys-color-primary, #0066cc);
+    md-filled-icon-button {
+      --md-filled-icon-button-container-color: var(--md-sys-color-primary, #0066cc);
+      --md-filled-icon-button-icon-color: var(--md-sys-color-on-primary, #ffffff);
+      --md-filled-icon-button-hover-icon-color: var(--md-sys-color-on-primary, #ffffff);
+      --md-filled-icon-button-focus-icon-color: var(--md-sys-color-on-primary, #ffffff);
+      --md-filled-icon-button-pressed-icon-color: var(--md-sys-color-on-primary, #ffffff);
+    }
+
+    md-icon {
       color: var(--md-sys-color-on-primary, #ffffff);
-      --md-icon-button-icon-color: var(--md-sys-color-on-primary, #ffffff);
-      border-radius: 50%;
     }
 
     md-circular-progress {
@@ -79,34 +84,43 @@ export class SuiAudioPlayer extends LitElement {
 
   render() {
     return html`
-      <audio 
-        src="${this.item?.src || ''}" 
+      <audio
+        src="${this.item?.src || ''}"
         preload="metadata"
         @loadedmetadata="${this._handleLoadedMetadata}"
         @ended="${this._handleEnded}"
-        @playing="${() => { this._isPlaying = true; }}"
-        @pause="${() => { this._isPlaying = false; }}"
-        @waiting="${() => { this._isBuffering = true; }}"
-        @canplay="${() => { this._isBuffering = false; }}"
+        @playing="${() => {
+          this._isPlaying = true;
+        }}"
+        @pause="${() => {
+          this._isPlaying = false;
+        }}"
+        @waiting="${() => {
+          this._isBuffering = true;
+        }}"
+        @canplay="${() => {
+          this._isBuffering = false;
+        }}"
       ></audio>
 
       <div class="play-button-container">
-        <md-icon-button @click="${this._togglePlay}">
+        <md-filled-icon-button @click="${this._togglePlay}">
           <md-icon>${this._isPlaying ? 'pause' : 'play_arrow'}</md-icon>
-        </md-icon-button>
+        </md-filled-icon-button>
         ${this._isBuffering && this._isPlaying
           ? html`<md-circular-progress indeterminate></md-circular-progress>`
           : ''}
       </div>
 
       <div class="time-display">
-        ${this._formatTime(this._currentTime)} / ${this._duration ? this._formatTime(this._duration) : '--:--'}
+        ${this._formatTime(this._currentTime)} /
+        ${this._duration ? this._formatTime(this._duration) : '--:--'}
       </div>
 
       <div class="slider-container">
-        <md-slider 
-          min="0" 
-          max="${this._duration || 100}" 
+        <md-slider
+          min="0"
+          max="${this._duration || 100}"
           value="${this._currentTime}"
           step="0.1"
           ?disabled="${!this._duration}"
@@ -133,7 +147,7 @@ export class SuiAudioPlayer extends LitElement {
     if (this._isPlaying) {
       this._audioEl.pause();
     } else {
-      this._audioEl.play().catch(e => console.error("Error playing audio", e));
+      this._audioEl.play().catch(e => console.error('Error playing audio', e));
     }
   }
 
@@ -163,7 +177,7 @@ export class SuiAudioPlayer extends LitElement {
 
   private _startTrackingTime() {
     const track = () => {
-      // Only update internal time state if the user ISN'T dragging the slider, 
+      // Only update internal time state if the user ISN'T dragging the slider,
       // otherwise they fight each other and cause jank.
       if (this._audioEl && !this._isDraggingSlider) {
         this._currentTime = this._audioEl.currentTime;
@@ -174,16 +188,16 @@ export class SuiAudioPlayer extends LitElement {
   }
 
   private _formatTime(seconds: number): string {
-    if (!seconds || isNaN(seconds)) return "0:00";
+    if (!seconds || isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
 
-    const formattedMins = mins < 10 && hrs > 0 ? "0" + mins : mins;
-    const formattedSecs = secs < 10 ? "0" + secs : secs;
+    const formattedMins = mins < 10 && hrs > 0 ? '0' + mins : mins;
+    const formattedSecs = secs < 10 ? '0' + secs : secs;
 
     return hrs > 0
-      ? hrs + ":" + formattedMins + ":" + formattedSecs
-      : formattedMins + ":" + formattedSecs;
+      ? hrs + ':' + formattedMins + ':' + formattedSecs
+      : formattedMins + ':' + formattedSecs;
   }
 }
