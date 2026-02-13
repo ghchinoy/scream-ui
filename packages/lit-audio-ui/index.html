@@ -259,18 +259,117 @@
 &lt;/ui-live-waveform&gt;</div>
       </ui-showcase-card>
 
-      <!-- Audio Player Demo -->
-      <ui-showcase-card title="ui-audio-player" description="A highly polished, customized audio player utilizing Material Web Components under the hood.">
+      <!-- Audio Player Demo (Classic Preset) -->
+      <ui-showcase-card title="ui-audio-player (Classic)" description="The original pill-shaped monolithic layout. It is now completely powered by the headless ui-audio-provider internally.">
         <div style="margin-top: 1rem;">
           <ui-audio-player id="demo-player"></ui-audio-player>
         </div>
-        <div slot="code">
-&lt;ui-audio-player 
+        <div slot="code">&lt;ui-audio-player 
   .item="${{ 
     id: 'sample1', 
     src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' 
   }}"&gt;
 &lt;/ui-audio-player&gt;</div>
+      </ui-showcase-card>
+
+      <!-- Compound Audio Player Architecture Demo -->
+      <ui-showcase-card title="Compound Audio Architecture" description="Because the player is now broken into atomic WebComponents powered by @lit/context, you can use HTML to construct entirely custom layouts that share the same underlying audio stream!">
+        
+        <style>
+          .custom-podcast-card {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          }
+          .custom-podcast-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+          }
+          .custom-podcast-art {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-secondary-container));
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+          }
+          .custom-podcast-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+          }
+          .custom-podcast-title {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+            line-height: 1.2;
+          }
+          .custom-podcast-author {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--md-sys-color-on-surface-variant);
+          }
+          .custom-podcast-scrubber {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+        </style>
+
+        <ui-audio-provider src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav">
+          <div class="custom-podcast-card">
+            
+            <div class="custom-podcast-header">
+              <div class="custom-podcast-art">
+                <span class="material-symbols-outlined" style="font-size: 32px;">graphic_eq</span>
+              </div>
+              <div class="custom-podcast-info">
+                <h4 class="custom-podcast-title">Episode 4: The WebComponent Revolution</h4>
+                <p class="custom-podcast-author">By Orus The Storyteller</p>
+              </div>
+              <ui-audio-play-button></ui-audio-play-button>
+            </div>
+
+            <div class="custom-podcast-scrubber">
+              <ui-audio-time-display format="elapsed"></ui-audio-time-display>
+              <div style="flex: 1;">
+                <ui-audio-progress-slider></ui-audio-progress-slider>
+              </div>
+              <ui-audio-time-display format="remaining"></ui-audio-time-display>
+            </div>
+            
+          </div>
+        </ui-audio-provider>
+
+        <div slot="code">&lt;ui-audio-provider src="my-podcast.mp3"&gt;
+  &lt;div class="custom-podcast-card"&gt;
+    
+    &lt;!-- Top Row: Art, Text, Button --&gt;
+    &lt;div class="header"&gt;
+      &lt;h4&gt;Episode 4&lt;/h4&gt;
+      &lt;ui-audio-play-button&gt;&lt;/ui-audio-play-button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Bottom Row: Scrubber --&gt;
+    &lt;div class="scrubber"&gt;
+      &lt;ui-audio-time-display format="elapsed"&gt;&lt;/ui-audio-time-display&gt;
+      &lt;ui-audio-progress-slider&gt;&lt;/ui-audio-progress-slider&gt;
+      &lt;ui-audio-time-display format="remaining"&gt;&lt;/ui-audio-time-display&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/ui-audio-provider&gt;</div>
       </ui-showcase-card>
 
       <!-- Mic Selector Demo -->
