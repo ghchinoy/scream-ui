@@ -4,7 +4,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/icon/icon.js';
-import './sui-live-waveform';
+import './ui-live-waveform';
 
 export type VoiceButtonState =
   | 'idle'
@@ -16,8 +16,8 @@ export type VoiceButtonState =
 /**
  * A native Lit WebComponent replacement for the ElevenLabs React voice-button.
  */
-@customElement('sui-voice-button')
-export class SuiVoiceButton extends LitElement {
+@customElement('ui-voice-button')
+export class UiVoiceButton extends LitElement {
   @property({type: String}) state: VoiceButtonState = 'idle';
   @property({type: String}) label?: string;
   @property({type: String}) trailing?: string;
@@ -31,8 +31,8 @@ export class SuiVoiceButton extends LitElement {
   static styles = css`
     :host {
       display: inline-block;
-      --sui-waveform-height: 24px;
-      --sui-waveform-width: 96px;
+      --ui-waveform-height: 24px;
+      --ui-waveform-width: 96px;
     }
 
     .wrapper {
@@ -82,8 +82,8 @@ export class SuiVoiceButton extends LitElement {
 
     .waveform-slot {
       position: relative;
-      width: var(--sui-waveform-width);
-      height: var(--sui-waveform-height);
+      width: var(--ui-waveform-width);
+      height: var(--ui-waveform-height);
       border-radius: 4px;
       overflow: hidden;
       display: flex;
@@ -197,7 +197,7 @@ export class SuiVoiceButton extends LitElement {
           <div class=${classMap(slotClasses)}>
             ${showWaveform
               ? html`
-                  <sui-live-waveform
+                  <ui-live-waveform
                     .active=${isRecording}
                     .processing=${isProcessing}
                     .analyserNode=${this.analyserNode}
@@ -208,7 +208,7 @@ export class SuiVoiceButton extends LitElement {
                     .sensitivity=${1.8}
                     height="20"
                     style="position: absolute; inset: 0;"
-                  ></sui-live-waveform>
+                  ></ui-live-waveform>
                 `
               : ''}
             ${showTrailing

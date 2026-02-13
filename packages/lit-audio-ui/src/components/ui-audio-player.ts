@@ -14,8 +14,8 @@ export interface AudioPlayerItem {
  * A native Lit WebComponent replacement for the ElevenLabs React audio-player.
  * It manages an internal <audio> element and binds its state to Material Web controls.
  */
-@customElement('sui-audio-player')
-export class SuiAudioPlayer extends LitElement {
+@customElement('ui-audio-player')
+export class UiAudioPlayer extends LitElement {
   @property({type: Object}) item?: AudioPlayerItem;
 
   @query('audio') private _audioEl!: HTMLAudioElement;

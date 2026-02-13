@@ -5,8 +5,8 @@ import {
   getNormalizedFrequencyData,
 } from '../utils/audio-utils';
 
-@customElement('sui-live-waveform')
-export class SuiLiveWaveform extends LitElement {
+@customElement('ui-live-waveform')
+export class UiLiveWaveform extends LitElement {
   @property({type: Boolean}) active: boolean = false;
   @property({type: Boolean}) processing: boolean = false;
   @property({attribute: false}) analyserNode?: AnalyserNode;

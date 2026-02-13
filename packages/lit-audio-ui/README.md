@@ -12,12 +12,12 @@ This repository is designed as a sister UI library to be consumed by application
 
 The library currently ships with the following native WebComponents:
 
-*   🎙️ **`<sui-voice-button>`**: A compound interactive button that dynamically mounts a live visualizer depending on its state. Cycles gracefully through `idle`, `recording`, `processing`, `success`, and `error` states.
-*   📊 **`<sui-waveform>`**: A static, pre-computed scrubbable waveform timeline for audio playback visualization.
-*   🌊 **`<sui-live-waveform>`**: A real-time visualizer that responds to an active `AudioContext`. Includes aggressive noise-gating, center-out mirroring, and a synthetic "processing" animation state.
-*   🎵 **`<sui-audio-player>`**: A highly polished, customized audio player utilizing Material Web Components (`<md-slider>`, `<md-filled-icon-button>`) under the hood for a seamless playback experience.
-*   🎛️ **`<sui-mic-selector>`**: Handles hardware microphone enumeration (`navigator.mediaDevices`), permissions, and displays a live audio preview directly inside a dropdown menu.
-*   🎭 **`<sui-voice-picker>`**: A searchable dropdown menu (combobox) that handles rendering complex persona objects, including real-time audio previews injected directly into the menu items.
+*   🎙️ **`<ui-voice-button>`**: A compound interactive button that dynamically mounts a live visualizer depending on its state. Cycles gracefully through `idle`, `recording`, `processing`, `success`, and `error` states.
+*   📊 **`<ui-waveform>`**: A static, pre-computed scrubbable waveform timeline for audio playback visualization.
+*   🌊 **`<ui-live-waveform>`**: A real-time visualizer that responds to an active `AudioContext`. Includes aggressive noise-gating, center-out mirroring, and a synthetic "processing" animation state.
+*   🎵 **`<ui-audio-player>`**: A highly polished, customized audio player utilizing Material Web Components (`<md-slider>`, `<md-filled-icon-button>`) under the hood for a seamless playback experience.
+*   🎛️ **`<ui-mic-selector>`**: Handles hardware microphone enumeration (`navigator.mediaDevices`), permissions, and displays a live audio preview directly inside a dropdown menu.
+*   🎭 **`<ui-voice-picker>`**: A searchable dropdown menu (combobox) that handles rendering complex persona objects, including real-time audio previews injected directly into the menu items.
 
 ---
 
@@ -48,8 +48,8 @@ Import the components into your JavaScript/TypeScript entry point:
 import 'scream-audio-ui';
 
 // Or import specific components
-import 'scream-audio-ui/components/sui-voice-button';
-import 'scream-audio-ui/components/sui-live-waveform';
+import 'scream-audio-ui/components/ui-voice-button';
+import 'scream-audio-ui/components/ui-live-waveform';
 ```
 
 ### 3. Use in HTML
@@ -57,10 +57,10 @@ Once imported, the custom elements are registered with the browser and can be us
 
 ```html
 <!-- Example: A voice recording button -->
-<sui-voice-button state="idle" label="Start Recording"></sui-voice-button>
+<ui-voice-button state="idle" label="Start Recording"></ui-voice-button>
 
 <!-- Example: An audio visualizer canvas linked to an AnalyserNode -->
-<sui-live-waveform .analyserNode="${myAudioAnalyser}"></sui-live-waveform>
+<ui-live-waveform .analyserNode="${myAudioAnalyser}"></ui-live-waveform>
 ```
 
 ### 4. Theming (Material Design 3)

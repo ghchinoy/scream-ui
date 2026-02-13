@@ -6,7 +6,7 @@ import '@material/web/menu/menu-item.js';
 import '@material/web/divider/divider.js';
 import '@material/web/button/text-button.js';
 import '@material/web/button/filled-tonal-button.js';
-import './sui-live-waveform';
+import './ui-live-waveform';
 
 export interface AudioDevice {
   deviceId: string;
@@ -18,8 +18,8 @@ export interface AudioDevice {
  * A native Lit WebComponent that provides a dropdown menu for selecting audio input devices.
  * Replaces the React/Radix MicSelector.
  */
-@customElement('sui-mic-selector')
-export class SuiMicSelector extends LitElement {
+@customElement('ui-mic-selector')
+export class UiMicSelector extends LitElement {
   @property({type: String}) value?: string;
   @property({type: Boolean}) muted = false;
   @property({type: Boolean}) disabled = false;
@@ -224,7 +224,7 @@ export class SuiMicSelector extends LitElement {
                 </md-text-button>
 
                 <div class="preview-waveform">
-                  <sui-live-waveform
+                  <ui-live-waveform
                     .active=${this._isMenuOpen &&
                     !this.muted &&
                     this._hasPermission}
@@ -234,7 +234,7 @@ export class SuiMicSelector extends LitElement {
                     .barGap=${1}
                     .fadeEdges=${false}
                     height="16"
-                  ></sui-live-waveform>
+                  ></ui-live-waveform>
                 </div>
               </div>
             `

@@ -5,7 +5,7 @@ import '@material/web/menu/menu.js';
 import '@material/web/menu/menu-item.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/textfield/outlined-text-field.js';
-import './sui-live-waveform';
+import './ui-live-waveform';
 
 export interface VoiceLabel {
   accent?: string;
@@ -26,8 +26,8 @@ export interface VoiceItem {
  * A native Lit WebComponent that provides a searchable dropdown menu for selecting
  * a voice persona, matching the React/Radix Command component.
  */
-@customElement('sui-voice-picker')
-export class SuiVoicePicker extends LitElement {
+@customElement('ui-voice-picker')
+export class UiVoicePicker extends LitElement {
   @property({type: Array}) voices: VoiceItem[] = [];
   @property({type: String}) value?: string;
   @property({type: String}) placeholder = 'Select a voice...';

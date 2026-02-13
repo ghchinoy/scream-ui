@@ -2,8 +2,8 @@ import {LitElement, html, css, type PropertyValues} from 'lit';
 import {customElement, property, query} from 'lit/decorators.js';
 import {applyCanvasEdgeFade} from '../utils/audio-utils';
 
-@customElement('sui-waveform')
-export class SuiWaveform extends LitElement {
+@customElement('ui-waveform')
+export class UiWaveform extends LitElement {
   @property({type: Array}) data: number[] = [];
   @property({type: Number}) barWidth: number = 4;
   @property({type: Number}) barHeight: number = 4;
