@@ -98,11 +98,12 @@
       }
 
       .demo-container {
-        max-width: 800px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
+        display: flex; 
+        flex-direction: row; /* FORCE ROW */
+        gap: 2rem; 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        align-items: flex-start;
       }
 
       .component-title {
@@ -182,7 +183,7 @@
       </div>
     </nav>
 
-    <div class="demo-container" style="display: flex; gap: 2rem; max-width: 1200px; margin: 0 auto; align-items: flex-start;">
+    <div class="demo-container">
       <aside class="side-nav">
         <h3 style="margin-top: 0; font-size: 1rem; font-weight: 600; color: var(--md-sys-color-on-surface); margin-bottom: 1rem;">Components</h3>
         <ul id="nav-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
