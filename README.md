@@ -1,23 +1,42 @@
-# scream-ui
+# Lit Audio UI (Scream UI)
 
-This project contains `packages/lit-audio-ui/`: A pure Lit WebComponents port of the ElevenLabs audio UI components, designed for framework-agnostic use in Lit WebComponents projects.
+**Lit Audio UI** is a pure Web Components library providing highly polished, interactive audio UI components.
 
-## Purpose of the Lit WebComponents Port
+It translates complex React-based audio visualizers, 3D WebGL elements, and recording controls into native browser Web Components using [Lit](https://lit.dev/) and Material Design 3 tokens. By doing so, these components can be dropped into **any** web project—whether you use React, Vue, Angular, Svelte, or plain HTML—without requiring a Virtual DOM or specific CSS framework like Tailwind.
 
-The `packages/lit-audio-ui` directory contains a framework-agnostic port of modern audio UI components. It translates complex React-based audio visualizers, 3D WebGL elements, and recording controls into native browser Web Components using [Lit](https://lit.dev/). By doing so, these components can be dropped into **any** web project—whether you use React, Vue, Angular, Svelte, or plain HTML—without requiring a Virtual DOM or specific CSS framework like Tailwind.
+This repository is designed as a sister UI library to be consumed by applications like **Scream: Speech Arena**.
 
-## Thanks to ElevenLabs UI 
+---
+
+## 🎨 Available Components
+
+The library currently ships with the following native WebComponents:
+
+*   🎙️ **`<sui-voice-button>`**: A compound interactive button that dynamically mounts a live visualizer depending on its state. Cycles gracefully through `idle`, `recording`, `processing`, `success`, and `error` states.
+*   📊 **`<sui-waveform>`**: A static, pre-computed scrubbable waveform timeline for audio playback visualization.
+*   🌊 **`<sui-live-waveform>`**: A real-time visualizer that responds to an active `AudioContext`. Includes aggressive noise-gating, center-out mirroring, and a synthetic "processing" animation state.
+*   🎵 **`<sui-audio-player>`**: A highly polished, customized audio player utilizing Material Web Components (`<md-slider>`, `<md-filled-icon-button>`) under the hood for a seamless playback experience.
+*   🎛️ **`<sui-mic-selector>`**: Handles hardware microphone enumeration (`navigator.mediaDevices`), permissions, and displays a live audio preview directly inside a dropdown menu.
+*   🎭 **`<sui-voice-picker>`**: A searchable dropdown menu (combobox) that handles rendering complex persona objects, including real-time audio previews injected directly into the menu items.
+
+---
+
+## 🙏 Gracious Attribution 
 
 This project is deeply inspired by and serves as a direct port of the incredible open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
 
-We are incredibly grateful for their contribution to the open-source community. Their original React components provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth and professionally polished.
+We are incredibly grateful for their contribution to the open-source community. Their original React components provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth and professionally polished. 
 
-## How to Use the Lit Components (For Users)
+While ElevenLabs UI is locked to React, shadcn/ui, and Tailwind, this project liberates those designs into standard browser APIs.
+
+---
+
+## 🚀 How to Use (For Users)
 
 As a Web Components library, you can use these elements directly in your HTML or inside any frontend framework.
 
 ### 1. Installation
-Install the package via npm (assuming you are linking it locally or publishing it):
+Install the package via npm:
 ```bash
 npm install scream-audio-ui
 ```
@@ -29,7 +48,8 @@ Import the components into your JavaScript/TypeScript entry point:
 import 'scream-audio-ui';
 
 // Or import specific components
-import 'scream-audio-ui/components/scream-voice-button';
+import 'scream-audio-ui/components/sui-voice-button';
+import 'scream-audio-ui/components/sui-live-waveform';
 ```
 
 ### 3. Use in HTML
@@ -37,15 +57,33 @@ Once imported, the custom elements are registered with the browser and can be us
 
 ```html
 <!-- Example: A voice recording button -->
-<scream-voice-button state="idle"></scream-voice-button>
+<sui-voice-button state="idle" label="Start Recording"></sui-voice-button>
 
-<!-- Example: An audio visualizer canvas -->
-<sui-live-waveform .data="${audioDataArray}"></sui-live-waveform>
+<!-- Example: An audio visualizer canvas linked to an AnalyserNode -->
+<sui-live-waveform .analyserNode="${myAudioAnalyser}"></sui-live-waveform>
 ```
 
-*Note: These components utilize Material Design 3 design tokens (`--md-sys-color-*`). Ensure you have a Material theme loaded or define the CSS variables manually for the best visual experience.*
+### 4. Theming (Material Design 3)
+These components are deeply theme-aware and utilize Material Design 3 design tokens. To customize their colors (or support light/dark modes), simply define the CSS variables in your stylesheet:
 
-## How to Build & Extend (For Developers)
+```css
+:root {
+  --md-sys-color-primary: #0066cc;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-surface-container: #f3f3f3;
+  /* ...other MD3 tokens */
+}
+
+.dark {
+  --md-sys-color-primary: #a8c7fa;
+  --md-sys-color-on-primary: #003062;
+  --md-sys-color-surface-container: #212121;
+}
+```
+
+---
+
+## 🛠️ How to Build & Extend (For Developers)
 
 We welcome contributions! If you want to extend the components, tweak the canvas math, or add new visualizers, here is how you can get started.
 
@@ -57,6 +95,7 @@ We welcome contributions! If you want to extend the components, tweak the canvas
 
 1. **Clone & Install**
    ```bash
+   git clone <repository-url>
    cd packages/lit-audio-ui
    npm install
    ```
@@ -68,21 +107,20 @@ We welcome contributions! If you want to extend the components, tweak the canvas
    ```
 
 3. **Code Structure**
-   - `/packages/lit-audio-ui/src/components/`: This is where the Lit elements (`.ts`) live. Each component should be self-contained with its scoped CSS (`static styles`).
-   - `/packages/lit-audio-ui/src/utils/`: Shared utilities, such as the `AudioContext` and FFT math ported from the original ElevenLabs React repository.
-   - `/packages/lit-audio-ui/index.html`: The development workbench. Whenever you create a new component or port a feature, add a demo block here.
+   - `/src/components/`: This is where the Lit elements (`.ts`) live. Each component should be self-contained with its scoped CSS (`static styles`).
+   - `/src/utils/`: Shared utilities, such as the `AudioContext` and FFT math ported from the original ElevenLabs repository.
+   - `index.html`: The development workbench. Whenever you create a new component or port a feature, add a demo block here.
 
 ### Building for Production
 To compile the TypeScript and bundle the library for distribution:
 ```bash
-cd packages/lit-audio-ui
 npm run build
 ```
 This generates the optimized assets in the `/dist` folder.
 
-### Linting
-We use ESLint and the `eslint-plugin-lit` ruleset to enforce code quality and Lit best practices.
+### Linting & Formatting
+We use `google/gts` (Google TypeScript Style) and the `eslint-plugin-lit` ruleset to enforce code quality and Lit best practices.
 ```bash
-cd packages/lit-audio-ui
-npm run lint
+npm run lint  # Check for errors
+npm run fix   # Auto-format code
 ```
