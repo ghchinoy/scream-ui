@@ -28,7 +28,7 @@ export interface AudioPlayerItem {
 
 /**
  * A native Lit WebComponent replacement for the ElevenLabs React audio-player.
- * It manages an internal <audio> element and binds its state to Material Web controls.
+ * It manages an internal <audio crossorigin="anonymous"> element and binds its state to Material Web controls.
  */
 @customElement('ui-audio-player')
 export class UiAudioPlayer extends LitElement {
@@ -129,7 +129,7 @@ export class UiAudioPlayer extends LitElement {
 
   render() {
     return html`
-      <audio
+      <audio crossorigin="anonymous"
         src="${this.item?.src || ''}"
         preload="metadata"
         @loadedmetadata="${this._handleLoadedMetadata}"

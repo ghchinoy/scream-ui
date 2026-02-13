@@ -232,7 +232,7 @@ export class UiVoicePicker extends LitElement {
 
     return html`
       <!-- Hidden audio player for previews -->
-      <audio
+      <audio crossorigin="anonymous"
         @ended=${() => (this._previewingVoiceId = undefined)}
         @pause=${() => (this._previewingVoiceId = undefined)}
       ></audio>
