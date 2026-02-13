@@ -51,6 +51,27 @@
         border-bottom: 1px solid #ccc;
         padding-bottom: 0.5rem;
       }
+      
+      .control-panel {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        align-items: center;
+      }
+      
+      .waveform-container {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f0f0f0;
+        border-radius: 8px;
+        height: 120px;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        .waveform-container {
+          background: #2a2a2a;
+        }
+      }
     </style>
   </head>
   <body>
@@ -58,14 +79,113 @@
       <h1>Lit Audio UI Components</h1>
       <p>A pure Lit WebComponents library for audio visualization and control.</p>
       
+      <!-- Static Waveform Demo -->
       <div class="component-card">
-        <h2 class="component-title">Basic Audio Button Demo</h2>
-        <!-- Future components will go here -->
-        <scream-voice-button state="idle"></scream-voice-button>
+        <h2 class="component-title">sui-waveform (Static Timeline)</h2>
+        <p>A pre-computed scrubbable waveform. This generates a random mock array of 200 data points (0.0 to 1.0) and visualizes them instantly.</p>
+        
+        <div class="waveform-container" style="height: 64px;">
+          <sui-waveform id="demo-static-waveform" barColor="var(--md-sys-color-primary, #0066cc)" fadeEdges="true"></sui-waveform>
+        </div>
       </div>
+      
+      <!-- Live Waveform Demo -->
+      <div class="component-card">
+        <h2 class="component-title">sui-live-waveform (Real-time Audio)</h2>
+        <p>A live visualizer that responds to an active <code>AudioContext</code>. Click "Play Sample" to feed the <strong>Gemini TTS</strong> speech sample into the visualizer.</p>
+        
+        <div class="control-panel">
+          <audio id="demo-audio-player" src="/samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
+          
+          <div style="flex: 1"></div>
+          
+          <button id="btn-processing" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer;">
+            Toggle "Processing" State
+          </button>
+        </div>
+        
+        <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
+           <sui-live-waveform id="demo-live-waveform" height="80" barColor="var(--md-sys-color-primary, #0066cc)"></sui-live-waveform>
+        </div>
+      </div>
+
     </div>
     
     <!-- Polyfill for older browsers -->
     <script type="module" src="/src/index.ts"></script>
+    
+    <script>
+      // 1. Setup Static Waveform
+      document.addEventListener('DOMContentLoaded', () => {
+        const staticWaveform = document.getElementById('demo-static-waveform');
+        // Generate 150 random data points to simulate an audio track
+        const mockData = Array.from({length: 150}, () => Math.random() * 0.8 + 0.1);
+        staticWaveform.data = mockData;
+        
+        
+        // 2. Setup Live Waveform
+        const liveWaveform = document.getElementById('demo-live-waveform');
+        const audioElement = document.getElementById('demo-audio-player');
+        const processingBtn = document.getElementById('btn-processing');
+        
+        let audioCtx;
+        let analyser;
+        let source;
+        let isConnected = false;
+        
+        // We must initialize AudioContext upon first user interaction
+        audioElement.addEventListener('play', () => {
+          if (!isConnected) {
+            // Standard + Safari fallback
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContextClass();
+            analyser = audioCtx.createAnalyser();
+            
+            // Replicate the ElevenLabs smoothing
+            analyser.fftSize = 256;
+            analyser.smoothingTimeConstant = 0.8;
+            
+            source = audioCtx.createMediaElementSource(audioElement);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            
+            isConnected = true;
+          }
+          
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          
+          // Pass the analyser node to our Lit Component!
+          liveWaveform.analyserNode = analyser;
+          liveWaveform.active = true;
+          liveWaveform.processing = false;
+          processingBtn.textContent = 'Toggle "Processing" State';
+        });
+        
+        audioElement.addEventListener('pause', () => {
+          // Keep it "active" to show it decaying to zero smoothly, but 
+          // practically you might set active = false depending on your UX.
+          liveWaveform.active = false;
+        });
+        
+        audioElement.addEventListener('ended', () => {
+          liveWaveform.active = false;
+        });
+        
+        // Setup "Processing" toggle button
+        processingBtn.addEventListener('click', () => {
+          if (!liveWaveform.processing) {
+            audioElement.pause();
+            liveWaveform.active = false;
+            liveWaveform.processing = true;
+            processingBtn.textContent = 'Stop "Processing"';
+          } else {
+            liveWaveform.processing = false;
+            processingBtn.textContent = 'Toggle "Processing" State';
+          }
+        });
+      });
+    </script>
   </body>
 </html>
