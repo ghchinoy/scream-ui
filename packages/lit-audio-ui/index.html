@@ -222,7 +222,6 @@
             color: var(--md-sys-color-on-surface-variant);
             overflow: hidden;
             white-space: nowrap;
-            text-overflow: ellipsis;
             width: 0;
             opacity: 0;
             transition: width 0.3s ease, opacity 0.3s ease;
@@ -257,16 +256,23 @@
           }
         </style>
 
-        <div class="speech-input-card" id="demo-speech-card" state="idle">
+                <div class="speech-input-card" id="demo-speech-card" state="idle">
           
-          <ui-voice-button id="demo-speech-btn" state="idle"></ui-voice-button>
+          <!-- Mimicking the ElevenLabs ghost icon button -->
+          <button id="demo-speech-btn" style="background: transparent; border: none; padding: 6px; cursor: pointer; color: var(--md-sys-color-on-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
+            <span class="material-symbols-outlined" id="demo-speech-icon" style="font-size: 20px;">mic</span>
+            <div id="demo-speech-pulse" style="position: absolute; inset: 0; background: var(--md-sys-color-primary); border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s ease; z-index: -1;"></div>
+          </button>
           
-          <div class="speech-preview">
-            <span id="demo-speech-text">Listening...</span>
+          <div class="speech-preview" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span id="demo-speech-text" style="flex: 1; white-space: nowrap; overflow: hidden; mask-image: linear-gradient(to right, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, black 80%, transparent);">Listening...</span>
+            <div id="demo-speech-wave-container" style="width: 32px; height: 20px; opacity: 0; transition: opacity 0.3s ease;">
+              <ui-live-waveform id="demo-speech-wave" height="20" barWidth="2" barGap="1" sensitivity="2.5"></ui-live-waveform>
+            </div>
           </div>
           
           <button class="speech-cancel-btn" id="demo-speech-cancel" title="Cancel recording">
-            <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+            <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
           </button>
           
         </div>
@@ -453,15 +459,25 @@
       </ui-showcase-card>
 
       <!-- Audio Player Demo (Classic Preset) -->
-      <ui-showcase-card title="ui-audio-player (Classic)" description="The original pill-shaped monolithic layout. It is now completely powered by the headless ui-audio-provider internally.">
+      <ui-showcase-card title="ui-audio-player (Classic)" description="The original monolithic layout powered by the headless provider. This example uses CSS ::part(container) to override the Shadow DOM and force a square border instead of the default pill shape!">
+        <style>
+          #demo-player::part(container) {
+            border-radius: 8px; /* Override the default 999px pill shape */
+            border: 1px solid var(--md-sys-color-primary);
+          }
+        </style>
         <div style="margin-top: 1rem;">
           <ui-audio-player id="demo-player"></ui-audio-player>
         </div>
-        <div slot="code">&lt;ui-audio-player 
-  .item="${{ 
-    id: 'sample1', 
-    src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' 
-  }}"&gt;
+        <div slot="code">&lt;style&gt;
+  ui-audio-player::part(container) {
+    border-radius: 8px; /* Override pill shape */
+    border: 1px solid var(--md-sys-color-primary);
+  }
+&lt;/style&gt;
+
+&lt;ui-audio-player 
+  .item="${{ src: 'audio.wav' }}"&gt;
 &lt;/ui-audio-player&gt;</div>
       </ui-showcase-card>
 
@@ -484,16 +500,25 @@
           <ui-voice-picker id="demo-voice-picker"></ui-voice-picker>
           <span id="demo-voice-picker-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected Voice: (none)</span>
         </div>
-        <div slot="code">
-&lt;ui-voice-picker 
-  .voices="${[
+        <div slot="code">&lt;!-- 1. Define your custom data array --&gt;
+&lt;script&gt;
+  const myCustomArray = [
     {
-      voiceId: 'v1',
-      name: 'Aoede',
-      previewUrl: 'https://...',
-      labels: { accent: 'American', gender: 'female' }
+      customId: "v1",
+      displayName: "Aoede",
+      sampleAudio: "https://...",
+      trait: "American • Female"
     }
-  ]}"
+  ];
+&lt;/script&gt;
+
+&lt;!-- 2. Map your keys to the component --&gt;
+&lt;ui-voice-picker 
+  .voices="${myCustomArray}"
+  idKey="customId"
+  titleKey="displayName"
+  subtitleKey="trait"
+  previewUrlKey="sampleAudio"
   @voice-change="${handleSelection}"&gt;
 &lt;/ui-voice-picker&gt;</div>
       </ui-showcase-card>
@@ -805,30 +830,36 @@
         const voicePickerState = document.getElementById('demo-voice-picker-state');
         
         // Mock data matching the ElevenLabs Voice array structure
+        voicePicker.idKey = "customId";
+        voicePicker.titleKey = "displayName";
+        voicePicker.subtitleKey = "trait";
+        voicePicker.previewUrlKey = "sampleAudio";
+
+        // Demonstrating the new Generic Data Mapping feature!
         voicePicker.voices = [
           {
-            voiceId: "v1",
-            name: "Aoede",
-            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav",
-            labels: { accent: "American", gender: "female", age: "young", use_case: "narration" }
+            customId: "v1",
+            displayName: "Aoede",
+            sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav",
+            trait: "American • Female"
           },
           {
-            voiceId: "v2",
-            name: "Zephyr",
-            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav",
-            labels: { accent: "British", gender: "female", age: "young", use_case: "news" }
+            customId: "v2",
+            displayName: "Zephyr",
+            sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav",
+            trait: "British • Female"
           },
           {
-            voiceId: "v3",
-            name: "Lyria Lo-Fi Beat",
-            previewUrl: "https://storage.googleapis.com/scream-ui-samples/music_sample.wav",
-            labels: { description: "Upbeat lo-fi hip hop" }
+            customId: "v3",
+            displayName: "Lyria Lo-Fi Beat",
+            sampleAudio: "https://storage.googleapis.com/scream-ui-samples/music_sample.wav",
+            trait: "Upbeat lo-fi hip hop"
           },
           {
-            voiceId: "v4",
-            name: "Orus",
-            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav",
-            labels: { accent: "Australian", gender: "male", age: "old", use_case: "storytelling" }
+            customId: "v4",
+            displayName: "Orus",
+            sampleAudio: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav",
+            trait: "Australian • Male"
           }
         ];
         
@@ -837,23 +868,42 @@
         });
       });
 
-        // 7. Setup Compound Speech Input
+                // 7. Setup Compound Speech Input
         const speechCard = document.getElementById('demo-speech-card');
         const speechBtn = document.getElementById('demo-speech-btn');
+        const speechIcon = document.getElementById('demo-speech-icon');
+        const speechPulse = document.getElementById('demo-speech-pulse');
         const speechCancel = document.getElementById('demo-speech-cancel');
         const speechText = document.getElementById('demo-speech-text');
+        const speechWave = document.getElementById('demo-speech-wave');
+        const speechWaveContainer = document.getElementById('demo-speech-wave-container');
         
         let transcriptInterval;
         const fakeTranscript = ["I", " am", " recording", " a", " message", " right", " now..."];
+        let isSpeechRecording = false;
         
-        speechBtn.addEventListener('voice-button-click', () => {
-          const currentState = speechBtn.getAttribute('state');
+        speechBtn.addEventListener('click', () => {
           
-          if (currentState === 'idle') {
+          if (!isSpeechRecording) {
             // Start recording
-            speechBtn.setAttribute('state', 'recording');
+            isSpeechRecording = true;
             speechCard.setAttribute('state', 'recording');
-            if (typeof analyser !== 'undefined') speechBtn.analyserNode = analyser;
+            
+            // Transform icon to stop button
+            speechIcon.textContent = 'stop';
+            speechIcon.style.transform = 'scale(0.8)';
+            speechBtn.style.color = 'var(--md-sys-color-on-primary)';
+            
+            // Activate mini waveform
+            speechWaveContainer.style.opacity = '1';
+            if (typeof analyser !== 'undefined') {
+              speechWave.analyserNode = analyser;
+              speechWave.active = true;
+            }
+            
+            // Show background pulse
+            speechPulse.style.opacity = '1';
+            speechPulse.style.transform = 'scale(1)';
             
             // Simulate live transcription
             speechText.textContent = "Listening...";
@@ -866,30 +916,45 @@
               }
             }, 400);
             
-          } else if (currentState === 'recording') {
-            // Stop recording, start processing
+          } else {
+            // Stop recording
             clearInterval(transcriptInterval);
-            speechBtn.setAttribute('state', 'processing');
+            isSpeechRecording = false;
             speechCard.setAttribute('state', 'processing');
-            speechBtn.analyserNode = undefined;
+            
+            // Transform back to mic (simulating loading/processing)
+            speechIcon.textContent = 'mic';
+            speechIcon.style.transform = 'scale(1)';
+            speechBtn.style.color = 'var(--md-sys-color-on-surface)';
+            
+            // Deactivate mini waveform
+            speechWaveContainer.style.opacity = '0';
+            speechWave.active = false;
+            speechPulse.style.opacity = '0';
+            speechPulse.style.transform = 'scale(0)';
             
             // Simulate processing finishing
             setTimeout(() => {
-              speechBtn.setAttribute('state', 'success');
-              speechCard.setAttribute('state', 'success');
-              setTimeout(() => {
                  speechCard.setAttribute('state', 'idle');
                  speechText.textContent = "Listening...";
-              }, 1500); // Wait for the button to auto-reset
-            }, 2000);
+            }, 1000);
           }
         });
         
         speechCancel.addEventListener('click', () => {
            clearInterval(transcriptInterval);
-           speechBtn.setAttribute('state', 'idle');
+           isSpeechRecording = false;
            speechCard.setAttribute('state', 'idle');
-           speechBtn.analyserNode = undefined;
+           
+           speechWaveContainer.style.opacity = '0';
+           speechWave.active = false;
+           
+           speechIcon.textContent = 'mic';
+           speechIcon.style.transform = 'scale(1)';
+           speechBtn.style.color = 'var(--md-sys-color-on-surface)';
+           speechPulse.style.opacity = '0';
+           speechPulse.style.transform = 'scale(0)';
+           
            speechText.textContent = "Listening...";
         });
 
