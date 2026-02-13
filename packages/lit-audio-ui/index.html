@@ -159,7 +159,7 @@
         <p>A live visualizer that responds to an active <code>AudioContext</code>. Click "Play Sample" to feed the <strong>Gemini TTS</strong> speech sample into the visualizer.</p>
         
         <div class="control-panel">
-          <audio id="demo-audio-player" src="/samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
+          <audio id="demo-audio-player" src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav" preload="metadata" controls></audio>
           
           <div style="flex: 1"></div>
           
@@ -318,7 +318,7 @@
         // 3. Setup Audio Player
         const demoPlayer = document.getElementById('demo-player');
         // Setting the property object natively in JS since HTML attributes don't parse JSON nicely
-        demoPlayer.item = { id: 'music-1', src: '/samples/music_sample.wav' };
+        demoPlayer.item = { id: 'music-1', src: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav' };
         
         // 4. Setup Voice Button State Cycle
         const voiceBtn = document.getElementById('demo-voice-btn');
@@ -419,25 +419,25 @@
           {
             voiceId: "v1",
             name: "Aoede",
-            previewUrl: "/samples/speech_sample-Aoede-20260212-183352.wav",
+            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav",
             labels: { accent: "American", gender: "female", age: "young", use_case: "narration" }
           },
           {
             voiceId: "v2",
             name: "Zephyr",
-            previewUrl: "/samples/speech_sample-Zephyr-20260213-082026.wav",
+            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav",
             labels: { accent: "British", gender: "female", age: "young", use_case: "news" }
           },
           {
             voiceId: "v3",
             name: "Lyria Lo-Fi Beat",
-            previewUrl: "/samples/music_sample.wav",
+            previewUrl: "https://storage.googleapis.com/scream-ui-samples/music_sample.wav",
             labels: { description: "Upbeat lo-fi hip hop" }
           },
           {
             voiceId: "v4",
             name: "Orus",
-            previewUrl: "/samples/speech_sample-Orus-20260213-082038.wav",
+            previewUrl: "https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav",
             labels: { accent: "Australian", gender: "male", age: "old", use_case: "storytelling" }
           }
         ];
