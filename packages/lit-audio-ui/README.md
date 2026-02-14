@@ -25,20 +25,26 @@ We are incredibly grateful for their contribution to the open-source community. 
 As a Web Components library, you can use these elements directly in your HTML or inside any frontend framework.
 
 ### 1. Installation
-Install the package via npm (assuming you are linking it locally or publishing it):
+Install the package via npm:
 ```bash
-npm install ui-audio
+npm install scream-audio-ui
 ```
 
-### 2. Import the Library
+### 2. Usage (CDN)
+For a zero-install experience, you can use the library directly from a CDN like [esm.run](https://esm.run/):
+```html
+<script type="module" src="https://esm.run/scream-audio-ui"></script>
+```
+
+### 3. Import the Library (Bundlers)
 Import the components into your JavaScript/TypeScript entry point:
 ```javascript
 // Import the entire library
-import 'ui-audio';
+import 'scream-audio-ui';
 
 // Or import specific components
-import 'ui-audio/components/ui-voice-button';
-import 'ui-audio/components/ui-live-waveform';
+import 'scream-audio-ui/components/ui-voice-button';
+import 'scream-audio-ui/components/ui-live-waveform';
 ```
 
 ### 3. Use in HTML
