@@ -1,4 +1,5 @@
 import {createMockAnalyser} from '../src/utils/audio-utils.ts';
+import './demo-layouts.ts';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Lazy-load the heavy Orb component
