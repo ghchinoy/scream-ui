@@ -1,6 +1,6 @@
 {
   "name": "@ghchinoy/lit-audio-ui",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A pure Lit WebComponents port of modern audio UI components",
   "author": "G. Hussain Chinoy",
   "license": "Apache-2.0",
