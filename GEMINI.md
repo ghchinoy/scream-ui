@@ -17,6 +17,12 @@ bd close <id>         # Complete work
 bd sync               # Sync with git
 ```
 
+## Inter-Agent Communication
+When working alongside other agents (e.g., in `scream-services`):
+- **Reference Issue IDs:** Use specific `bd` IDs (e.g., `sui-7to`) to refer to bug fixes or feature completions.
+- **Detailed Resolutions:** Always append a note (`--append-notes`) when closing an issue, explaining the impact on other systems or specific version numbers (e.g., "Fixed in v0.2.1").
+- **Cross-Project Coordination:** If an issue in one project depends on a fix in another, note the foreign ID in the description or comments.
+
 ## Troubleshooting & Maintenance
 
 ### bd (Beads) Issues
