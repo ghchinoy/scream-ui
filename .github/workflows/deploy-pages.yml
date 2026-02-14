@@ -34,11 +34,11 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
       - name: Install dependencies
-        working-directory: packages/lit-audio-ui
-        run: npm install
+        run: npm install --ignore-scripts
       - name: Build Demo
-        working-directory: packages/lit-audio-ui
-        run: npm run build
+        run: |
+          npm run build:lib -w @ghchinoy/lit-audio-ui
+          npm run build:demo -w @ghchinoy/lit-audio-ui
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
