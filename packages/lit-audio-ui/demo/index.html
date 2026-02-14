@@ -98,37 +98,36 @@
                     <ui-speech-preview placeholder="Brandable speech input..."></ui-speech-preview>
                  </ui-speech-provider>
               </div>
-              <div class="control-panel" style="background: var(--md-sys-color-surface-container-low); padding: 1rem; border-radius: 8px; width: 100%; box-sizing: border-box;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
-                  <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 12px; font-weight: 600; white-space: nowrap;">Record Color</label>
-                    <input type="color" id="theme-record-color" value="#ff4444" style="width: 100%; height: 32px; border: none; border-radius: 4px; cursor: pointer;" />
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 12px; font-weight: 600; white-space: nowrap;">Waveform Color</label>
-                    <input type="color" id="theme-wave-color" value="#00ccff" style="width: 100%; height: 32px; border: none; border-radius: 4px; cursor: pointer;" />
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 12px; font-weight: 600; white-space: nowrap;">Text Size</label>
-                    <select id="theme-text-size" style="width: 100%; height: 32px; border-radius: 4px; padding: 0 8px;">
-                      <option value="12px">Small (12px)</option>
-                      <option value="14px" selected>Normal (14px)</option>
-                      <option value="18px">Large (18px)</option>
-                      <option value="24px">X-Large (24px)</option>
-                    </select>
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 12px; font-weight: 600; white-space: nowrap;">Font Style</label>
-                    <select id="theme-font-family" style="width: 100%; height: 32px; border-radius: 4px; padding: 0 8px;">
-                      <option value="inherit">Project Default</option>
-                      <option value="monospace">Monospace</option>
-                      <option value="serif">Serif</option>
-                      <option value="cursive">Cursive</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+                            <div class="workbench-controls">
+                              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                  <label>Record Color</label>
+                                  <input type="color" id="theme-record-color" value="#ff4444" />
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                  <label>Waveform Color</label>
+                                  <input type="color" id="theme-wave-color" value="#00ccff" />
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                  <label>Text Size</label>
+                                  <select id="theme-text-size">
+                                    <option value="12px">Small (12px)</option>
+                                    <option value="14px" selected>Normal (14px)</option>
+                                    <option value="18px">Large (18px)</option>
+                                    <option value="24px">X-Large (24px)</option>
+                                  </select>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                  <label>Font Style</label>
+                                  <select id="theme-font-family">
+                                    <option value="inherit">Project Default</option>
+                                    <option value="monospace">Monospace</option>
+                                    <option value="serif">Serif</option>
+                                    <option value="cursive">Cursive</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>            </div>
             <div slot="code">&lt;style&gt;
   :root {
     --ui-speech-record-color: #ff4444;

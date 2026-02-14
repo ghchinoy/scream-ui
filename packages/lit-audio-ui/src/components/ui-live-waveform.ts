@@ -44,6 +44,7 @@ export class UiLiveWaveform extends LitElement {
   private _animationFrameId: number = 0;
   private _lastUpdateTime: number = 0;
   private _resizeObserver?: ResizeObserver;
+  private _themeObserver?: MutationObserver;
 
   // State for rendering
   private _dataArray?: Uint8Array;
@@ -87,6 +88,15 @@ export class UiLiveWaveform extends LitElement {
     });
     this._resizeObserver.observe(this._container);
 
+    // Watch for theme changes to pick up new CSS variables
+    this._themeObserver = new MutationObserver(() => {
+      this._renderFrame();
+    });
+    this._themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'style'],
+    });
+
     // Start loop
     this._startAnimationLoop();
   }
@@ -113,6 +123,9 @@ export class UiLiveWaveform extends LitElement {
     super.disconnectedCallback();
     if (this._resizeObserver) {
       this._resizeObserver.disconnect();
+    }
+    if (this._themeObserver) {
+      this._themeObserver.disconnect();
     }
     if (this._animationFrameId) {
       cancelAnimationFrame(this._animationFrameId);
