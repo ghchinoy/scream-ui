@@ -25,6 +25,17 @@ export class UiSpeechProvider extends LitElement {
   private _stream?: MediaStream;
   private _audioCtx?: AudioContext;
   private _analyser?: AnalyserNode;
+  private _transcriptInterval?: any;
+  private _fakeTranscript = [
+    'I',
+    ' am',
+    ' recording',
+    ' a',
+    ' message',
+    ' using',
+    ' atomic',
+    ' components...',
+  ];
 
   static styles = css`
     :host {
@@ -60,8 +71,23 @@ export class UiSpeechProvider extends LitElement {
         state: 'recording',
         analyserNode: this._analyser,
         transcript: '',
-        partialTranscript: '',
+        partialTranscript: 'Listening...',
       });
+
+      // Start mock transcription
+      let wordIndex = 0;
+      this._transcriptInterval = setInterval(() => {
+        if (wordIndex < this._fakeTranscript.length) {
+          if (wordIndex === 0) {
+            this._updateContext({partialTranscript: ''});
+          }
+          const current = this._context.partialTranscript;
+          this._updateContext({
+            partialTranscript: current + this._fakeTranscript[wordIndex],
+          });
+          wordIndex++;
+        }
+      }, 500);
 
       this.dispatchEvent(
         new CustomEvent('speech-start', {
@@ -82,8 +108,13 @@ export class UiSpeechProvider extends LitElement {
   stop() {
     if (this._context.state !== 'recording') return;
 
+    clearInterval(this._transcriptInterval);
     this._cleanupStream();
-    this._updateContext({state: 'processing'});
+    this._updateContext({
+      state: 'processing',
+      transcript: this._context.partialTranscript,
+      partialTranscript: '',
+    });
 
     this.dispatchEvent(
       new CustomEvent('speech-stop', {
@@ -102,6 +133,7 @@ export class UiSpeechProvider extends LitElement {
   }
 
   cancel() {
+    clearInterval(this._transcriptInterval);
     this._cleanupStream();
     this._updateContext({
       state: 'idle',
