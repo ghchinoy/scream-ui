@@ -790,24 +790,6 @@
         });
       });
 
-                
-        
-        speechCancel.addEventListener('click', () => {
-           clearInterval(transcriptInterval);
-           isSpeechRecording = false;
-           speechCard.setAttribute('state', 'idle');
-           
-           speechWaveContainer.style.opacity = '0';
-           speechWave.active = false;
-           
-           speechIcon.textContent = 'mic';
-           speechIcon.style.transform = 'scale(1)';
-           speechBtn.style.color = 'var(--md-sys-color-on-surface)';
-           speechPulse.style.opacity = '0';
-           speechPulse.style.transform = 'scale(0)';
-           
-           speechText.textContent = "Listening...";
-        });
         // 8. Setup Orb Demo
         const orb = document.getElementById('demo-orb');
         const orbBtn = document.getElementById('orb-state-btn');
