@@ -1,15 +1,18 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { consume } from '@lit/context';
-import { audioPlayerContext, type AudioPlayerState } from '../utils/audio-context';
+import {LitElement, html, css} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import {consume} from '@lit/context';
+import {
+  audioPlayerContext,
+  type AudioPlayerState,
+} from '../utils/audio-context';
 
 @customElement('ui-audio-time-display')
 export class UiAudioTimeDisplay extends LitElement {
-  @consume({ context: audioPlayerContext, subscribe: true })
-  @property({ attribute: false })
+  @consume({context: audioPlayerContext, subscribe: true})
+  @property({attribute: false})
   public playerState?: AudioPlayerState;
 
-  @property({ type: String }) format: 'elapsed' | 'remaining' | 'full' = 'full';
+  @property({type: String}) format: 'elapsed' | 'remaining' | 'full' = 'full';
 
   static styles = css`
     :host {
@@ -32,7 +35,8 @@ export class UiAudioTimeDisplay extends LitElement {
       return html`-${this._formatTime(remain)}`;
     } else {
       // 'full'
-      return html`${this._formatTime(current)} / ${total ? this._formatTime(total) : '--:--'}`;
+      return html`${this._formatTime(current)} /
+      ${total ? this._formatTime(total) : '--:--'}`;
     }
   }
 

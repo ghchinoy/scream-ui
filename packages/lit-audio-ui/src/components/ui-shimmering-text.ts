@@ -34,9 +34,13 @@ export class UiShimmeringText extends LitElement {
 
       /* Default colors fallback to MD3 tokens if available */
       /* Use a highly transparent base color for maximum contrast against the shimmer */
-      --base-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1e1e1e) 20%, transparent);
+      --base-color: color-mix(
+        in srgb,
+        var(--md-sys-color-on-surface, #1e1e1e) 20%,
+        transparent
+      );
       --shimmer-color: var(--md-sys-color-on-surface, #1e1e1e);
-      
+
       --shimmer-bg: linear-gradient(
         90deg,
         transparent calc(50% - var(--spread)),

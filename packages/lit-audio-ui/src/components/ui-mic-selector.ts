@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {LitElement, html, css, PropertyValues} from 'lit';
+import {LitElement, html, css, type PropertyValues} from 'lit';
 import {customElement, property, state, query} from 'lit/decorators.js';
 import '@material/web/icon/icon.js';
 import '@material/web/menu/menu.js';

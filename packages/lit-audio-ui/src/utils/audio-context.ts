@@ -1,4 +1,4 @@
-import { createContext } from '@lit/context';
+import {createContext} from '@lit/context';
 
 /**
  * The unified state and control surface of our audio player.
@@ -12,8 +12,8 @@ export interface AudioPlayerState {
   volume: number;
   muted: boolean;
   error?: string;
-  
-  // Expose an explicit reference to the underlying AnalyserNode 
+
+  // Expose an explicit reference to the underlying AnalyserNode
   // so that visualizers (like ui-live-waveform) can connect to it!
   analyserNode?: AnalyserNode;
 
@@ -27,8 +27,10 @@ export interface AudioPlayerState {
 }
 
 /**
- * A unique token to identify our context. 
- * Any component that uses @consume({context: audioPlayerContext}) 
+ * A unique token to identify our context.
+ * Any component that uses @consume({context: audioPlayerContext})
  * will automatically receive updates when the nearest <ui-audio-provider> changes its state.
  */
-export const audioPlayerContext = createContext<AudioPlayerState>('ui-audio-player-context');
+export const audioPlayerContext = createContext<AudioPlayerState>(
+  'ui-audio-player-context',
+);

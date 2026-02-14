@@ -1,13 +1,16 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { consume } from '@lit/context';
-import { audioPlayerContext, type AudioPlayerState } from '../utils/audio-context';
+import {LitElement, html, css} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import {consume} from '@lit/context';
+import {
+  audioPlayerContext,
+  type AudioPlayerState,
+} from '../utils/audio-context';
 import '@material/web/slider/slider.js';
 
 @customElement('ui-audio-progress-slider')
 export class UiAudioProgressSlider extends LitElement {
-  @consume({ context: audioPlayerContext, subscribe: true })
-  @property({ attribute: false })
+  @consume({context: audioPlayerContext, subscribe: true})
+  @property({attribute: false})
   public playerState?: AudioPlayerState;
 
   private _isDragging = false;
@@ -31,10 +34,12 @@ export class UiAudioProgressSlider extends LitElement {
   render() {
     const duration = this.playerState?.duration || 0;
     const disabled = duration === 0 || !this.playerState?.src;
-    
-    // Smooth rendering: if user is actively dragging, display their local drag value, 
+
+    // Smooth rendering: if user is actively dragging, display their local drag value,
     // otherwise display the context's current time.
-    const currentValue = this._isDragging ? this._dragValue : (this.playerState?.currentTime || 0);
+    const currentValue = this._isDragging
+      ? this._dragValue
+      : this.playerState?.currentTime || 0;
 
     return html`
       <md-slider
@@ -58,11 +63,11 @@ export class UiAudioProgressSlider extends LitElement {
   private _handleChange(e: Event) {
     const slider = e.target as any;
     this._dragValue = slider.value;
-    
+
     if (this.playerState) {
       this.playerState.seek(this._dragValue);
     }
-    
+
     this._isDragging = false;
   }
 }

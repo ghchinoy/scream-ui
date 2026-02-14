@@ -1,4 +1,9 @@
 {
+  "name": "scream-ui-root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@material/web": "^2.4.1",
     "express": "^5.2.1",

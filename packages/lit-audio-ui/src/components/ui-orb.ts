@@ -1,17 +1,17 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import {LitElement, html, css} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
 import * as THREE from 'three';
 
-export type AgentState = null | "thinking" | "listening" | "talking";
+export type AgentState = null | 'thinking' | 'listening' | 'talking';
 
 @customElement('ui-orb')
 export class UiOrb extends LitElement {
-  @property({ type: Array }) colors: [string, string] = ["#CADCFC", "#A0B9D1"];
-  @property({ type: String }) agentState: AgentState = null;
-  @property({ type: Number }) inputVolume = 0;
-  @property({ type: Number }) outputVolume = 0;
-  @property({ type: String }) volumeMode: "auto" | "manual" = "auto";
-  @property({ type: Number }) seed = Math.floor(Math.random() * 2 ** 32);
+  @property({type: Array}) colors: [string, string] = ['#CADCFC', '#A0B9D1'];
+  @property({type: String}) agentState: AgentState = null;
+  @property({type: Number}) inputVolume = 0;
+  @property({type: Number}) outputVolume = 0;
+  @property({type: String}) volumeMode: 'auto' | 'manual' = 'auto';
+  @property({type: Number}) seed = Math.floor(Math.random() * 2 ** 32);
 
   @query('.container') private _container!: HTMLDivElement;
 
@@ -21,7 +21,7 @@ export class UiOrb extends LitElement {
   private _mesh?: THREE.Mesh<THREE.CircleGeometry, THREE.ShaderMaterial>;
   private _animationFrameId: number = 0;
   private _resizeObserver?: ResizeObserver;
-  
+
   // State refs for animation loop
   private _animSpeed = 0.1;
   private _curIn = 0;
@@ -60,8 +60,8 @@ export class UiOrb extends LitElement {
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('colors')) {
       if (this._targetColor1 && this._targetColor2) {
-          this._targetColor1.set(this.colors[0]);
-          this._targetColor2.set(this.colors[1]);
+        this._targetColor1.set(this.colors[0]);
+        this._targetColor2.set(this.colors[1]);
       }
     }
   }
@@ -85,11 +85,13 @@ export class UiOrb extends LitElement {
 
     // Load texture
     try {
-      this._perlinNoiseTexture = await this._textureLoader.loadAsync("https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png");
+      this._perlinNoiseTexture = await this._textureLoader.loadAsync(
+        'https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png',
+      );
       this._perlinNoiseTexture.wrapS = THREE.RepeatWrapping;
       this._perlinNoiseTexture.wrapT = THREE.RepeatWrapping;
     } catch (e) {
-      console.warn("Failed to load perlin noise texture for orb.", e);
+      console.warn('Failed to load perlin noise texture for orb.', e);
       return; // Need texture to run shader
     }
 
@@ -97,26 +99,33 @@ export class UiOrb extends LitElement {
     const height = this._container.clientHeight;
 
     this._scene = new THREE.Scene();
-    
+
     // Orthographic camera for 2D shader work
     this._camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 0.1, 10);
     this._camera.position.z = 1;
 
-    this._renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, premultipliedAlpha: true });
+    this._renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      premultipliedAlpha: true,
+    });
     this._renderer.setSize(width, height);
     this._renderer.setPixelRatio(window.devicePixelRatio);
     this._container.appendChild(this._renderer.domElement);
 
     const random = this._splitmix32(this.seed);
-    const offsets = new Float32Array(Array.from({ length: 7 }, () => random() * Math.PI * 2));
+    const offsets = new Float32Array(
+      Array.from({length: 7}, () => random() * Math.PI * 2),
+    );
 
-    const isDark = document.documentElement.classList.contains("dark") || 
-                   window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark =
+      document.documentElement.classList.contains('dark') ||
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const uniforms = {
       uColor1: new THREE.Uniform(new THREE.Color(this.colors[0])),
       uColor2: new THREE.Uniform(new THREE.Color(this.colors[1])),
-      uOffsets: { value: offsets },
+      uOffsets: {value: offsets},
       uPerlinTexture: new THREE.Uniform(this._perlinNoiseTexture),
       uTime: new THREE.Uniform(0),
       uAnimation: new THREE.Uniform(0.1),
@@ -139,7 +148,10 @@ export class UiOrb extends LitElement {
 
     this._resizeObserver = new ResizeObserver(() => {
       if (this._container && this._renderer) {
-        this._renderer.setSize(this._container.clientWidth, this._container.clientHeight);
+        this._renderer.setSize(
+          this._container.clientWidth,
+          this._container.clientHeight,
+        );
       }
     });
     this._resizeObserver.observe(this._container);
@@ -147,10 +159,13 @@ export class UiOrb extends LitElement {
     // Watch for theme changes on HTML tag
     const observer = new MutationObserver(() => {
       if (!this._mesh) return;
-      const dark = document.documentElement.classList.contains("dark");
+      const dark = document.documentElement.classList.contains('dark');
       this._mesh.material.uniforms.uInverted.value = dark ? 1 : 0;
     });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
 
     this._lastTime = performance.now();
     this._animate();
@@ -160,7 +175,7 @@ export class UiOrb extends LitElement {
 
   private _animate() {
     this._animationFrameId = requestAnimationFrame(() => this._animate());
-    
+
     if (!this._mesh || !this._renderer || !this._scene || !this._camera) return;
 
     const now = performance.now();
@@ -177,7 +192,7 @@ export class UiOrb extends LitElement {
     let targetIn = 0;
     let targetOut = 0.3;
 
-    if (this.volumeMode === "manual") {
+    if (this.volumeMode === 'manual') {
       targetIn = this._clamp01(this.inputVolume);
       targetOut = this._clamp01(this.outputVolume);
     } else {
@@ -185,10 +200,10 @@ export class UiOrb extends LitElement {
       if (this.agentState === null) {
         targetIn = 0;
         targetOut = 0.3;
-      } else if (this.agentState === "listening") {
+      } else if (this.agentState === 'listening') {
         targetIn = this._clamp01(0.55 + Math.sin(t * 3.2) * 0.35);
         targetOut = 0.45;
-      } else if (this.agentState === "talking") {
+      } else if (this.agentState === 'talking') {
         targetIn = this._clamp01(0.65 + Math.sin(t * 4.8) * 0.22);
         targetOut = this._clamp01(0.75 + Math.sin(t * 3.6) * 0.22);
       } else {
