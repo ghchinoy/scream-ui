@@ -805,23 +805,42 @@
         const orbStates = [null, 'listening', 'thinking', 'talking'];
         let orbStateIndex = 0;
         
+        const directBtns = document.querySelectorAll('.orb-direct-btn');
+        const syncOrbButtons = (state) => {
+          orbBtn.textContent = `Cycle State: ${state === null ? 'idle' : state}`;
+          directBtns.forEach(btn => {
+            const btnState = btn.dataset.state === 'null' ? null : btn.dataset.state;
+            if (btnState === state) {
+              btn.style.borderColor = 'var(--md-sys-color-primary)';
+              btn.style.background = 'var(--md-sys-color-primary-container)';
+              btn.style.color = 'var(--md-sys-color-on-primary-container)';
+            } else {
+              btn.style.borderColor = 'var(--md-sys-color-outline-variant)';
+              btn.style.background = 'var(--md-sys-color-surface)';
+              btn.style.color = 'var(--md-sys-color-on-surface)';
+            }
+          });
+        };
+
         orbBtn.addEventListener('click', () => {
           orbStateIndex = (orbStateIndex + 1) % orbStates.length;
           const nextState = orbStates[orbStateIndex];
           orb.agentState = nextState;
-          orbBtn.textContent = `Cycle State: ${nextState === null ? 'idle' : nextState}`;
+          syncOrbButtons(nextState);
         });
 
         // Direct Orb state buttons
-        document.querySelectorAll('.orb-direct-btn').forEach(btn => {
+        directBtns.forEach(btn => {
           btn.addEventListener('click', () => {
             const state = btn.dataset.state === 'null' ? null : btn.dataset.state;
             orb.agentState = state;
-            orbBtn.textContent = `Cycle State: ${state === null ? 'idle' : state}`;
-            // Update the index to keep cycle button in sync
             orbStateIndex = orbStates.indexOf(state);
+            syncOrbButtons(state);
           });
         });
+        
+        // Initial sync
+        syncOrbButtons(null);
         
         // Connect the generic color picker to the orb colors too!
         swatches.forEach(swatch => {

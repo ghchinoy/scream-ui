@@ -139,8 +139,8 @@ export class UiOrb extends LitElement {
       window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const uniforms = {
-      uColor1: new THREE.Uniform(new THREE.Color(this.colors[0])),
-      uColor2: new THREE.Uniform(new THREE.Color(this.colors[1])),
+      uColor1: new THREE.Uniform(this._targetColor1),
+      uColor2: new THREE.Uniform(this._targetColor2),
       uOffsets: {value: offsets},
       uPerlinTexture: new THREE.Uniform(this._perlinNoiseTexture),
       uTime: new THREE.Uniform(0),
