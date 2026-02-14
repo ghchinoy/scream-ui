@@ -73,6 +73,26 @@ export class UiVoiceButton extends LitElement {
         --md-sys-color-on-error-container,
         #410002
       );
+      --md-filled-button-hover-label-text-color: var(
+        --md-sys-color-on-error-container,
+        #410002
+      );
+      --md-filled-button-focus-label-text-color: var(
+        --md-sys-color-on-error-container,
+        #410002
+      );
+      --md-filled-button-pressed-label-text-color: var(
+        --md-sys-color-on-error-container,
+        #410002
+      );
+      --md-filled-button-with-icon-icon-color: var(
+        --md-sys-color-on-error-container,
+        #410002
+      );
+      --md-filled-button-with-icon-hover-icon-color: var(
+        --md-sys-color-on-error-container,
+        #410002
+      );
     }
 
     md-filled-button.processing {
@@ -144,18 +164,28 @@ export class UiVoiceButton extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--md-sys-color-surface, #fff);
+      background: inherit;
+      border-radius: inherit;
       animation: fadeIn 0.3s ease forwards;
+      pointer-events: none;
+    }
+
+    .feedback-overlay.success {
+      background: var(--md-sys-color-primary-container, #d1e4ff);
+    }
+
+    .feedback-overlay.error {
+      background: var(--md-sys-color-error-container, #ffdad6);
     }
 
     .feedback-icon {
       font-size: 16px;
     }
     .feedback-icon.success {
-      color: var(--md-sys-color-primary, #0066cc);
+      color: var(--md-sys-color-on-primary-container, #001d36);
     }
     .feedback-icon.error {
-      color: var(--md-sys-color-error, #ba1a1a);
+      color: var(--md-sys-color-on-error-container, #410002);
     }
 
     @keyframes fadeIn {
@@ -244,16 +274,16 @@ export class UiVoiceButton extends LitElement {
               : ''}
           </div>
 
-          ${this._showFeedback && isSuccess
+          ${(this._showFeedback || isSuccess) && isSuccess
             ? html`
-                <div class="feedback-overlay">
+                <div class="feedback-overlay success">
                   <md-icon class="feedback-icon success">check</md-icon>
                 </div>
               `
             : ''}
           ${this._showFeedback && isError
             ? html`
-                <div class="feedback-overlay">
+                <div class="feedback-overlay error">
                   <md-icon class="feedback-icon error">close</md-icon>
                 </div>
               `
