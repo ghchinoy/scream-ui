@@ -35,8 +35,15 @@ export * from './components/ui-audio-progress-slider';
 export * from './components/ui-audio-time-display';
 export * from './utils/audio-context';
 
+export * from './components/ui-speech-provider';
+export * from './components/ui-speech-record-button';
+export * from './components/ui-speech-cancel-button';
+export * from './components/ui-speech-preview';
+export * from './utils/speech-context';
+
 // Export types
 export type {AgentState} from './components/ui-orb';
 export type {AudioPlayerState} from './utils/audio-context';
+export type {SpeechState, SpeechContext} from './utils/speech-context';
 
 export * from './components/ui-audio-volume-slider';

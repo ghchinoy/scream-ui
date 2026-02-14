@@ -285,6 +285,23 @@
 &lt;/div&gt;</div>
       </ui-showcase-card>
 
+      <!-- Smart Textarea (Atomic Speech) Demo -->
+      <ui-showcase-card title="Smart Textarea" description="The 'Atomic' version of speech input. This demo uses <ui-speech-provider> to orchestrate independent atoms (<ui-speech-record-button>, <ui-speech-preview>, and <ui-speech-cancel-button>) embedded directly inside a standard textarea.">
+        
+        <demo-smart-textarea></demo-smart-textarea>
+
+        <div slot="code">&lt;ui-speech-provider&gt;
+  &lt;div class="my-custom-field"&gt;
+    &lt;textarea&gt;&lt;/textarea&gt;
+    
+    &lt;!-- Atoms can be placed anywhere! --&gt;
+    &lt;ui-speech-record-button size="sm"&gt;&lt;/ui-speech-record-button&gt;
+    &lt;ui-speech-preview&gt;&lt;/ui-speech-preview&gt;
+    &lt;ui-speech-cancel-button&gt;&lt;/ui-speech-cancel-button&gt;
+  &lt;/div&gt;
+&lt;/ui-speech-provider&gt;</div>
+      </ui-showcase-card>
+
 
       </div>
       <div class="demo-section" data-title="Components" style="display: flex; flex-direction: column; gap: 2rem;">
