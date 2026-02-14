@@ -35,4 +35,8 @@ export * from './components/ui-audio-progress-slider';
 export * from './components/ui-audio-time-display';
 export * from './utils/audio-context';
 
+// Export types
+export type {AgentState} from './components/ui-orb';
+export type {AudioPlayerState} from './utils/audio-context';
+
 export * from './components/ui-audio-volume-slider';
