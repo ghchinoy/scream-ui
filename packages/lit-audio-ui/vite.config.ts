@@ -9,7 +9,15 @@ export default defineConfig({
       fileName: format => `scream-audio-ui.${format}.js`,
     },
     rollupOptions: {
-      external: [/^lit/, /^@material\/web/],
+      external: [/^lit/, /^@material\/web/, 'three'],
+      output: {
+        globals: (id) => {
+          if (id.startsWith('lit')) return 'Lit';
+          if (id.startsWith('@material/web')) return 'MaterialWeb';
+          if (id === 'three') return 'THREE';
+          return id;
+        },
+      },
     },
   },
 });

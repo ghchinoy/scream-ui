@@ -5,6 +5,7 @@ scream-ui is a Lit WebComponents pure css port of git@github.com:elevenlabs/ui.g
 # Agent Instructions
 
 This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
+Run `bd prime` for workflow context, or install hooks (`bd hooks install`) for auto-injection.
 
 ## Quick Reference
 

@@ -27,27 +27,27 @@ As a Web Components library, you can use these elements directly in your HTML or
 ### 1. Installation
 Install the package via npm:
 ```bash
-npm install scream-audio-ui
+npm install @ghchinoy/lit-audio-ui
 ```
 
 ### 2. Usage (CDN)
 For a zero-install experience, you can use the library directly from a CDN like [esm.run](https://esm.run/):
 ```html
-<script type="module" src="https://esm.run/scream-audio-ui"></script>
+<script type="module" src="https://esm.run/@ghchinoy/lit-audio-ui"></script>
 ```
 
 ### 3. Import the Library (Bundlers)
 Import the components into your JavaScript/TypeScript entry point:
 ```javascript
 // Import the entire library
-import 'scream-audio-ui';
+import '@ghchinoy/lit-audio-ui';
 
 // Or import specific components
-import 'scream-audio-ui/components/ui-voice-button';
-import 'scream-audio-ui/components/ui-live-waveform';
+import '@ghchinoy/lit-audio-ui/components/ui-voice-button';
+import '@ghchinoy/lit-audio-ui/components/ui-live-waveform';
 ```
 
-### 3. Use in HTML
+### 4. Use in HTML
 Once imported, the custom elements are registered with the browser and can be used like standard HTML tags:
 
 ```html
@@ -58,7 +58,7 @@ Once imported, the custom elements are registered with the browser and can be us
 <ui-live-waveform .analyserNode="${myAudioAnalyser}"></ui-live-waveform>
 ```
 
-### 4. Theming (Material Design 3)
+### 5. Theming (Material Design 3)
 These components are deeply theme-aware and utilize Material Design 3 design tokens. To customize their colors (or support light/dark modes), simply define the CSS variables in your stylesheet:
 
 ```css
