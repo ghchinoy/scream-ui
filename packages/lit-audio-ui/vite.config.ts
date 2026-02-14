@@ -2,9 +2,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig({
   server: {
-    open: '/demo/',
+    open: '/demo/index.html',
     fs: {
-      allow: ['.'],
+      allow: ['..'],
     },
   },
   build: {
