@@ -21,7 +21,8 @@ export class UiSpeechPreview extends LitElement {
     }
 
     .transcript {
-      font-size: 14px;
+      font-size: var(--ui-speech-preview-font-size, 14px);
+      font-family: var(--ui-speech-preview-font-family, inherit);
       color: var(--md-sys-color-on-surface, #1e1e1e);
       white-space: nowrap;
       overflow: hidden;
