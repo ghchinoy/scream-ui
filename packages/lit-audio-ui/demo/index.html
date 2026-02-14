@@ -491,9 +491,9 @@
     <script type="module" src="../src/index.ts"></script>
     <script type="module" src="./demo-layouts.ts"></script>
     
-    <script>
+    <script type="module">
+      import { createMockAnalyser } from '../src/utils/audio-utils.ts';
 
-      
       function forceStaticWaveformRedraw() {
         const staticWaveform = document.getElementById('demo-static-waveform');
         if (staticWaveform && staticWaveform.data) {
@@ -708,8 +708,8 @@
            voiceBtn.setAttribute('state', newState);
            
            // If we enter recording, inject the analyser node so the mini-waveform bounces!
-           if (newState === 'recording' && typeof analyser !== 'undefined') {
-             voiceBtn.analyserNode = analyser;
+           if (newState === 'recording') {
+             voiceBtn.analyserNode = typeof analyser !== 'undefined' ? analyser : createMockAnalyser();
            } else {
              voiceBtn.analyserNode = undefined;
            }
