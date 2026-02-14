@@ -203,20 +203,6 @@
       <div class="main-content" style="flex: 1; max-width: 800px; display: flex; flex-direction: column; gap: 2rem;">
       <div class="demo-section" data-title="Examples" style="display: flex; flex-direction: column; gap: 2rem;">
         <h2 style="margin-top: 0; margin-bottom: -1rem; border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 0.5rem;">Examples</h2>
-      <!-- Compound Speech Input Architecture Demo -->
-      <ui-showcase-card title="Dynamic Speech Input Widget" description="A highly customized, compound recording widget. It uses the atomic ui-voice-button alongside custom layout logic to simulate a real-time transcription experience (similar to ElevenLabs SpeechInput).">
-        
-        <demo-speech-input></demo-speech-input>
-
-        <div slot="code">&lt;!-- HTML Layout --&gt;
-&lt;div class="speech-input-card" state="recording"&gt;
-  &lt;ui-voice-button state="recording"&gt;&lt;/ui-voice-button&gt;
-  &lt;div class="speech-preview"&gt;
-    &lt;span&gt;Transcribing...&lt;/span&gt;
-  &lt;/div&gt;
-  &lt;button class="speech-cancel-btn"&gt;X&lt;/button&gt;
-&lt;/div&gt;</div>
-      </ui-showcase-card>
 
       <!-- Compound Audio Player Architecture Demo -->
       <ui-showcase-card title="Podcast Player Example" description="An audio player is a combination of atomic WebComponents powered by @lit/context. Use HTML to construct an entirely custom layout that shares the same underlying audio stream!">
@@ -277,6 +263,20 @@
 &lt;/ui-audio-provider&gt;</div>
       </ui-showcase-card>
 
+        <!-- Compound Speech Input Architecture Demo -->
+      <ui-showcase-card title="Dynamic Speech Input Widget" description="A highly customized, compound recording widget. It uses the atomic ui-voice-button alongside custom layout logic to simulate a real-time transcription experience (similar to ElevenLabs SpeechInput).">
+        
+        <demo-speech-input></demo-speech-input>
+
+        <div slot="code">&lt;!-- HTML Layout --&gt;
+&lt;div class="speech-input-card" state="recording"&gt;
+  &lt;ui-voice-button state="recording"&gt;&lt;/ui-voice-button&gt;
+  &lt;div class="speech-preview"&gt;
+    &lt;span&gt;Transcribing...&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;button class="speech-cancel-btn"&gt;X&lt;/button&gt;
+&lt;/div&gt;</div>
+      </ui-showcase-card>
 
 
       </div>
