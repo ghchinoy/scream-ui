@@ -100,6 +100,15 @@ export class UiMicSelector extends LitElement {
       );
       --md-menu-container-shape: 12px;
       min-width: 280px;
+      font-family: inherit;
+    }
+
+    md-menu-item {
+      font-family: inherit;
+    }
+
+    md-menu-item div[slot='headline'] {
+      font-family: inherit;
     }
 
     .menu-footer {
@@ -108,6 +117,11 @@ export class UiMicSelector extends LitElement {
       justify-content: space-between;
       padding: 8px 12px;
       gap: 12px;
+      font-family: inherit;
+    }
+
+    md-text-button {
+      font-family: inherit;
     }
 
     .preview-waveform {
