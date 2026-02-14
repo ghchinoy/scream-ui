@@ -42,7 +42,7 @@ export * from './components/ui-speech-preview';
 export * from './utils/speech-context';
 
 // Export types
-export type {AgentState} from './components/ui-orb';
+export * from './components/ui-orb';
 export type {AudioPlayerState} from './utils/audio-context';
 export type {SpeechState, SpeechContext} from './utils/speech-context';
 
