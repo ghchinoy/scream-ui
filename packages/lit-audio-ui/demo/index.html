@@ -483,6 +483,55 @@
   @voice-button-click="${handleClick}"&gt;
 &lt;/ui-voice-button&gt;</div>
       </ui-showcase-card>
+
+      <!-- Theming & Branding Workbench -->
+      <div class="demo-section" data-title="Branding" style="display: flex; flex-direction: column; gap: 2rem;">
+        <h2 style="margin-top: 2rem; margin-bottom: -1rem; border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 0.5rem;">Theming Workbench</h2>
+
+        <ui-showcase-card title="Zero-JS Branding" description="Demonstrating how to completely re-theme the recording experience using only CSS variables. No JavaScript configuration required.">
+          
+          <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; padding: 1rem;">
+            
+            <div id="theme-workbench-target" style="display: flex; gap: 2rem; align-items: center; padding: 2rem; border-radius: 16px; border: 2px dashed var(--md-sys-color-outline-variant);">
+               <ui-speech-provider simulation>
+                  <ui-speech-record-button></ui-speech-record-button>
+                  <ui-speech-preview placeholder="Brandable speech input..."></ui-speech-preview>
+               </ui-speech-provider>
+            </div>
+
+            <div class="control-panel" style="background: var(--md-sys-color-surface-container-low); padding: 1rem; border-radius: 8px; width: 100%; box-sizing: border-box;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <label style="font-size: 12px; font-weight: 600;">Record Color</label>
+                  <input type="color" id="theme-record-color" value="#ff4444" style="width: 100%; height: 32px; border: none; border-radius: 4px; cursor: pointer;" />
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <label style="font-size: 12px; font-weight: 600;">Waveform Color</label>
+                  <input type="color" id="theme-wave-color" value="#00ccff" style="width: 100%; height: 32px; border: none; border-radius: 4px; cursor: pointer;" />
+                </div>
+              </div>
+              <p style="font-size: 11px; margin-top: 1rem; color: var(--md-sys-color-on-surface-variant);">
+                Try changing the colors above to see the speech components adapt instantly via CSS variables.
+              </p>
+            </div>
+
+          </div>
+
+          <div slot="code">&lt;!-- Use these variables in your global CSS to re-brand everything --&gt;
+&lt;style&gt;
+  :root {
+    --ui-speech-record-color: #ff4444;
+    --ui-speech-wave-color: #00ccff;
+    --ui-speech-processing-color: #ffd700;
+  }
+&lt;/style&gt;
+
+&lt;ui-speech-provider&gt;
+  &lt;ui-speech-record-button&gt;&lt;/ui-speech-record-button&gt;
+  &lt;ui-speech-preview&gt;&lt;/ui-speech-preview&gt;
+&lt;/ui-speech-provider&gt;</div>
+        </ui-showcase-card>
+      </div>
             </div>
 </div>
     </div>
@@ -827,6 +876,22 @@
         voicePicker.addEventListener('voice-change', (e) => {
            voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
         });
+
+        // 7. Setup Theming Workbench
+        const themeTarget = document.getElementById('theme-workbench-target');
+        const recordColorInput = document.getElementById('theme-record-color');
+        const waveColorInput = document.getElementById('theme-wave-color');
+
+        if (recordColorInput && themeTarget) {
+          recordColorInput.addEventListener('input', (e) => {
+            themeTarget.style.setProperty('--ui-speech-record-color', e.target.value);
+          });
+        }
+        if (waveColorInput && themeTarget) {
+          waveColorInput.addEventListener('input', (e) => {
+            themeTarget.style.setProperty('--ui-speech-wave-color', e.target.value);
+          });
+        }
       });
 
         // 8. Setup Orb Demo

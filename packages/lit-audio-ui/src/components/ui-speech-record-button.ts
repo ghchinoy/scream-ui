@@ -35,14 +35,14 @@ export class UiSpeechRecordButton extends LitElement {
 
     .recording {
       --md-filled-icon-button-container-color: var(
-        --md-sys-color-error,
-        #ba1a1a
+        --ui-speech-record-color,
+        var(--md-sys-color-error, #ba1a1a)
       );
     }
     .processing {
       --md-filled-icon-button-container-color: var(
-        --md-sys-color-secondary,
-        #0066cc
+        --ui-speech-processing-color,
+        var(--md-sys-color-secondary, #0066cc)
       );
       animation: pulse 2s infinite;
     }

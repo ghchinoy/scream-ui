@@ -67,8 +67,8 @@ export class UiVoiceButton extends LitElement {
     /* Customize the button depending on the state */
     md-filled-button.recording {
       --md-filled-button-container-color: var(
-        --md-sys-color-error-container,
-        #ffdad6
+        --ui-speech-record-color,
+        var(--md-sys-color-error-container, #ffdad6)
       );
       --md-filled-button-label-text-color: var(
         --md-sys-color-on-error-container,
@@ -98,8 +98,8 @@ export class UiVoiceButton extends LitElement {
 
     md-filled-button.processing {
       --md-filled-button-container-color: var(
-        --md-sys-color-secondary-container,
-        #cce5ff
+        --ui-speech-processing-color,
+        var(--md-sys-color-secondary-container, #cce5ff)
       );
       --md-filled-button-label-text-color: var(
         --md-sys-color-on-secondary-container,
@@ -265,7 +265,7 @@ export class UiVoiceButton extends LitElement {
                     .barRadius=${4}
                     .fadeEdges=${false}
                     .sensitivity=${1.8}
-                    barColor="currentColor"
+                    barColor="var(--ui-speech-wave-color, currentColor)"
                     height="20"
                     style="position: absolute; inset: 0;"
                   ></ui-live-waveform>

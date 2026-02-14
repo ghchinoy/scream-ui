@@ -76,6 +76,7 @@ export class UiSpeechPreview extends LitElement {
           barWidth="2"
           barGap="1"
           height="20"
+          barColor="var(--ui-speech-wave-color, currentColor)"
         ></ui-live-waveform>
       </div>
     `;
