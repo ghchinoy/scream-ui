@@ -23,6 +23,12 @@ When working alongside other agents (e.g., in `scream-services`):
 - **Detailed Resolutions:** Always append a note (`--append-notes`) when closing an issue, explaining the impact on other systems or specific version numbers (e.g., "Fixed in v0.2.1").
 - **Cross-Project Coordination:** If an issue in one project depends on a fix in another, note the foreign ID in the description or comments.
 
+## Designing for AI Consumption (Agent-to-Agent)
+- **Agnostic Logic:** Ensure "Mock" or "Simulation" logic is strictly optional (via properties). Agents building backends need to plug in real streams without fighting internal timers.
+- **Context-First State:** Favor `@lit/context` for state sharing. It allows other agents to build bespoke "Composites" (like the Smart Textarea) using our atomic components without rewriting the logic.
+- **Build Visibility:** When optimizing bundle size (e.g., dynamic imports), ensure sub-modules are still explicitly built and exported so other agents can `import` them granularly.
+- **Theming via Tokens:** Rely on CSS variables for branding. This allows an agent working on a dashboard to re-brand the entire audio library via a single CSS file without touching the TypeScript source.
+
 ## Troubleshooting & Maintenance
 
 ### bd (Beads) Issues
