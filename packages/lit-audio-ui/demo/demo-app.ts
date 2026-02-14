@@ -1,21 +1,16 @@
-import {createMockAnalyser} from '../src/utils/audio-utils.ts';
-import './demo-layouts.ts';
+import {createMockAnalyser} from '../src/utils/audio-utils.js';
+import './demo-layouts.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Lazy-load the heavy Orb component
-  await import('../src/components/ui-orb.ts');
+  await import('../src/components/ui-orb.js');
 
   // 2. Setup Static Waveform
-  const staticWaveform = document.getElementById(
-    'demo-static-waveform',
-  ) as any;
+  const staticWaveform = document.getElementById('demo-static-waveform') as any;
   const regenerateStaticBtn = document.getElementById('btn-regenerate-static');
 
   function generateStaticData() {
-    const mockData = Array.from(
-      {length: 200},
-      () => Math.random() * 0.8 + 0.1,
-    );
+    const mockData = Array.from({length: 200}, () => Math.random() * 0.8 + 0.1);
     if (staticWaveform) {
       staticWaveform.data = mockData;
     }
@@ -220,7 +215,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           cycleIndex = stateCycle.indexOf(finalState);
           voiceBtn.setAttribute('state', finalState);
           voiceBtn.label = '';
-          if (voiceStateText) voiceStateText.textContent = `State: ${finalState}`;
+          if (voiceStateText)
+            voiceStateText.textContent = `State: ${finalState}`;
         }
       }, 2500);
     }

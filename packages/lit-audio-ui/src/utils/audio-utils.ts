@@ -35,7 +35,7 @@ export interface AudioAnalyserResult {
 /**
  * Creates a mock AnalyserNode that generates procedural data.
  * Useful for demo environments where microphone access is not available.
- * 
+ *
  * @returns A partial AnalyserNode-like object.
  */
 export function createMockAnalyser(): any {

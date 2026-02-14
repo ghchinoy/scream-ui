@@ -50,7 +50,8 @@ export class UiSpeechProvider extends LitElement {
   willUpdate(changedProperties: Map<string, any>) {
     const update: Partial<SpeechContext> = {};
     if (changedProperties.has('state')) update.state = this.state;
-    if (changedProperties.has('transcript')) update.transcript = this.transcript;
+    if (changedProperties.has('transcript'))
+      update.transcript = this.transcript;
     if (changedProperties.has('partialTranscript'))
       update.partialTranscript = this.partialTranscript;
 
@@ -73,8 +74,9 @@ export class UiSpeechProvider extends LitElement {
 
         // Set up audio analysis for visualizers
         if (!this._audioCtx) {
-          this._audioCtx = new (window.AudioContext ||
-            (window as any).webkitAudioContext)();
+          this._audioCtx = new (
+            window.AudioContext || (window as any).webkitAudioContext
+          )();
         }
         const source = this._audioCtx.createMediaStreamSource(this._stream);
         this._analyser = this._audioCtx.createAnalyser();
@@ -129,7 +131,9 @@ export class UiSpeechProvider extends LitElement {
     this._cleanupStream();
     this._updateContext({
       state: 'processing',
-      transcript: this.simulation ? this._context.partialTranscript : this.transcript,
+      transcript: this.simulation
+        ? this._context.partialTranscript
+        : this.transcript,
       partialTranscript: '',
     });
 

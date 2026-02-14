@@ -69,7 +69,11 @@ export class UiSpeechPreview extends LitElement {
         ? html`<span class="placeholder">${this.placeholder}</span>`
         : html`<span class="transcript">${displayTranscript}</span>`}
 
-      <div class="waveform-container ${isRecording || isProcessing ? '' : 'hidden'}">
+      <div
+        class="waveform-container ${isRecording || isProcessing
+          ? ''
+          : 'hidden'}"
+      >
         <ui-live-waveform
           .active=${isRecording}
           .processing=${isProcessing}
