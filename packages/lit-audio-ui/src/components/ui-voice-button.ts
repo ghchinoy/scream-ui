@@ -42,6 +42,7 @@ export class UiVoiceButton extends LitElement {
 
   // Internal state for the success/error transient feedback
   @state() private _showFeedback = false;
+  @state() private _feedbackType: 'success' | 'error' | null = null;
   private _feedbackTimeout?: ReturnType<typeof setTimeout>;
 
   static styles = css`
@@ -204,16 +205,19 @@ export class UiVoiceButton extends LitElement {
     if (changedProperties.has('state')) {
       if (this.state === 'success' || this.state === 'error') {
         this._showFeedback = true;
+        this._feedbackType = this.state;
         if (this._feedbackTimeout) clearTimeout(this._feedbackTimeout);
         this._feedbackTimeout = setTimeout(() => {
           this._showFeedback = false;
+          this._feedbackType = null;
           // Optionally auto-reset state to idle after feedback
           if (this.state === 'success' || this.state === 'error') {
             this.state = 'idle';
           }
         }, 1500);
-      } else {
+      } else if (this.state !== 'idle') {
         this._showFeedback = false;
+        this._feedbackType = null;
       }
     }
   }
@@ -221,8 +225,6 @@ export class UiVoiceButton extends LitElement {
   render() {
     const isRecording = this.state === 'recording';
     const isProcessing = this.state === 'processing';
-    const isSuccess = this.state === 'success';
-    const isError = this.state === 'error';
     const isDisabled = this.disabled || isProcessing;
 
     const showWaveform = isRecording || isProcessing;
@@ -231,8 +233,8 @@ export class UiVoiceButton extends LitElement {
     const buttonClasses = {
       recording: isRecording,
       processing: isProcessing,
-      success: isSuccess && this._showFeedback,
-      error: isError && this._showFeedback,
+      success: this._feedbackType === 'success',
+      error: this._feedbackType === 'error',
     };
 
     const slotClasses = {
@@ -274,14 +276,14 @@ export class UiVoiceButton extends LitElement {
               : ''}
           </div>
 
-          ${(this._showFeedback || isSuccess) && isSuccess
+          ${this._showFeedback && this._feedbackType === 'success'
             ? html`
                 <div class="feedback-overlay success">
                   <md-icon class="feedback-icon success">check</md-icon>
                 </div>
               `
             : ''}
-          ${this._showFeedback && isError
+          ${this._showFeedback && this._feedbackType === 'error'
             ? html`
                 <div class="feedback-overlay error">
                   <md-icon class="feedback-icon error">close</md-icon>
