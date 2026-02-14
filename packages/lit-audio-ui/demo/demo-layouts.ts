@@ -618,7 +618,10 @@ export class DemoSmartTextarea extends LitElement {
 
   render() {
     return html`
-      <ui-speech-provider @speech-start=${this._onStart}>
+      <ui-speech-provider
+        @speech-start=${this._onStart}
+        @state-change=${this._handleStateChange}
+      >
         <div class="textarea-container">
           <textarea
             .value=${this._text}
@@ -642,5 +645,12 @@ export class DemoSmartTextarea extends LitElement {
 
   private _onStart() {
     console.log('Recording started in Smart Textarea');
+  }
+
+  private _handleStateChange(e: CustomEvent) {
+    const {transcript, partialTranscript} = e.detail;
+    if (transcript || partialTranscript) {
+      this._text = partialTranscript || transcript;
+    }
   }
 }

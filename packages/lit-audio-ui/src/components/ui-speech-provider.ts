@@ -43,7 +43,7 @@ export class UiSpeechProvider extends LitElement {
     }
   `;
 
-  updated(changedProperties: Map<string, any>) {
+  willUpdate(changedProperties: Map<string, any>) {
     if (changedProperties.has('state')) {
       this._updateContext({state: this.state});
     }
@@ -166,6 +166,14 @@ export class UiSpeechProvider extends LitElement {
     if (update.state) {
       this.state = update.state;
     }
+
+    this.dispatchEvent(
+      new CustomEvent('state-change', {
+        bubbles: true,
+        composed: true,
+        detail: this._context,
+      }),
+    );
   }
 
   render() {
