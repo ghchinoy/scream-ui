@@ -17,7 +17,25 @@ bd close <id>         # Complete work
 bd sync               # Sync with git
 ```
 
+## Troubleshooting & Maintenance
 
+### bd (Beads) Issues
+If `bd` commands fail with "database disk image is malformed" or legacy errors:
+1.  **Rebuild from JSONL:** `bd doctor --fix --source=jsonl` (Uses the JSONL files as the source of truth).
+2.  **Legacy Fix:** If prompted about a legacy database, run `bd migrate --update-repo-id` to bind the DB to the current repo.
+3.  **Sync:** Always run `bd sync` after recovery.
+
+## Engineering Standards
+
+### Monorepo & Workspace Guidelines
+- **TSConfig Robustness:** Always use bare specifiers for extensions (e.g., `"extends": "gts/tsconfig-google.json"`) instead of relative paths like `./node_modules/...`. This ensures TypeScript can find configs regardless of hoisting.
+- **CI/CD Consistency:** Use `npm install --ignore-scripts` at the project root in CI environments (GitHub Actions) to prevent `prepare` or `preinstall` scripts from triggering premature builds before the workspace is fully linked.
+- **Lockfile Sync:** If package names or workspace structures change, run `npm install` at the root to regenerate the `package-lock.json` before pushing.
+
+### Asset Management (GCS vs Git)
+- **Large Assets:** NEVER commit large audio files, high-res images, or video to the git repository.
+- **Temporary Workflow:** Use the `sources/` directory (git-ignored) for local asset generation or processing.
+- **Distribution:** Upload final assets to the public GCS bucket (`gs://scream-ui-samples/`) and reference them via public HTTPS URLs in the demo code.
 
 ## Landing the Plane (Session Completion)
 
@@ -54,7 +72,9 @@ When porting React/Tailwind/Radix components from `sources/ui/` into the `packag
 - **Do not wrap React components**. Rewrite them as pure native WebComponents using `LitElement`.
 - **Replace Hooks**: `useRef` becomes `@query()`. `useEffect` for initialization becomes `firstUpdated()`. `useEffect` for reactive changes becomes `updated(changedProperties)`.
 - **Styling**: Translate Tailwind utility classes into scoped standard CSS within `static styles = css... `. Use Material Design 3 design tokens (`--md-sys-color-primary`) instead of hardcoded colors or Tailwind variables.
+- **Theme Awareness**: Components that use Canvas or Three.js (like `ui-orb`) must explicitly listen for theme changes to update internal uniforms. Use a `MutationObserver` on `document.documentElement` to watch for `class` attribute changes (`.dark`) and call a re-color method.
 - **Controls**: Replace complex Radix primitives (like sliders or menus) with `@material/web` components (e.g., `<md-slider>`, `<md-filled-button>`).
+- **Layout Convention**: Center component showcase cards within their demo containers using `margin: 0 auto;` and a defined `max-width`.
 
 ### 2. Canvas & Audio Visualizer Math
 The ElevenLabs UI components use highly tuned audio math. When porting this math, watch out for the following blind spots:
