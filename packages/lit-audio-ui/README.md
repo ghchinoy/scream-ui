@@ -2,6 +2,8 @@
 
 A lightweight, framework-agnostic Web Components library for high-performance audio visualization and control, built natively for the browser using [Lit](https://lit.dev/).
 
+Take a look at the [examples and documentation](https://ghchinoy.github.io/scream-ui/) to see the components in action.
+
 ## Why Lit Web Components?
 
 When building complex, high-frequency audio visualizers (like real-time canvas waveforms), performance and bundle size are critical. Traditional React/ShadcnUI libraries often bring significant overhead due to Virtual DOM reconciliation loops and heavy CSS framework dependencies (like Tailwind).
@@ -14,15 +16,11 @@ By leveraging **Lit** and native Web Components, this library offers distinct ad
 * **Scoped Styling:** Uses standard CSS variables and Material Design 3 tokens. No Tailwind installation, complex class merging, or CSS-in-JS runtime required.
 * **Atomic Composition:** Powered by `@lit/context`, the complex monolithic audio players are broken down into atomic, highly composable state machines.
 
-## Acknowledgements
-
-This project is deeply inspired by the beautiful, open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
-
-We are incredibly grateful for their contribution to the open-source community. Their original repository provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth. While their library focuses heavily on the React ecosystem, this project reimagines those beautiful designs as standard, universal browser APIs.
 
 ## How to Use the Lit Components (For Users)
 
 As a Web Components library, you can use these elements directly in your HTML or inside any frontend framework.
+
 
 ### 1. Installation
 Install the package via npm:
@@ -135,6 +133,11 @@ npm run lint
 npm run fix
 ```
 
+## Acknowledgements
+
+This project is deeply inspired by the beautiful, open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
+
+We are incredibly grateful for their contribution to the open-source community. Their original repository provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth. While their library focuses heavily on the React ecosystem, this project reimagines those beautiful designs as standard, universal browser APIs.
 
 # License
 

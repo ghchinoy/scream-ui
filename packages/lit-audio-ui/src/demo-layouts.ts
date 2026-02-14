@@ -54,6 +54,7 @@ export class DemoPodcastPlayer extends LitElement {
       gap: 16px;
       max-width: 320px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
     }
     .custom-podcast-header {
       display: flex;
@@ -146,6 +147,18 @@ export class DemoLyriaPlayer extends LitElement {
   @query('#music-provider') private _provider!: any;
   @query('#music-scroller') private _scroller!: any;
 
+  @state() private _coverUrl =
+    'https://storage.googleapis.com/scream-ui-samples/acoustic.png';
+
+  private _trackCovers: {[key: string]: string} = {
+    'https://storage.googleapis.com/scream-ui-samples/acoustic.wav':
+      'https://storage.googleapis.com/scream-ui-samples/acoustic.png',
+    'https://storage.googleapis.com/scream-ui-samples/lofi.wav':
+      'https://storage.googleapis.com/scream-ui-samples/lofi.png',
+    'https://storage.googleapis.com/scream-ui-samples/cinematic.wav':
+      'https://storage.googleapis.com/scream-ui-samples/cinematic.png',
+  };
+
   static styles = css`
     :host {
       display: block;
@@ -170,12 +183,44 @@ export class DemoLyriaPlayer extends LitElement {
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      max-width: 400px;
+      gap: 24px;
+      max-width: 600px;
       box-sizing: border-box;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
     }
+
+    .player-layout {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 500px) {
+      .player-layout {
+        flex-direction: column;
+      }
+    }
+
+    .album-art {
+      width: 160px;
+      height: 160px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      background: var(--md-sys-color-surface-container-highest);
+    }
+
+    .player-controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
     .music-track-selector {
       display: flex;
       gap: 12px;
@@ -225,36 +270,43 @@ export class DemoLyriaPlayer extends LitElement {
               </option>
             </select>
           </div>
-          <div
-            style="height: 60px; background: #000; border-radius: 8px; overflow: hidden; position: relative;"
-          >
-            <ui-scrolling-waveform
-              id="music-scroller"
-              speed="50"
-              height="60"
-              barWidth="4"
-              barGap="2"
-              active="false"
-            ></ui-scrolling-waveform>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <ui-audio-time-display
-              format="elapsed"
-              style="font-size: 12px; opacity: 0.8;"
-            ></ui-audio-time-display>
-            <div style="flex: 1;">
-              <ui-audio-progress-slider></ui-audio-progress-slider>
+
+          <div class="player-layout">
+            <img class="album-art" src="${this._coverUrl}" alt="Album Art" />
+
+            <div class="player-controls">
+              <div
+                style="height: 60px; background: #000; border-radius: 8px; overflow: hidden; position: relative;"
+              >
+                <ui-scrolling-waveform
+                  id="music-scroller"
+                  speed="50"
+                  height="60"
+                  barWidth="4"
+                  barGap="2"
+                  active="false"
+                ></ui-scrolling-waveform>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <ui-audio-time-display
+                  format="elapsed"
+                  style="font-size: 12px; opacity: 0.8;"
+                ></ui-audio-time-display>
+                <div style="flex: 1;">
+                  <ui-audio-progress-slider></ui-audio-progress-slider>
+                </div>
+                <ui-audio-time-display
+                  format="remaining"
+                  style="font-size: 12px; opacity: 0.8;"
+                ></ui-audio-time-display>
+              </div>
+              <div class="music-controls">
+                <ui-audio-play-button></ui-audio-play-button>
+                <ui-audio-volume-slider
+                  style="width: 140px; flex-shrink: 0;"
+                ></ui-audio-volume-slider>
+              </div>
             </div>
-            <ui-audio-time-display
-              format="remaining"
-              style="font-size: 12px; opacity: 0.8;"
-            ></ui-audio-time-display>
-          </div>
-          <div class="music-controls">
-            <ui-audio-play-button></ui-audio-play-button>
-            <ui-audio-volume-slider
-              style="width: 140px; flex-shrink: 0;"
-            ></ui-audio-volume-slider>
           </div>
         </div>
       </ui-audio-provider>
@@ -265,6 +317,9 @@ export class DemoLyriaPlayer extends LitElement {
     const select = e.target as HTMLSelectElement;
     if (this._provider) {
       this._provider.src = select.value;
+      this._coverUrl =
+        this._trackCovers[select.value] ||
+        'https://storage.googleapis.com/scream-ui-samples/acoustic.png';
       await this._provider.updateComplete;
       this._provider.play();
     }
