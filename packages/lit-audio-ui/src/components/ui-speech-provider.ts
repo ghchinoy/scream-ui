@@ -23,6 +23,8 @@ export class UiSpeechProvider extends LitElement {
 
   @property({type: String}) state: SpeechState = 'idle';
   @property({type: Boolean}) simulation = false;
+  @property({type: String}) transcript = '';
+  @property({type: String}) partialTranscript = '';
 
   private _stream?: MediaStream;
   private _audioCtx?: AudioContext;
@@ -46,8 +48,14 @@ export class UiSpeechProvider extends LitElement {
   `;
 
   willUpdate(changedProperties: Map<string, any>) {
-    if (changedProperties.has('state')) {
-      this._updateContext({state: this.state});
+    const update: Partial<SpeechContext> = {};
+    if (changedProperties.has('state')) update.state = this.state;
+    if (changedProperties.has('transcript')) update.transcript = this.transcript;
+    if (changedProperties.has('partialTranscript'))
+      update.partialTranscript = this.partialTranscript;
+
+    if (Object.keys(update).length > 0) {
+      this._updateContext(update);
     }
   }
 
@@ -78,23 +86,25 @@ export class UiSpeechProvider extends LitElement {
         state: 'recording',
         analyserNode: this._analyser,
         transcript: '',
-        partialTranscript: 'Listening...',
+        partialTranscript: this.simulation ? 'Listening...' : '',
       });
 
-      // Start mock transcription
-      let wordIndex = 0;
-      this._transcriptInterval = setInterval(() => {
-        if (wordIndex < this._fakeTranscript.length) {
-          if (wordIndex === 0) {
-            this._updateContext({partialTranscript: ''});
+      // Start mock transcription ONLY if simulation is enabled
+      if (this.simulation) {
+        let wordIndex = 0;
+        this._transcriptInterval = setInterval(() => {
+          if (wordIndex < this._fakeTranscript.length) {
+            if (wordIndex === 0) {
+              this._updateContext({partialTranscript: ''});
+            }
+            const current = this._context.partialTranscript;
+            this._updateContext({
+              partialTranscript: current + this._fakeTranscript[wordIndex],
+            });
+            wordIndex++;
           }
-          const current = this._context.partialTranscript;
-          this._updateContext({
-            partialTranscript: current + this._fakeTranscript[wordIndex],
-          });
-          wordIndex++;
-        }
-      }, 500);
+        }, 500);
+      }
 
       this.dispatchEvent(
         new CustomEvent('speech-start', {
@@ -115,11 +125,11 @@ export class UiSpeechProvider extends LitElement {
   stop() {
     if (this._context.state !== 'recording') return;
 
-    clearInterval(this._transcriptInterval);
+    if (this._transcriptInterval) clearInterval(this._transcriptInterval);
     this._cleanupStream();
     this._updateContext({
       state: 'processing',
-      transcript: this._context.partialTranscript,
+      transcript: this.simulation ? this._context.partialTranscript : this.transcript,
       partialTranscript: '',
     });
 
@@ -130,13 +140,15 @@ export class UiSpeechProvider extends LitElement {
       }),
     );
 
-    // Mock processing for now - in real world, this waits for final transcript
-    setTimeout(() => {
-      if (this._context.state === 'processing') {
-        this._updateContext({state: 'success'});
-        setTimeout(() => this.cancel(), 2000);
-      }
-    }, 1500);
+    // Mock processing ONLY if simulation is enabled
+    if (this.simulation) {
+      setTimeout(() => {
+        if (this._context.state === 'processing') {
+          this._updateContext({state: 'success'});
+          setTimeout(() => this.cancel(), 2000);
+        }
+      }, 1500);
+    }
   }
 
   cancel() {
