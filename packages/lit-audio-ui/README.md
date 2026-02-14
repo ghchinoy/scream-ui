@@ -87,6 +87,7 @@ The library currently ships with the following native WebComponents:
 *   ✨ **`<ui-shimmering-text>`**: A pure CSS, dependency-free text loading effect translating complex gradients into native `@keyframes`.
 *   🎛️ **`<ui-mic-selector>`**: Handles hardware microphone enumeration (`navigator.mediaDevices`), permissions, and displays a live audio preview directly inside a dropdown menu.
 *   🎭 **`<ui-voice-picker>`**: A searchable dropdown menu (combobox) that handles rendering complex persona objects, including real-time audio previews injected directly into the menu items.
+*   🗣️ **Atomic Speech Architecture**: Use `<ui-speech-provider>`, `<ui-speech-record-button>`, `<ui-speech-preview>`, and `<ui-speech-cancel-button>` to build custom recording UIs (like the Smart Textarea) with built-in state management and visualization.
 
 
 ## How to Build & Extend (For Developers)

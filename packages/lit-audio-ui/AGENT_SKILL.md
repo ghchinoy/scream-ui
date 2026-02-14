@@ -51,7 +51,7 @@ await import('@ghchinoy/lit-audio-ui/components/ui-orb.js');
 ## Reference Components
 - **Playback:** `ui-audio-play-button`, `ui-audio-progress-slider`, `ui-audio-volume-slider`, `ui-audio-time-display`.
 - **Visualization:** `ui-waveform` (static), `ui-live-waveform` (real-time), `ui-scrolling-waveform` (procedural), `ui-orb` (3D).
-- **Voice/Input:** `ui-voice-button`, `ui-mic-selector`, `ui-voice-picker`.
+- **Voice/Input:** `ui-voice-button`, `ui-mic-selector`, `ui-voice-picker`, `ui-speech-provider`, `ui-speech-record-button`, `ui-speech-preview`, `ui-speech-cancel-button`.
 
 ## Quality Gates
 - Ensure `crossorigin="anonymous"` is set on audio sources if using external URLs to prevent CORS errors in visualizers.
