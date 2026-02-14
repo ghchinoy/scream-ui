@@ -60,6 +60,7 @@ export class UiVoiceButton extends LitElement {
     md-filled-button,
     md-outlined-button {
       transition: all 0.2s ease-in-out;
+      font-family: inherit;
     }
 
     /* Customize the button depending on the state */
