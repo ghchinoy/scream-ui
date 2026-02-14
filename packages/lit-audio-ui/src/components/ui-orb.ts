@@ -6,7 +6,7 @@ export type AgentState = null | 'thinking' | 'listening' | 'talking';
 
 @customElement('ui-orb')
 export class UiOrb extends LitElement {
-  @property({type: Array}) colors: [string, string] = ['#CADCFC', '#A0B9D1'];
+  @property({type: Array}) colors?: [string, string];
   @property({type: String}) agentState: AgentState = null;
   @property({type: Number}) inputVolume = 0;
   @property({type: Number}) outputVolume = 0;
@@ -59,10 +59,25 @@ export class UiOrb extends LitElement {
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('colors')) {
-      if (this._targetColor1 && this._targetColor2) {
-        this._targetColor1.set(this.colors[0]);
-        this._targetColor2.set(this.colors[1]);
-      }
+      this._updateColors();
+    }
+  }
+
+  private _updateColors() {
+    if (!this._targetColor1 || !this._targetColor2) return;
+
+    if (this.colors && this.colors.length === 2) {
+      this._targetColor1.set(this.colors[0]);
+      this._targetColor2.set(this.colors[1]);
+    } else {
+      // Fallback to MD3 tokens from computed style
+      const style = getComputedStyle(this);
+      const primary =
+        style.getPropertyValue('--md-sys-color-primary').trim() || '#CADCFC';
+      const secondary =
+        style.getPropertyValue('--md-sys-color-secondary').trim() || '#A0B9D1';
+      this._targetColor1.set(primary);
+      this._targetColor2.set(secondary);
     }
   }
 
@@ -80,8 +95,9 @@ export class UiOrb extends LitElement {
   private async _initThree() {
     if (!this._container) return;
 
-    this._targetColor1 = new THREE.Color(this.colors[0]);
-    this._targetColor2 = new THREE.Color(this.colors[1]);
+    this._targetColor1 = new THREE.Color();
+    this._targetColor2 = new THREE.Color();
+    this._updateColors();
 
     // Load texture
     try {
@@ -161,6 +177,7 @@ export class UiOrb extends LitElement {
       if (!this._mesh) return;
       const dark = document.documentElement.classList.contains('dark');
       this._mesh.material.uniforms.uInverted.value = dark ? 1 : 0;
+      this._updateColors();
     });
     observer.observe(document.documentElement, {
       attributes: true,

@@ -224,6 +224,7 @@
     &lt;!-- Top Row: Art, Text, Button --&gt;
     &lt;div class="header"&gt;
       &lt;div class="custom-podcast-art"&gt;
+        &lt;!-- The orb is theme-aware via CSS variables, but can be manually colored --&gt;
         &lt;ui-orb id="orb" agentState="idle"&gt;&lt;/ui-orb&gt;
       &lt;/div&gt;
       &lt;h4&gt;Episode 4&lt;/h4&gt;
@@ -249,6 +250,7 @@
     
     &lt;!-- Reacts to live audio from the provider! --&gt;
     &lt;!-- Tip: Use barColor="#ff0000" to override the default theme color --&gt;
+    &lt;!-- The background is black by design to make the bars pop --&gt;
     &lt;ui-scrolling-waveform .analyserNode="${liveAnalyser}"&gt;&lt;/ui-scrolling-waveform&gt;
 
     &lt;ui-audio-progress-slider&gt;&lt;/ui-audio-progress-slider&gt;
@@ -317,15 +319,22 @@
       
       <!-- 3D Orb Visualizer Demo -->
       <ui-showcase-card title="ui-orb" description="A native WebGL Three.js implementation of the conversational agent Orb. Powered by custom GLSL shaders without requiring React Three Fiber.">
-        <div class="control-panel">
+        <div class="control-panel" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
           <button id="orb-state-btn" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit;">
             Cycle State: idle
           </button>
+          <div style="width: 1px; height: 24px; background: var(--md-sys-color-outline-variant); margin: 0 4px;"></div>
+          <button class="orb-direct-btn" data-state="null" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Idle</button>
+          <button class="orb-direct-btn" data-state="listening" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Listening</button>
+          <button class="orb-direct-btn" data-state="thinking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Thinking</button>
+          <button class="orb-direct-btn" data-state="talking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Talking</button>
         </div>
         <div style="width: 250px; height: 250px; margin: 0 auto; background: var(--md-sys-color-surface-container-highest); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
           <ui-orb id="demo-orb"></ui-orb>
         </div>
-        <div slot="code">&lt;ui-orb 
+        <div slot="code">&lt;!-- The Orb consumes Material Design 3 tokens by default --&gt;
+&lt;!-- Override colors via the .colors property to match specific branding --&gt;
+&lt;ui-orb 
   agentState="idle | listening | thinking | talking"
   .colors="${['#CADCFC', '#A0B9D1']}"&gt;
 &lt;/ui-orb&gt;</div>
@@ -801,6 +810,17 @@
           const nextState = orbStates[orbStateIndex];
           orb.agentState = nextState;
           orbBtn.textContent = `Cycle State: ${nextState === null ? 'idle' : nextState}`;
+        });
+
+        // Direct Orb state buttons
+        document.querySelectorAll('.orb-direct-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const state = btn.dataset.state === 'null' ? null : btn.dataset.state;
+            orb.agentState = state;
+            orbBtn.textContent = `Cycle State: ${state === null ? 'idle' : state}`;
+            // Update the index to keep cycle button in sync
+            orbStateIndex = orbStates.indexOf(state);
+          });
         });
         
         // Connect the generic color picker to the orb colors too!
