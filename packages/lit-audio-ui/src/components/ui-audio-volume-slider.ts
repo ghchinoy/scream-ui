@@ -1,15 +1,18 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { consume } from '@lit/context';
-import { audioPlayerContext, type AudioPlayerState } from '../utils/audio-context';
+import {LitElement, html, css} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import {consume} from '@lit/context';
+import {
+  audioPlayerContext,
+  type AudioPlayerState,
+} from '../utils/audio-context';
 import '@material/web/slider/slider.js';
 import '@material/web/iconbutton/icon-button.js';
 import '@material/web/icon/icon.js';
 
 @customElement('ui-audio-volume-slider')
 export class UiAudioVolumeSlider extends LitElement {
-  @consume({ context: audioPlayerContext, subscribe: true })
-  @property({ attribute: false })
+  @consume({context: audioPlayerContext, subscribe: true})
+  @property({attribute: false})
   public playerState?: AudioPlayerState;
 
   static styles = css`
@@ -25,9 +28,12 @@ export class UiAudioVolumeSlider extends LitElement {
       flex: 1;
       min-width: 0; /* Prevent flex overflow */
       width: 100%;
-      --md-slider-inactive-track-color: var(--md-sys-color-outline-variant, #c4c7c5);
+      --md-slider-inactive-track-color: var(
+        --md-sys-color-outline-variant,
+        #c4c7c5
+      );
     }
-    
+
     md-icon-button {
       color: var(--md-sys-color-on-surface-variant, #444);
     }
@@ -36,7 +42,7 @@ export class UiAudioVolumeSlider extends LitElement {
   render() {
     const volume = this.playerState?.volume ?? 1;
     const muted = this.playerState?.muted ?? false;
-    
+
     let icon = 'volume_up';
     if (muted || volume === 0) icon = 'volume_off';
     else if (volume < 0.5) icon = 'volume_down';

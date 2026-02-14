@@ -2,7 +2,7 @@
   "name": "scream-audio-ui",
   "version": "1.0.0",
   "description": "A pure Lit WebComponents port of modern audio UI components",
-  "author": "Google LLC",
+  "author": "G. Hussain Chinoy",
   "license": "Apache-2.0",
   "main": "dist/scream-audio-ui.umd.js",
   "module": "dist/scream-audio-ui.es.js",
@@ -29,7 +29,8 @@
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
-    "fix": "gts fix"
+    "fix": "gts fix",
+    "prepare": "npm run build:lib"
   },
   "dependencies": {
     "@lit/context": "^1.1.6",

@@ -192,19 +192,24 @@ export class UiScrollingWaveform extends LitElement {
           this._dataIndex = (this._dataIndex + 1) % this.data.length;
         } else if (this.analyserNode) {
           // Live analyser node
-          if (!this._dataArray || this._dataArray.length !== this.analyserNode.frequencyBinCount) {
-             this._dataArray = new Uint8Array(this.analyserNode.frequencyBinCount);
+          if (
+            !this._dataArray ||
+            this._dataArray.length !== this.analyserNode.frequencyBinCount
+          ) {
+            this._dataArray = new Uint8Array(
+              this.analyserNode.frequencyBinCount,
+            );
           }
-          this.analyserNode.getByteFrequencyData(this._dataArray);
-          
+          this.analyserNode.getByteFrequencyData(this._dataArray as any);
+
           let sum = 0;
           const limit = Math.min(this._dataArray.length, 50); // average lower bands
-          for(let i = 0; i < limit; i++) {
-             sum += this._dataArray[i];
+          for (let i = 0; i < limit; i++) {
+            sum += this._dataArray[i];
           }
           const avg = sum / limit;
           const normalized = avg / 255;
-          
+
           // Apply curve
           newHeight = Math.max(0.1, Math.pow(normalized, 1.5) * 1.5);
         } else {

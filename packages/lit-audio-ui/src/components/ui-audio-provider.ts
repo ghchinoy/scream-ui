@@ -1,15 +1,18 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators.js';
-import { provide } from '@lit/context';
-import { audioPlayerContext, type AudioPlayerState } from '../utils/audio-context';
+import {LitElement, html, css} from 'lit';
+import {customElement, property, state, query} from 'lit/decorators.js';
+import {provide} from '@lit/context';
+import {
+  audioPlayerContext,
+  type AudioPlayerState,
+} from '../utils/audio-context';
 
 /**
- * A headless (invisible) WebComponent that manages an internal <audio> tag 
+ * A headless (invisible) WebComponent that manages an internal <audio> tag
  * and provides state to any child components via @lit/context.
  */
 @customElement('ui-audio-provider')
 export class UiAudioProvider extends LitElement {
-  @property({ type: String }) src = '';
+  @property({type: String}) src = '';
 
   @query('audio') private _audioEl!: HTMLAudioElement;
 
@@ -19,7 +22,7 @@ export class UiAudioProvider extends LitElement {
   private _animationFrameId = 0;
 
   // The state object we provide to all children!
-  @provide({ context: audioPlayerContext })
+  @provide({context: audioPlayerContext})
   @state()
   public state: AudioPlayerState = {
     src: '',
@@ -49,7 +52,7 @@ export class UiAudioProvider extends LitElement {
 
   render() {
     return html`
-      <audio 
+      <audio
         crossorigin="anonymous"
         src="${this.src}"
         preload="metadata"
@@ -57,8 +60,8 @@ export class UiAudioProvider extends LitElement {
         @ended="${this._handleEnded}"
         @playing="${this._handlePlaying}"
         @pause="${this._handlePause}"
-        @waiting="${() => this._updateState({ isBuffering: true })}"
-        @canplay="${() => this._updateState({ isBuffering: false })}"
+        @waiting="${() => this._updateState({isBuffering: true})}"
+        @canplay="${() => this._updateState({isBuffering: false})}"
         @error="${this._handleError}"
       ></audio>
       <slot></slot>
@@ -67,7 +70,12 @@ export class UiAudioProvider extends LitElement {
 
   willUpdate(changed: Map<string, any>) {
     if (changed.has('src')) {
-      this._updateState({ src: this.src, isPlaying: false, currentTime: 0, error: undefined });
+      this._updateState({
+        src: this.src,
+        isPlaying: false,
+        currentTime: 0,
+        error: undefined,
+      });
     }
   }
 
@@ -91,36 +99,39 @@ export class UiAudioProvider extends LitElement {
   // --- State Mutators ---
 
   private _updateState(updates: Partial<AudioPlayerState>) {
-    // We must create a new object reference so @lit/context detects the change 
+    // We must create a new object reference so @lit/context detects the change
     // and re-renders consumers!
-    this.state = { ...this.state, ...updates };
-    
+    this.state = {...this.state, ...updates};
+
     // Dispatch a standard DOM event so vanilla HTML/JS users can react to the player!
     this.dispatchEvent(
       new CustomEvent('state-change', {
         detail: this.state,
         bubbles: true,
-        composed: true
-      })
+        composed: true,
+      }),
     );
   }
 
   private _setupAudioContext() {
     if (this._audioContext || !this._audioEl) return;
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext || (window as any).webkitAudioContext;
       this._audioContext = new AudioContextClass();
       this._analyserNode = this._audioContext.createAnalyser();
       this._analyserNode.fftSize = 256;
       this._analyserNode.smoothingTimeConstant = 0.8;
 
-      this._mediaSource = this._audioContext.createMediaElementSource(this._audioEl);
+      this._mediaSource = this._audioContext.createMediaElementSource(
+        this._audioEl,
+      );
       this._mediaSource.connect(this._analyserNode);
       this._analyserNode.connect(this._audioContext.destination);
 
-      this._updateState({ analyserNode: this._analyserNode });
+      this._updateState({analyserNode: this._analyserNode});
     } catch (e) {
-      console.warn("Failed to set up AudioContext for visualizer:", e);
+      console.warn('Failed to set up AudioContext for visualizer:', e);
     }
   }
 
@@ -132,7 +143,7 @@ export class UiAudioProvider extends LitElement {
     }
     this._audioEl.play().catch(e => {
       console.error('Error playing audio', e);
-      this._updateState({ error: 'Playback failed' });
+      this._updateState({error: 'Playback failed'});
     });
   }
 
@@ -152,60 +163,62 @@ export class UiAudioProvider extends LitElement {
   private _seek(time: number) {
     if (!this._audioEl) return;
     this._audioEl.currentTime = time;
-    this._updateState({ currentTime: time });
+    this._updateState({currentTime: time});
   }
 
   private _setVolume(volume: number) {
     if (!this._audioEl) return;
     this._audioEl.volume = volume;
-    this._updateState({ volume, muted: volume === 0 });
+    this._updateState({volume, muted: volume === 0});
   }
 
   private _toggleMute() {
     if (!this._audioEl) return;
     this._audioEl.muted = !this._audioEl.muted;
-    this._updateState({ muted: this._audioEl.muted });
+    this._updateState({muted: this._audioEl.muted});
   }
 
   // --- Audio Event Listeners ---
 
   private _handleLoadedMetadata() {
-    this._updateState({ duration: this._audioEl.duration });
+    this._updateState({duration: this._audioEl.duration});
   }
 
   private _handleEnded() {
-    this._updateState({ isPlaying: false, currentTime: 0 });
+    this._updateState({isPlaying: false, currentTime: 0});
     this._audioEl.currentTime = 0;
   }
 
   private _handlePlaying() {
-    this._updateState({ isPlaying: true, isBuffering: false, error: undefined });
+    this._updateState({isPlaying: true, isBuffering: false, error: undefined});
     this._startTrackingTime();
   }
 
   private _handlePause() {
-    this._updateState({ isPlaying: false });
+    this._updateState({isPlaying: false});
     if (this._animationFrameId) {
       cancelAnimationFrame(this._animationFrameId);
     }
   }
 
   private _handleError() {
-    this._updateState({ 
-      error: 'Error loading audio', 
-      isPlaying: false, 
-      isBuffering: false 
+    this._updateState({
+      error: 'Error loading audio',
+      isPlaying: false,
+      isBuffering: false,
     });
   }
 
   private _startTrackingTime() {
     const track = () => {
       if (this._audioEl && this.state.isPlaying) {
-        // Only trigger an update if the time actually changed significantly, 
+        // Only trigger an update if the time actually changed significantly,
         // otherwise we flood Lit's render loop.
-        const diff = Math.abs(this.state.currentTime - this._audioEl.currentTime);
-        if (diff > 0.05) { 
-          this._updateState({ currentTime: this._audioEl.currentTime });
+        const diff = Math.abs(
+          this.state.currentTime - this._audioEl.currentTime,
+        );
+        if (diff > 0.05) {
+          this._updateState({currentTime: this._audioEl.currentTime});
         }
         this._animationFrameId = requestAnimationFrame(track);
       }

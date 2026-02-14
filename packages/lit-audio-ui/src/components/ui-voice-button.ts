@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {LitElement, html, css, PropertyValues} from 'lit';
+import {LitElement, html, css, type PropertyValues} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {classMap} from 'lit/directives/class-map.js';
 import '@material/web/button/filled-button.js';

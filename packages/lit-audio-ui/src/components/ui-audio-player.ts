@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import {LitElement, html, css} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import './ui-audio-provider';
 import './ui-audio-play-button';
 import './ui-audio-progress-slider';
@@ -11,13 +11,13 @@ export interface AudioPlayerItem {
 }
 
 /**
- * A monolithic backward-compatibility wrapper that renders the classic ElevenLabs 
- * pill-shaped audio player. Internally, it relies completely on the new 
+ * A monolithic backward-compatibility wrapper that renders the classic ElevenLabs
+ * pill-shaped audio player. Internally, it relies completely on the new
  * compound <ui-audio-provider> architecture.
  */
 @customElement('ui-audio-player')
 export class UiAudioPlayer extends LitElement {
-  @property({ type: Object }) item?: AudioPlayerItem;
+  @property({type: Object}) item?: AudioPlayerItem;
 
   static styles = css`
     :host {
@@ -36,7 +36,7 @@ export class UiAudioPlayer extends LitElement {
       width: fit-content;
       font-family: inherit;
     }
-    
+
     .time-container {
       min-width: 85px; /* prevent jitter when times change */
     }
@@ -52,7 +52,6 @@ export class UiAudioPlayer extends LitElement {
     return html`
       <ui-audio-provider .src="${this.item?.src || ''}">
         <div class="player-pill" part="container">
-          
           <!-- Atomic Play/Pause Button -->
           <ui-audio-play-button></ui-audio-play-button>
 
@@ -65,7 +64,6 @@ export class UiAudioPlayer extends LitElement {
           <div class="slider-container">
             <ui-audio-progress-slider></ui-audio-progress-slider>
           </div>
-
         </div>
       </ui-audio-provider>
     `;

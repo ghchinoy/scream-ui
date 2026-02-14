@@ -88,7 +88,7 @@ export function getNormalizedFrequencyData(
   analyser: AnalyserNode,
   dataArray: Uint8Array,
 ): number[] {
-  analyser.getByteFrequencyData(dataArray);
+  analyser.getByteFrequencyData(dataArray as any);
   const normalizedData: number[] = [];
   for (let i = 0; i < dataArray.length; i++) {
     // getByteFrequencyData returns values between 0 and 255.

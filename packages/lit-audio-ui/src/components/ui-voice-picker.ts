@@ -44,7 +44,7 @@ export class UiVoicePicker extends LitElement {
   @property({type: Array}) voices: any[] = []; // Changed to any[] to accept generic data
   @property({type: String}) value?: string;
   @property({type: String}) placeholder = 'Select a voice...';
-  
+
   // Data mapping keys for generic objects
   @property({type: String}) idKey = 'voiceId';
   @property({type: String}) titleKey = 'name';
@@ -84,13 +84,15 @@ export class UiVoicePicker extends LitElement {
       font-family: inherit;
       font-size: 14px;
       min-height: 48px;
-      transition: background-color 0.2s, border-color 0.2s;
+      transition:
+        background-color 0.2s,
+        border-color 0.2s;
     }
-    
+
     .anchor-button:hover {
       background: var(--md-sys-color-surface-container-highest, #e3e3e3);
     }
-    
+
     .anchor-button:focus-visible {
       outline: none;
       border-color: var(--md-sys-color-primary, #0066cc);
@@ -269,17 +271,35 @@ export class UiVoicePicker extends LitElement {
       ></audio>
 
       <!-- Anchor Button -->
-      <button class="anchor-button" part="button" id="voice-anchor" @click=${this._toggleMenu}>
+      <button
+        class="anchor-button"
+        part="button"
+        id="voice-anchor"
+        @click=${this._toggleMenu}
+      >
         <div class="trigger-content">
           <div class="trigger-left">
             ${selectedVoice
               ? html`
-                  <div class="trigger-icon" style="${this.useOrbs ? 'overflow: hidden;' : ''}">
-                    ${this.useOrbs 
-                      ? html`<ui-orb agentState="listening" .colors="${selectedVoice[this.colorKey] || ['#CADCFC', '#A0B9D1']}"></ui-orb>`
-                      : html`<md-icon style="font-size: 16px;">record_voice_over</md-icon>`}
+                  <div
+                    class="trigger-icon"
+                    style="${this.useOrbs ? 'overflow: hidden;' : ''}"
+                  >
+                    ${this.useOrbs
+                      ? html`<ui-orb
+                          agentState="listening"
+                          .colors="${selectedVoice[this.colorKey] || [
+                            '#CADCFC',
+                            '#A0B9D1',
+                          ]}"
+                        ></ui-orb>`
+                      : html`<md-icon style="font-size: 16px;"
+                          >record_voice_over</md-icon
+                        >`}
                   </div>
-                  <span class="trigger-text">${selectedVoice[this.titleKey] || selectedVoice.name}</span>
+                  <span class="trigger-text"
+                    >${selectedVoice[this.titleKey] || selectedVoice.name}</span
+                  >
                 `
               : html`
                   <span
@@ -331,9 +351,20 @@ export class UiVoicePicker extends LitElement {
                       class="voice-avatar"
                       @click=${(e: Event) => this._togglePreview(e, voice)}
                     >
-                      ${this.useOrbs 
-                         ? html`<ui-orb agentState="${this._previewingVoiceId === voice[this.idKey] ? 'talking' : 'listening'}" .colors="${voice[this.colorKey] || ['#CADCFC', '#A0B9D1']}"></ui-orb>`
-                         : html`<md-icon style="font-size: 18px;">face</md-icon>`}
+                      ${this.useOrbs
+                        ? html`<ui-orb
+                            agentState="${this._previewingVoiceId ===
+                            voice[this.idKey]
+                              ? 'talking'
+                              : 'listening'}"
+                            .colors="${voice[this.colorKey] || [
+                              '#CADCFC',
+                              '#A0B9D1',
+                            ]}"
+                          ></ui-orb>`
+                        : html`<md-icon style="font-size: 18px;"
+                            >face</md-icon
+                          >`}
                       ${voice[this.previewUrlKey]
                         ? html`
                             <div
@@ -358,16 +389,18 @@ export class UiVoicePicker extends LitElement {
                       ${voice[this.subtitleKey] || voice.labels
                         ? html`
                             <div class="voice-labels">
-                              ${voice[this.subtitleKey] 
-                                  ? html`<span class="voice-badge">${voice[this.subtitleKey]}</span>`
-                                  : Object.values(voice.labels || {})
-                                  .filter(Boolean)
-                                  .map(
-                                    label =>
-                                      html`<span class="voice-badge"
-                                        >${label}</span
-                                      >`
-                                  )}
+                              ${voice[this.subtitleKey]
+                                ? html`<span class="voice-badge"
+                                    >${voice[this.subtitleKey]}</span
+                                  >`
+                                : Object.values(voice.labels || {})
+                                    .filter(Boolean)
+                                    .map(
+                                      label =>
+                                        html`<span class="voice-badge"
+                                          >${label}</span
+                                        >`,
+                                    )}
                             </div>
                           `
                         : ''}
