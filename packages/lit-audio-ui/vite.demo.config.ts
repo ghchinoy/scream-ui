@@ -1,8 +1,8 @@
 import {defineConfig} from 'vite';
 
 export default defineConfig({
-  // Base public path for GitHub Pages
-  base: '/scream-ui/',
+  // Base public path
+  base: './',
   build: {
     outDir: 'dist-demo',
   },
