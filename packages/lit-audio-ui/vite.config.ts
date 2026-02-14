@@ -9,21 +9,32 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    emptyOutDir: true,
     lib: {
       entry: 'src/index.ts',
       name: 'ScreamAudioUI',
-      fileName: format => `scream-audio-ui.${format}.js`,
     },
     rollupOptions: {
       external: [/^lit/, /^@material\/web/, 'three'],
-      output: {
-        globals: (id) => {
-          if (id.startsWith('lit')) return 'Lit';
-          if (id.startsWith('@material/web')) return 'MaterialWeb';
-          if (id === 'three') return 'THREE';
-          return id;
+      output: [
+        {
+          format: 'es',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          entryFileNames: '[name].js',
         },
-      },
+        {
+          format: 'umd',
+          name: 'ScreamAudioUI',
+          entryFileNames: 'scream-audio-ui.umd.js',
+          globals: (id) => {
+            if (id.startsWith('lit')) return 'Lit';
+            if (id.startsWith('@material/web')) return 'MaterialWeb';
+            if (id === 'three') return 'THREE';
+            return id;
+          },
+        }
+      ],
     },
   },
 });
