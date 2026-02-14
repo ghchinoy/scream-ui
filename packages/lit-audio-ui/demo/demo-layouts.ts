@@ -18,7 +18,7 @@ import {LitElement, html, css} from 'lit';
 import {customElement, state, query} from 'lit/decorators.js';
 
 // Import our library components so they are registered
-import './index.js';
+import '../src/index.js';
 
 /* ==========================================================================
    1. Podcast Player Example
@@ -134,7 +134,7 @@ export class DemoPodcastPlayer extends LitElement {
 
   async firstUpdated() {
     // Lazy-load the heavy Orb component
-    await import('./components/ui-orb.js');
+    await import('../src/components/ui-orb.js');
   }
 
   private _handleState(e: CustomEvent) {
