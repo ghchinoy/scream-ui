@@ -6,6 +6,7 @@ import {
   type SpeechContext,
   type SpeechState,
 } from '../utils/speech-context';
+import {createMockAnalyser} from '../utils/audio-utils';
 
 @customElement('ui-speech-provider')
 export class UiSpeechProvider extends LitElement {
@@ -21,6 +22,7 @@ export class UiSpeechProvider extends LitElement {
   };
 
   @property({type: String}) state: SpeechState = 'idle';
+  @property({type: Boolean}) simulation = false;
 
   private _stream?: MediaStream;
   private _audioCtx?: AudioContext;
@@ -55,17 +57,22 @@ export class UiSpeechProvider extends LitElement {
     try {
       this._updateContext({state: 'connecting'});
 
-      this._stream = await navigator.mediaDevices.getUserMedia({audio: true});
+      if (this.simulation) {
+        // Use procedural audio for demo
+        this._analyser = createMockAnalyser() as AnalyserNode;
+      } else {
+        this._stream = await navigator.mediaDevices.getUserMedia({audio: true});
 
-      // Set up audio analysis for visualizers
-      if (!this._audioCtx) {
-        this._audioCtx = new (window.AudioContext ||
-          (window as any).webkitAudioContext)();
+        // Set up audio analysis for visualizers
+        if (!this._audioCtx) {
+          this._audioCtx = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
+        }
+        const source = this._audioCtx.createMediaStreamSource(this._stream);
+        this._analyser = this._audioCtx.createAnalyser();
+        this._analyser.fftSize = 256;
+        source.connect(this._analyser);
       }
-      const source = this._audioCtx.createMediaStreamSource(this._stream);
-      this._analyser = this._audioCtx.createAnalyser();
-      this._analyser.fftSize = 256;
-      source.connect(this._analyser);
 
       this._updateContext({
         state: 'recording',

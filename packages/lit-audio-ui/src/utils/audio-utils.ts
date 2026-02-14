@@ -33,6 +33,31 @@ export interface AudioAnalyserResult {
 }
 
 /**
+ * Creates a mock AnalyserNode that generates procedural data.
+ * Useful for demo environments where microphone access is not available.
+ * 
+ * @returns A partial AnalyserNode-like object.
+ */
+export function createMockAnalyser(): any {
+  // We return a proxy that implements getByteFrequencyData
+  return {
+    fftSize: 256,
+    frequencyBinCount: 128,
+    getByteFrequencyData: (array: Uint8Array) => {
+      const time = performance.now() / 1000;
+      for (let i = 0; i < array.length; i++) {
+        // Generate a simple dynamic wave pattern
+        const val =
+          Math.sin(time * 2 + i * 0.1) * 50 +
+          Math.sin(time * 5 + i * 0.2) * 30 +
+          100;
+        array[i] = Math.max(0, Math.min(255, val));
+      }
+    },
+  };
+}
+
+/**
  * Creates and configures an AnalyserNode from a given MediaStream.
  *
  * @param mediaStream The stream to analyze (e.g. from getUserMedia)

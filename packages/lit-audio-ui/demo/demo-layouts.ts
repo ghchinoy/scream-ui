@@ -619,6 +619,7 @@ export class DemoSmartTextarea extends LitElement {
   render() {
     return html`
       <ui-speech-provider
+        simulation
         @speech-start=${this._onStart}
         @state-change=${this._handleStateChange}
       >
