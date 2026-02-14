@@ -132,6 +132,11 @@ export class DemoPodcastPlayer extends LitElement {
     `;
   }
 
+  async firstUpdated() {
+    // Lazy-load the heavy Orb component
+    await import('./components/ui-orb.js');
+  }
+
   private _handleState(e: CustomEvent) {
     if (this._orb) {
       this._orb.agentState = e.detail.isPlaying ? 'talking' : 'idle';

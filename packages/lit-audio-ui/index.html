@@ -572,7 +572,9 @@
       });
 
       // 1. Setup Static Waveform
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Lazy-load the heavy Orb component
+        await import('./src/components/ui-orb.ts');
         const staticWaveform = document.getElementById('demo-static-waveform');
         const regenerateStaticBtn = document.getElementById('btn-regenerate-static');
         
