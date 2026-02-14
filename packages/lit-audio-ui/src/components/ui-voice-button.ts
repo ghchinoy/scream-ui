@@ -107,7 +107,7 @@ export class UiVoiceButton extends LitElement {
       align-items: center;
       justify-content: center;
       background: transparent;
-      border: 1px solid transparent;
+      border: none;
       transition: all 0.3s ease;
     }
 
@@ -119,19 +119,15 @@ export class UiVoiceButton extends LitElement {
 
     .waveform-slot.recording,
     .waveform-slot.processing {
-      background: var(--md-sys-color-surface-container-highest, #e3e3e3);
-      border-color: var(--md-sys-color-outline-variant, #c4c7c5);
       opacity: 1;
     }
 
     .waveform-slot.recording {
-      background: var(--md-sys-color-error-container, #ffdad6);
-      border-color: var(--md-sys-color-on-error-container, #410002);
+      color: var(--md-sys-color-on-error-container, #410002);
     }
 
     .waveform-slot.processing {
-      background: var(--md-sys-color-secondary-container, #cce5ff);
-      border-color: var(--md-sys-color-on-secondary-container, #001d36);
+      color: var(--md-sys-color-on-secondary-container, #001d36);
     }
 
     .trailing-text {
@@ -237,6 +233,7 @@ export class UiVoiceButton extends LitElement {
                     .barRadius=${4}
                     .fadeEdges=${false}
                     .sensitivity=${1.8}
+                    barColor="currentColor"
                     height="20"
                     style="position: absolute; inset: 0;"
                   ></ui-live-waveform>
@@ -245,21 +242,22 @@ export class UiVoiceButton extends LitElement {
             ${showTrailing
               ? html` <span class="trailing-text">${this.trailing}</span> `
               : ''}
-            ${this._showFeedback && isSuccess
-              ? html`
-                  <div class="feedback-overlay">
-                    <md-icon class="feedback-icon success">check</md-icon>
-                  </div>
-                `
-              : ''}
-            ${this._showFeedback && isError
-              ? html`
-                  <div class="feedback-overlay">
-                    <md-icon class="feedback-icon error">close</md-icon>
-                  </div>
-                `
-              : ''}
           </div>
+
+          ${this._showFeedback && isSuccess
+            ? html`
+                <div class="feedback-overlay">
+                  <md-icon class="feedback-icon success">check</md-icon>
+                </div>
+              `
+            : ''}
+          ${this._showFeedback && isError
+            ? html`
+                <div class="feedback-overlay">
+                  <md-icon class="feedback-icon error">close</md-icon>
+                </div>
+              `
+            : ''}
         </div>
       </md-filled-button>
     `;
