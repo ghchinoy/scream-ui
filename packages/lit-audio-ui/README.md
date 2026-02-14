@@ -116,7 +116,8 @@ We welcome contributions! If you want to extend the components, tweak the canvas
 3. **Code Structure**
    - `/packages/lit-audio-ui/src/components/`: This is where the Lit elements (`.ts`) live. Each component should be self-contained with its scoped CSS (`static styles`).
    - `/packages/lit-audio-ui/src/utils/`: Shared utilities, such as the `AudioContext` and FFT math ported from the original ElevenLabs React repository.
-   - `/packages/lit-audio-ui/index.html`: The development workbench. Whenever you create a new component or port a feature, add a demo block here.
+   - `/packages/lit-audio-ui/demo/index.html`: The development workbench. Whenever you create a new component or port a feature, add a demo block here.
+   - `/packages/lit-audio-ui/demo/demo-layouts.ts`: Complex composite examples and layout logic used in the workbench.
 
 ### Building for Production
 To compile the TypeScript and bundle the library for distribution:
