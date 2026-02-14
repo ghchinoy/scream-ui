@@ -751,7 +751,8 @@
             if (mutation.type === 'attributes' && mutation.attributeName === 'state') {
               const currentState = voiceBtn.getAttribute('state');
               if (currentState === 'idle') {
-                 // Do NOT reset cycleIndex, let the user keep clicking through the states!
+                 // Reset cycleIndex so the next click starts from the beginning
+                 cycleIndex = -1;
                  voiceBtn.label = 'Start Recording';
                  voiceStateText.textContent = 'State: idle (auto-reset)';
               }
