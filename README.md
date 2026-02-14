@@ -14,12 +14,6 @@ By leveraging **Lit** and native Web Components, this library offers distinct ad
 * **Scoped Styling:** Uses standard CSS variables and Material Design 3 tokens. No Tailwind installation, complex class merging, or CSS-in-JS runtime required.
 * **Atomic Composition:** Powered by `@lit/context`, the complex monolithic audio players are broken down into atomic, highly composable state machines.
 
-## Acknowledgements
-
-This project is deeply inspired by the beautiful, open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
-
-We are incredibly grateful for their contribution to the open-source community. Their original repository provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth. While their library focuses heavily on the React ecosystem, this project reimagines those beautiful designs as standard, universal browser APIs.
-
 ## How to Use the Lit Components (For Users)
 
 As a Web Components library, you can use these elements directly in your HTML or inside any frontend framework.
@@ -129,6 +123,12 @@ npm run lint
 npm run fix
 ```
 
+
+## Acknowledgements
+
+This project is deeply inspired by the beautiful, open-source audio components designed and built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). 
+
+We are incredibly grateful for their contribution to the open-source community. Their original repository provided the foundational audio mathematics, canvas drawing logic, and WebGL shader configurations that make these visualizers look buttery smooth. While their library focuses heavily on the React ecosystem, this project reimagines those beautiful designs as standard, universal browser APIs.
 
 # License
 
