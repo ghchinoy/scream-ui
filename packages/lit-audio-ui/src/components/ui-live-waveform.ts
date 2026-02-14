@@ -271,13 +271,22 @@ export class UiLiveWaveform extends LitElement {
     ctx.clearRect(0, 0, rect.width, rect.height);
 
     // Provide a sensible default color if none provided, looking up the CSS variable cascade
-    // Get the computed color, trimming whitespace that getPropertyValue often returns
     const styles = getComputedStyle(this);
-    let computedBarColor = this.barColor;
-    if (!computedBarColor) {
+    let computedBarColor = this.barColor || 'currentColor';
+
+    // If it's a CSS variable, resolve it
+    if (computedBarColor.startsWith('var(')) {
+      const varName = computedBarColor.match(/var\(([^,)]+)/)?.[1].trim();
+      if (varName) {
+        const resolved = styles.getPropertyValue(varName).trim();
+        if (resolved) computedBarColor = resolved;
+      }
+    }
+
+    // Final fallback if we still don't have a valid color (e.g. currentColor resolved to nothing)
+    if (computedBarColor === 'currentColor' || !computedBarColor) {
       const primary = styles.getPropertyValue('--md-sys-color-primary').trim();
-      const color = styles.getPropertyValue('color').trim();
-      computedBarColor = primary || color || '#0066cc'; // Solid fallback
+      computedBarColor = primary || '#0066cc';
     }
 
     const step = this.barWidth + this.barGap;
