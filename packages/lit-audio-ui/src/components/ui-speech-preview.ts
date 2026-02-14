@@ -22,7 +22,7 @@ export class UiSpeechPreview extends LitElement {
 
     .transcript {
       font-size: 14px;
-      color: var(--md-sys-color-on-surface);
+      color: var(--md-sys-color-on-surface, #1e1e1e);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -30,7 +30,7 @@ export class UiSpeechPreview extends LitElement {
     }
 
     .placeholder {
-      color: var(--md-sys-color-outline);
+      color: var(--md-sys-color-outline, #79747e);
       font-style: italic;
     }
 
@@ -39,12 +39,17 @@ export class UiSpeechPreview extends LitElement {
       height: 24px;
       display: flex;
       align-items: center;
-      transition: opacity 0.3s ease;
+      justify-content: center;
+      background: transparent;
+      border-radius: 4px;
+      transition: all 0.3s ease;
     }
 
     .hidden {
+      width: 0;
       opacity: 0;
       pointer-events: none;
+      margin-left: -12px;
     }
   `;
 

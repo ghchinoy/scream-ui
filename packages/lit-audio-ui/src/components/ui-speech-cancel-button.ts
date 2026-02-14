@@ -12,10 +12,23 @@ export class UiSpeechCancelButton extends LitElement {
 
   static styles = css`
     :host {
-      display: none;
+      display: inline-block;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      width: 0;
+      overflow: hidden;
     }
     :host([active]) {
-      display: inline-block;
+      opacity: 1;
+      visibility: visible;
+      width: 40px;
+    }
+    md-icon-button {
+      --md-icon-button-icon-color: var(
+        --md-sys-color-on-surface-variant,
+        #444444
+      );
     }
   `;
 

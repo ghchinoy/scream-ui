@@ -105,19 +105,32 @@ export class UiVoiceButton extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .waveform-slot.idle {
+      width: 0;
+      opacity: 0;
+      margin-left: -12px; /* Pull back to hide gap when idle */
+    }
+
+    .waveform-slot.recording,
+    .waveform-slot.processing {
       background: var(--md-sys-color-surface-container-highest, #e3e3e3);
-      border: 1px solid var(--md-sys-color-outline-variant, #c4c7c5);
-      transition: background-color 0.3s ease;
+      border-color: var(--md-sys-color-outline-variant, #c4c7c5);
+      opacity: 1;
     }
 
     .waveform-slot.recording {
       background: var(--md-sys-color-error-container, #ffdad6);
-      border-color: transparent;
+      border-color: var(--md-sys-color-on-error-container, #410002);
     }
 
     .waveform-slot.processing {
       background: var(--md-sys-color-secondary-container, #cce5ff);
-      border-color: transparent;
+      border-color: var(--md-sys-color-on-secondary-container, #001d36);
     }
 
     .trailing-text {
@@ -197,6 +210,7 @@ export class UiVoiceButton extends LitElement {
 
     const slotClasses = {
       'waveform-slot': true,
+      idle: !isRecording && !isProcessing,
       recording: isRecording,
       processing: isProcessing,
     };
