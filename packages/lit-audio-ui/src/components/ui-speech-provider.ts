@@ -23,6 +23,7 @@ export class UiSpeechProvider extends LitElement {
 
   @property({type: String}) state: SpeechState = 'idle';
   @property({type: Boolean}) simulation = false;
+  @property({type: Boolean}) manual = false;
   @property({type: String}) transcript = '';
   @property({type: String}) partialTranscript = '';
 
@@ -62,6 +63,16 @@ export class UiSpeechProvider extends LitElement {
 
   async start() {
     if (this._context.state !== 'idle') return;
+
+    if (this.manual) {
+      this.dispatchEvent(
+        new CustomEvent('speech-request-start', {
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      return;
+    }
 
     try {
       this._updateContext({state: 'connecting'});
@@ -127,6 +138,16 @@ export class UiSpeechProvider extends LitElement {
   stop() {
     if (this._context.state !== 'recording') return;
 
+    if (this.manual) {
+      this.dispatchEvent(
+        new CustomEvent('speech-request-stop', {
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      return;
+    }
+
     if (this._transcriptInterval) clearInterval(this._transcriptInterval);
     this._cleanupStream();
     this._updateContext({
@@ -156,7 +177,7 @@ export class UiSpeechProvider extends LitElement {
   }
 
   cancel() {
-    clearInterval(this._transcriptInterval);
+    if (this._transcriptInterval) clearInterval(this._transcriptInterval);
     this._cleanupStream();
     this._updateContext({
       state: 'idle',

@@ -135,6 +135,29 @@
   }
 &lt;/style&gt;</div>
           </ui-showcase-card>
+
+          <ui-showcase-card title="Manual Backend Control" description="Demonstrating the 'manual' property. The component only emits intent events; the parent backend or agent is responsible for managing the actual state and data stream.">
+            <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; padding: 1rem;">
+              <div id="manual-demo-container" style="display: flex; gap: 2rem; align-items: center; padding: 2rem; border-radius: 16px; border: 2px solid var(--md-sys-color-outline-variant); width: 100%; box-sizing: border-box; justify-content: center;">
+                 <ui-speech-provider id="manual-provider" manual>
+                    <ui-speech-record-button></ui-speech-record-button>
+                    <ui-speech-preview placeholder="Orchestrated by backend..."></ui-speech-preview>
+                 </ui-speech-provider>
+              </div>
+              <div class="workbench-controls">
+                <div style="display: flex; justify-content: center; gap: 1rem; align-items: center;">
+                  <span id="manual-backend-status" style="font-size: 12px; font-family: monospace; background: var(--md-sys-color-surface-container-highest); padding: 4px 12px; border-radius: 12px;">Backend: IDLE</span>
+                  <div style="width: 1px; height: 24px; background: var(--md-sys-color-outline-variant);"></div>
+                  <em style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Simulation: Record button will request start, then backend will 'accept' after 1s delay.</em>
+                </div>
+              </div>
+            </div>
+            <div slot="code">&lt;ui-speech-provider manual 
+  .state="${backendState}" 
+  .partialTranscript="${liveStream}"
+  @speech-request-start="${onMicClick}"&gt;
+&lt;/ui-speech-provider&gt;</div>
+          </ui-showcase-card>
         </div>
 
         <!-- COMPONENTS SECTION -->

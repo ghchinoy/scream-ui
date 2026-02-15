@@ -374,4 +374,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (podcastOrb)
       podcastOrb.agentState = e.detail.isPlaying ? 'talking' : 'idle';
   });
+
+  // 14. Setup Manual Backend Demo
+  const manualProvider = document.getElementById('manual-provider') as any;
+  const backendStatus = document.getElementById('manual-backend-status');
+  let manualInterval: any;
+
+  manualProvider?.addEventListener('speech-request-start', () => {
+    if (backendStatus) backendStatus.textContent = 'Backend: HANDSHAKE...';
+    // Simulate network delay
+    setTimeout(() => {
+      manualProvider.state = 'recording';
+      if (backendStatus) backendStatus.textContent = 'Backend: STREAMING';
+
+      // Simulate live transcription stream
+      let i = 0;
+      const words = ['Simulating', ' actual', ' backend', ' data', ' stream...'];
+      manualInterval = setInterval(() => {
+        if (i < words.length) {
+          manualProvider.partialTranscript += words[i];
+          i++;
+        }
+      }, 600);
+    }, 1000);
+  });
+
+  manualProvider?.addEventListener('speech-request-stop', () => {
+    clearInterval(manualInterval);
+    if (backendStatus) backendStatus.textContent = 'Backend: PROCESSING...';
+    manualProvider.state = 'processing';
+
+    setTimeout(() => {
+      manualProvider.state = 'success';
+      if (backendStatus) backendStatus.textContent = 'Backend: SUCCESS';
+      setTimeout(() => {
+        manualProvider.state = 'idle';
+        manualProvider.partialTranscript = '';
+        if (backendStatus) backendStatus.textContent = 'Backend: IDLE';
+      }, 1500);
+    }, 2000);
+  });
 });
