@@ -55,13 +55,16 @@ export class UiVoiceButton extends LitElement {
     .wrapper {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 12px;
+      min-width: 100%;
     }
 
     md-filled-button,
     md-outlined-button {
       transition: all 0.2s ease-in-out;
       font-family: inherit;
+      min-width: 140px; /* Ensure enough room for text + wave */
     }
 
     /* Customize the button depending on the state */
@@ -130,6 +133,7 @@ export class UiVoiceButton extends LitElement {
       background: transparent;
       border: none;
       transition: all 0.3s ease;
+      flex-shrink: 0;
     }
 
     .waveform-slot.idle {
@@ -143,12 +147,13 @@ export class UiVoiceButton extends LitElement {
       opacity: 1;
     }
 
+    /* Waveform contrast colors based on state */
     .waveform-slot.recording {
-      color: var(--md-sys-color-on-error-container, #410002);
+      --current-wave-color: var(--md-sys-color-error, #ba1a1a);
     }
 
     .waveform-slot.processing {
-      color: var(--md-sys-color-on-secondary-container, #001d36);
+      --current-wave-color: var(--md-sys-color-primary, #0066cc);
     }
 
     .trailing-text {
@@ -265,7 +270,7 @@ export class UiVoiceButton extends LitElement {
                     .barRadius=${4}
                     .fadeEdges=${false}
                     .sensitivity=${1.8}
-                    barColor="var(--ui-speech-wave-color, currentColor)"
+                    barColor="var(--ui-speech-wave-color, var(--current-wave-color, currentColor))"
                     height="20"
                     style="position: absolute; inset: 0;"
                   ></ui-live-waveform>
