@@ -73,6 +73,18 @@ export class UiOrb extends LitElement {
     if (changedProperties.has('colors')) {
       this._updateColors();
     }
+    if (changedProperties.has('seed')) {
+      this._updateSeed();
+    }
+  }
+
+  private _updateSeed() {
+    if (!this._mesh) return;
+    const random = this._splitmix32(this.seed);
+    const offsets = new Float32Array(
+      Array.from({length: 7}, () => random() * Math.PI * 2),
+    );
+    this._mesh.material.uniforms.uOffsets.value = offsets;
   }
 
   private _updateColors() {
