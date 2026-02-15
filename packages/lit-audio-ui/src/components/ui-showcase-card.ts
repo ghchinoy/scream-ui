@@ -87,8 +87,8 @@ export class UiShowcaseCard extends LitElement {
 
     .code-panel {
       display: none;
-      background: #1e1e1e; /* Standard terminal color */
-      color: #e3e3e3;
+      background: var(--md-sys-color-surface-container-highest, #1e1e1e);
+      color: var(--md-sys-color-on-surface, #e3e3e3);
       padding: 1.5rem;
       border-radius: 8px;
       overflow-x: auto;
@@ -96,6 +96,7 @@ export class UiShowcaseCard extends LitElement {
       font-size: 0.85rem;
       line-height: 1.5;
       margin: 0;
+      border: 1px solid var(--md-sys-color-outline-variant);
     }
 
     .code-panel.active {
