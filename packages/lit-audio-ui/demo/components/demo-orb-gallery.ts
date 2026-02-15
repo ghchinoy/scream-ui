@@ -18,7 +18,8 @@ import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 /**
- * A gallery showcasing the ui-orb component configured with the iconic Google brand colors.
+ * A gallery showcasing the ui-orb component with a variety of color schemes.
+ * The order pays a subtle homage to the iconic brand colors.
  */
 @customElement('demo-orb-gallery')
 export class DemoOrbGallery extends LitElement {
@@ -64,10 +65,10 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="talking" 
-              .colors="${['#EA4335', '#FBBC04']}">
+              .colors="${['#EA4335', '#C5221F']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Google Red</div>
+          <div class="orb-label">Crimson Ember</div>
         </div>
 
         <!-- YELLOW -->
@@ -75,10 +76,10 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="thinking" 
-              .colors="${['#FBBC04', '#34A853']}">
+              .colors="${['#FBBC04', '#F9AB00']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Google Yellow</div>
+          <div class="orb-label">Electric Sun</div>
         </div>
 
         <!-- GREEN -->
@@ -86,10 +87,10 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="listening" 
-              .colors="${['#34A853', '#4285F4']}">
+              .colors="${['#34A853', '#1E8E3E']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Google Green</div>
+          <div class="orb-label">Forest Green</div>
         </div>
 
         <!-- BLUE -->
@@ -97,10 +98,10 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="talking" 
-              .colors="${['#4285F4', '#EA4335']}">
+              .colors="${['#4285F4', '#1967D2']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Google Blue</div>
+          <div class="orb-label">Ocean Blue</div>
         </div>
       </div>
     `;
