@@ -16,6 +16,7 @@
 
 import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import '@material/web/icon/icon.js';
 
 /**
  * A layout utility component that provides 3D card flipping functionality.
@@ -73,6 +74,7 @@ export class Ui3dFlip extends LitElement {
 
     .back {
       transform: rotateY(180deg);
+      background: var(--md-sys-color-surface, #ffffff);
     }
 
     :host([axis='x']) .back {
@@ -86,6 +88,9 @@ export class Ui3dFlip extends LitElement {
       right: 12px;
       z-index: 10;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   `;
 

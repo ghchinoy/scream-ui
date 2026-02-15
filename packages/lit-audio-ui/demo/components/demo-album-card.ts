@@ -166,7 +166,7 @@ export class DemoAlbumCard extends LitElement {
         <div class="album-container">
           <ui-3d-flip id="flip-engine">
             <!-- FRONT SIDE -->
-            <div slot="front" class="art-wrapper">
+            <div slot="front" class="art-wrapper" @click=${this._toggleFlip}>
               <img class="album-art" src="${this._getCurrentTrack()?.artwork}" alt="Cover" />
               
               <div class="track-overlay">
@@ -207,6 +207,11 @@ export class DemoAlbumCard extends LitElement {
         </div>
       </ui-audio-provider>
     `;
+  }
+
+  private _toggleFlip() {
+    const flip = this.shadowRoot?.getElementById('flip-engine') as any;
+    if (flip) flip.toggle();
   }
 
   private _getCurrentTrack() {
