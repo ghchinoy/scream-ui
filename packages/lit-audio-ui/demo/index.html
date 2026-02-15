@@ -173,12 +173,21 @@
             <div class="waveform-container" style="height: 64px;">
               <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
             </div>
+            <div slot="code">&lt;ui-waveform 
+  .data="${myData}" 
+  height="64" 
+  fadeEdges="true"&gt;
+&lt;/ui-waveform&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-scrolling-waveform" description="Procedural scrolling animation.">
             <div class="waveform-container" style="height: 64px;">
               <ui-scrolling-waveform height="64" speed="50" barWidth="4" barGap="2" fadeEdges="true"></ui-scrolling-waveform>
             </div>
+            <div slot="code">&lt;ui-scrolling-waveform 
+  speed="50" 
+  barWidth="4"&gt;
+&lt;/ui-scrolling-waveform&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-orb" description="3D WebGL agent visualizer.">
@@ -192,12 +201,17 @@
             <div style="width: 250px; height: 250px; margin: 0 auto; background: var(--md-sys-color-surface-container-highest); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
               <ui-orb id="demo-orb"></ui-orb>
             </div>
+            <div slot="code">&lt;ui-orb agentState="thinking"&gt;&lt;/ui-orb&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-shimmering-text" description="Pure CSS text loading effect.">
             <div style="font-size: 2rem; font-weight: 700;">
               <ui-shimmering-text text="Transcribing audio..." duration="2"></ui-shimmering-text>
             </div>
+            <div slot="code">&lt;ui-shimmering-text 
+  text="Loading..." 
+  duration="2"&gt;
+&lt;/ui-shimmering-text&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-live-waveform" description="Real-time AudioContext visualizer.">
@@ -208,6 +222,10 @@
             <div class="waveform-container" style="height: 100px; display: flex; align-items: center;">
                <ui-live-waveform id="demo-live-waveform" height="80" sensitivity="2.5"></ui-live-waveform>
             </div>
+            <div slot="code">&lt;ui-live-waveform 
+  .analyserNode="${node}" 
+  active="true"&gt;
+&lt;/ui-live-waveform&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-mic-selector" description="Hardware device enumeration.">
@@ -215,6 +233,7 @@
               <ui-mic-selector id="demo-mic-selector"></ui-mic-selector>
               <span id="demo-mic-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected ID: (none)</span>
             </div>
+            <div slot="code">&lt;ui-mic-selector&gt;&lt;/ui-mic-selector&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-voice-picker" description="Searchable persona selector.">
@@ -222,6 +241,7 @@
               <ui-voice-picker id="demo-voice-picker"></ui-voice-picker>
               <span id="demo-voice-picker-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">Selected Voice: (none)</span>
             </div>
+            <div slot="code">&lt;ui-voice-picker .voices="${list}"&gt;&lt;/ui-voice-picker&gt;</div>
           </ui-showcase-card>
 
           <ui-showcase-card title="ui-voice-button" description="Compound interactive button.">
@@ -229,6 +249,7 @@
               <ui-voice-button id="demo-voice-btn" state="idle" label="Start Recording" trailing="⌥Space"></ui-voice-button>
               <span id="demo-voice-btn-state" style="font-family: monospace; font-size: 14px; background: var(--md-sys-color-surface-container-high); padding: 4px 8px; border-radius: 4px;">State: idle</span>
             </div>
+            <div slot="code">&lt;ui-voice-button state="idle" label="Record"&gt;&lt;/ui-voice-button&gt;</div>
           </ui-showcase-card>
         </div>
       </main>
