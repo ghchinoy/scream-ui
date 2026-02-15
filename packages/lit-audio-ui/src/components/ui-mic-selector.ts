@@ -57,6 +57,7 @@ export class UiMicSelector extends LitElement {
       display: inline-block;
       position: relative;
       font-family: inherit;
+      color-scheme: light dark;
     }
 
     .anchor-button {
@@ -64,11 +65,11 @@ export class UiMicSelector extends LitElement {
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
-      background: var(--md-sys-color-surface-container-high, #e2e2e2);
-      color: var(--md-sys-color-on-surface, #1e1e1e);
+      background: var(--md-sys-color-surface-container-high, transparent);
+      color: var(--md-sys-color-on-surface);
       border-radius: 999px;
       cursor: pointer;
-      border: none;
+      border: 1px solid var(--md-sys-color-outline-variant, currentColor);
       font-family: inherit;
       font-size: 14px;
       font-weight: 500;
@@ -77,7 +78,7 @@ export class UiMicSelector extends LitElement {
     }
 
     .anchor-button:hover:not(:disabled) {
-      background: var(--md-sys-color-surface-container-highest, #e3e3e3);
+      background: var(--md-sys-color-surface-container-highest);
     }
 
     .anchor-button:disabled {
@@ -96,7 +97,7 @@ export class UiMicSelector extends LitElement {
     md-menu {
       --md-menu-container-color: var(
         --md-sys-color-surface-container,
-        var(--md-sys-color-surface, #ffffff)
+        var(--md-sys-color-surface)
       );
       --md-menu-container-shape: 12px;
       min-width: 280px;
@@ -137,7 +138,7 @@ export class UiMicSelector extends LitElement {
       height: 24px;
       background: var(
         --md-sys-color-surface-variant,
-        var(--md-sys-color-surface-container-highest, #e1e2e1)
+        var(--md-sys-color-surface-container-highest)
       );
       border-radius: 6px;
       overflow: hidden;
@@ -219,7 +220,7 @@ export class UiMicSelector extends LitElement {
       <md-menu
         id="device-menu"
         anchor="anchor-button"
-        positioning="fixed"
+        positioning="popover"
         @closed=${() => (this._isMenuOpen = false)}
         @opened=${() => (this._isMenuOpen = true)}
       >

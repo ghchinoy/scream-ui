@@ -68,6 +68,7 @@ export class UiVoicePicker extends LitElement {
       display: inline-block;
       width: 100%;
       font-family: inherit;
+      color-scheme: light dark;
     }
 
     .anchor-button {
@@ -78,11 +79,11 @@ export class UiVoicePicker extends LitElement {
       padding: 8px 16px;
       background: var(
         --ui-voice-picker-anchor-bg,
-        var(--md-sys-color-surface-container-high, #e2e2e2)
+        var(--md-sys-color-surface-container-high, transparent)
       );
-      border: 1px solid var(--md-sys-color-outline-variant, #c4c7c5);
+      border: 1px solid var(--md-sys-color-outline-variant, currentColor);
       border-radius: 8px;
-      color: var(--md-sys-color-on-surface, #1e1e1e);
+      color: var(--md-sys-color-on-surface);
       cursor: pointer;
       font-family: inherit;
       font-size: 14px;
@@ -93,13 +94,13 @@ export class UiVoicePicker extends LitElement {
     }
 
     .anchor-button:hover {
-      background: var(--md-sys-color-surface-container-highest, #e3e3e3);
+      background: var(--md-sys-color-surface-container-highest);
     }
 
     .anchor-button:focus-visible {
       outline: none;
-      border-color: var(--md-sys-color-primary, #0066cc);
-      box-shadow: 0 0 0 1px var(--md-sys-color-primary, #0066cc);
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 1px var(--md-sys-color-primary);
     }
 
     .trigger-content {
@@ -122,8 +123,8 @@ export class UiVoicePicker extends LitElement {
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: var(--md-sys-color-primary-container, #d1e4ff);
-      color: var(--md-sys-color-on-primary-container, #001d36);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -134,14 +135,14 @@ export class UiVoicePicker extends LitElement {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--md-sys-color-on-surface, #1e1e1e);
+      color: var(--md-sys-color-on-surface);
     }
 
     md-menu {
       --md-menu-container-shape: 12px;
       --md-menu-container-color: var(
         --md-sys-color-surface-container,
-        var(--md-sys-color-surface, #f3f3f3)
+        var(--md-sys-color-surface)
       );
       max-width: 400px;
       font-family: inherit;
@@ -151,7 +152,7 @@ export class UiVoicePicker extends LitElement {
 
     .search-container {
       padding: 8px 12px;
-      background: var(--md-sys-color-surface-container, #f3f3f3);
+      background: var(--md-sys-color-surface-container);
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
       font-family: inherit;
     }
@@ -337,7 +338,7 @@ export class UiVoicePicker extends LitElement {
       <md-menu
         id="voice-menu"
         anchor="voice-anchor"
-        positioning="fixed"
+        positioning="popover"
         @closed=${this._handleMenuClosed}
       >
         <!-- The click.stop modifier stops the menu from closing when searching -->
