@@ -205,17 +205,18 @@ export class DemoAlbumCard extends LitElement {
               </div>
             </div>
 
-            <!-- CUSTOM FLIP ICONS - Placed outside the art-wrapper click zone if needed -->
+            <!-- CUSTOM FLIP ICONS -->
             <div
               slot="flip-icon"
               class="flip-btn"
-              @click=${(e: Event) => e.stopPropagation()}
+              @click=${this._toggleFlip}
             >
               <span class="material-symbols-outlined">queue_music</span>
             </div>
             <div
               slot="flip-icon-back"
               class="flip-btn"
+              @click=${this._toggleFlip}
               style="background: var(--md-sys-color-primary); color: white; border: none;"
             >
               <span class="material-symbols-outlined">image</span>
@@ -226,7 +227,8 @@ export class DemoAlbumCard extends LitElement {
     `;
   }
 
-  private _toggleFlip() {
+  private _toggleFlip(e: Event) {
+    e.stopPropagation(); // Prevent double-triggering if parent wrapper also has a listener
     const flip = this.shadowRoot?.getElementById('flip-engine') as any;
     if (flip) flip.toggle();
   }
