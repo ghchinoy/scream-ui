@@ -174,49 +174,36 @@
   @speech-request-start="${onMicClick}"&gt;
 &lt;/ui-speech-provider&gt;</div>
           </ui-showcase-card>
+
+          <ui-showcase-card title="ui-orb Gallery" description="Showcasing visual variety using the 'colors' property.">
+            <demo-orb-gallery></demo-orb-gallery>
+            <div slot="code">&lt;!-- Custom Coral --&gt;
+&lt;ui-orb 
+  agentState="talking" 
+  .colors="${['#F28B82', '#E57373']}"&gt;
+&lt;/ui-orb&gt;</div>
+          </ui-showcase-card>
         </div>
 
         <!-- COMPONENTS SECTION -->
         <div class="demo-section" data-title="Components">
           <h2>Components</h2>
 
+          <ui-showcase-card title="ui-orb" description="3D WebGL agent visualizer with interactive state control.">
+            <div class="control-panel" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+              <button id="orb-state-btn" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 13px;">Cycle State: idle</button>
+              <button class="orb-direct-btn" data-state="null" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Idle</button>
+              <button class="orb-direct-btn" data-state="listening" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Listening</button>
+              <button class="orb-direct-btn" data-state="thinking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Thinking</button>
+              <button class="orb-direct-btn" data-state="talking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Talking</button>
+            </div>
+            <div style="width: 200px; height: 200px; margin: 0 auto; background: var(--md-sys-color-surface-container-highest); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+              <ui-orb id="demo-orb"></ui-orb>
+            </div>
+            <div slot="code">&lt;ui-orb agentState="thinking"&gt;&lt;/ui-orb&gt;</div>
+          </ui-showcase-card>
+
           <ui-showcase-card title="ui-waveform" description="Static timeline visualization.">
-            <div class="control-panel">
-              <button id="btn-regenerate-static" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <span class="material-symbols-outlined" style="font-size: 18px;">refresh</span> Regenerate
-              </button>
-            </div>
-            <div class="waveform-container" style="height: 64px;">
-              <ui-waveform id="demo-static-waveform" height="64" fadeEdges="true"></ui-waveform>
-            </div>
-            <div slot="code">&lt;ui-waveform 
-  .data="${myData}" 
-  height="64" 
-  fadeEdges="true"&gt;
-&lt;/ui-waveform&gt;</div>
-          </ui-showcase-card>
-
-          <ui-showcase-card title="ui-scrolling-waveform" description="Procedural scrolling animation.">
-            <div class="waveform-container" style="height: 64px;">
-              <ui-scrolling-waveform height="64" speed="50" barWidth="4" barGap="2" fadeEdges="true"></ui-scrolling-waveform>
-            </div>
-            <div slot="code">&lt;ui-scrolling-waveform 
-  speed="50" 
-  barWidth="4"&gt;
-&lt;/ui-scrolling-waveform&gt;</div>
-          </ui-showcase-card>
-
-          <ui-showcase-card title="ui-orb" description="3D WebGL agent visualizer. Use the 'colors' property to match your brand.">
-            <demo-orb-gallery></demo-orb-gallery>
-            <div slot="code">&lt;!-- Default Blue --&gt;
-&lt;ui-orb agentState="listening"&gt;&lt;/ui-orb&gt;
-
-&lt;!-- Custom Coral --&gt;
-&lt;ui-orb 
-  agentState="talking" 
-  .colors="${['#F28B82', '#E57373']}"&gt;
-&lt;/ui-orb&gt;</div>
-          </ui-showcase-card>
 
           <ui-showcase-card title="ui-shimmering-text" description="Pure CSS text loading effect.">
             <div style="font-size: 2rem; font-weight: 700;">
