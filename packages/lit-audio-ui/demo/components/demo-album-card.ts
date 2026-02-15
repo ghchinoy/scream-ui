@@ -22,24 +22,24 @@ import {type PlaylistTrack} from '../../src/utils/audio-context.js';
 export class DemoAlbumCard extends LitElement {
   @state() private _playlist: PlaylistTrack[] = [
     {
-      id: 'acoustic',
-      src: 'https://storage.googleapis.com/scream-ui-samples/acoustic.wav',
-      title: 'Acoustic Dreams',
-      artist: 'Lyria AI',
-      artwork: 'https://storage.googleapis.com/scream-ui-samples/acoustic.png',
+      id: 'starlight',
+      src: 'https://storage.googleapis.com/scream-ui-samples/starlight_silicon.mp3',
+      title: 'Starlight Silicon',
+      artist: 'Scream Labs',
+      artwork: 'https://storage.googleapis.com/scream-ui-samples/starlight_silicon.png',
     },
     {
-      id: 'lofi',
-      src: 'https://storage.googleapis.com/scream-ui-samples/lofi.wav',
-      title: 'Neon Nights',
-      artist: 'Lyria AI',
-      artwork: 'https://storage.googleapis.com/scream-ui-samples/lofi.png',
+      id: 'deep-learning',
+      src: 'https://storage.googleapis.com/scream-ui-samples/deep_learning.mp3',
+      title: 'Deep Learning',
+      artist: 'Neural Orchestra',
+      artwork: 'https://storage.googleapis.com/scream-ui-samples/deep_learning.png',
     },
     {
-      id: 'cinematic',
-      src: 'https://storage.googleapis.com/scream-ui-samples/cinematic.wav',
-      title: 'Orchestral Storm',
-      artist: 'Lyria AI',
+      id: 'ether',
+      src: 'https://storage.googleapis.com/scream-ui-samples/ether_drift.mp3',
+      title: 'Ether Drift',
+      artist: 'Digital Ghost',
       artwork: 'https://storage.googleapis.com/scream-ui-samples/cinematic.png',
     },
   ];
