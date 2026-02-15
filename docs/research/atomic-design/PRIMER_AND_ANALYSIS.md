@@ -1,52 +1,56 @@
-# Atomic Design: Primer & Library Analysis
+# Atomic Design: Primer & Library Analysis (v2 - Agent Research Integrated)
 
-## Part 1: The Atomic Design Primer
-Atomic Design, pioneered by Brad Frost, is a methodology for creating design systems. It acknowledges that UIs are hierarchical and should be built from the bottom up.
+## Part 1: The Atomic Design Primer (Lit Adaptation)
+Atomic Design, pioneered by Brad Frost, is a hierarchical mental model for creating user interfaces. In Lit, this moves from abstract theory to native implementation via Custom Elements and Shadow DOM.
 
 ### The Five Stages
-1.  **Atoms:** The smallest functional units. In WebComponents, these are single-purpose elements like buttons, icons, or labels. They cannot be broken down further without losing their purpose.
-2.  **Molecules:** Groups of atoms bonded together. They represent a distinct piece of functionality, like a search bar (input + button) or a specific audio control pill.
-3.  **Organisms:** Complex components made of molecules and atoms. They form a distinct section of an interface, such as a full Music Player card or a Navigation Header.
-4.  **Templates:** Page-level objects that place organisms into a layout. They focus on the structure (wireframe) rather than final data.
-5.  **Pages:** Specific instances of templates with real content. This is where we test the effectiveness of the design system.
+1.  **Atoms:** The foundational building blocks (Hydrogen). "Dumb" components like `<ui-button>`. Immutable and stateless.
+2.  **Molecules:** Groups of atoms bonded together (H2O). Specialized wrappers like `<ui-search-field>` that handle local interaction logic.
+3.  **Organisms:** Complex UI sections that are **Context-Aware**. They subscribe to data (e.g., `<ui-media-player>`) and orchestrate molecules.
+4.  **Templates:** Layout engines. Content-agnostic skeletons using **Named Slots** to define structure.
+5.  **Pages:** The Data Orchestrators. "Smart" components connected to API/Global State that populate templates.
 
 ---
 
-## Part 2: Current Library Analysis (`lit-audio-ui`)
-Our library currently follows these principles implicitly. Formalizing them will improve developer ergonomics and agent-to-agent collaboration.
+## Part 2: Structural Mapping Matrix
 
-### 🧪 Atoms (The Primitives)
-These are the core "building blocks" currently exported by the library.
-- `ui-audio-play-button`
-- `ui-audio-next-button`
-- `ui-audio-prev-button`
-- `ui-audio-time-display`
-- `ui-audio-progress-slider`
-- `ui-speech-record-button`
-- `ui-speech-cancel-button`
-- `ui-shimmering-text`
-
-### 🧬 Molecules (The Functional Units)
-These combine atoms to provide a richer interaction.
-- `ui-live-waveform` (Canvas + Logic)
-- `ui-spectrum-visualizer`
-- `ui-scrolling-waveform`
-- `ui-mic-selector` (Button + Icon + Logic)
-- `ui-voice-picker` (Search + List + Preview)
-- `ui-speech-preview` (Transcript + State)
-
-### 🦠 Organisms (The Composites)
-These are high-level components that orchestrate multiple molecules and atoms.
-- `demo-media-dashboard` (Should be promoted to `ui-media-dashboard`)
-- `demo-album-card` (Should be promoted to `ui-album-card`)
-- `ui-audio-player` (Our current "monolithic" player)
-
-### 🧱 Templates & Pages
-- `packages/lit-audio-ui/demo/index.html`: Effectively serves as our primary "Page" for testing.
+| Atomic Stage | Lit Role / Pattern | State Responsibility | Data Flow |
+| :--- | :--- | :--- | :--- |
+| **Atom** | Presentational | Stateless | Props Down / Events Up |
+| **Molecule** | Composite | Minimal (Ephemeral) | Slot-based Composition |
+| **Organism** | Mediator | Domain (Partial) | Context / Signals |
+| **Template** | Layout | Layout Grid | Multi-Slot Composition |
+| **Page** | Container | Application Owner | Global Store / API |
 
 ---
 
-## Part 3: Gap Analysis & Recommendations
-1.  **Naming Convention:** We should consider a sub-directory structure in `src/components/` (e.g., `atoms/`, `molecules/`) to make the hierarchy explicit to consumers.
-2.  **State Management:** `@lit/context` providers (like `ui-audio-provider`) are the "Glue" that allows Atoms to function inside Organisms without direct prop-drilling.
-3.  **Export Strategy:** We should update `package.json` to allow `import { ... } from '@ghchinoy/lit-audio-ui/atoms'`.
+## Part 3: Current Library Audit (`lit-audio-ui`)
+
+### 🧪 Atoms
+- `ui-audio-play-button`, `ui-audio-next-button`, `ui-audio-time-display`, etc.
+- **Rule:** MUST NOT import contexts or services.
+
+### 🧬 Molecules
+- `ui-mic-selector`, `ui-voice-picker`.
+- **Refinement:** Should prioritize slotting for icons/buttons to allow consumer customization.
+
+### 🦠 Organisms
+- `ui-audio-player`.
+- **Promoted:** `ui-media-dashboard`, `ui-album-card` (from demo to library).
+
+---
+
+## Part 4: Construction Principles for AI Agents
+To ensure inter-agent reliability, the following rules are now enforced:
+
+1.  **The "Dumb" Atom Rule:** Atoms must have maximum configurability via CSS Variables and zero side effects.
+2.  **Slot-over-Data:** Prefer `<slot>` based composition for Molecules and Organisms. Avoid passing complex JSON arrays for rendering children; allow the parent to inject components.
+3.  **Explicit Context indicators:** Any component consuming `@lit/context` is automatically classified as a **Molecule** or **Organism**.
+4.  **Positioning:** Use `positioning="popover"` for Atoms/Molecules that require overlays to ensure compatibility with 3D Organisms (perspective/transform contexts).
+
+---
+
+## Part 5: Implementation Roadmap
+1.  **Modularize Exports:** Update `package.json` to reflect `atoms/`, `molecules/`, etc.
+2.  **Sanitize Atoms:** Remove any accidental context dependencies from the Atom layer.
+3.  **Standardize Templates:** Extract layout logic from `index.html` into reusable `<ui-layout-...>` templates.
