@@ -18,5 +18,6 @@
 import './components/demo-podcast-player.js';
 import './components/demo-lyria-player.js';
 import './components/demo-album-card.js';
+import './components/demo-orb-gallery.js';
 import './components/demo-speech-input.js';
 import './components/demo-smart-textarea.js';
