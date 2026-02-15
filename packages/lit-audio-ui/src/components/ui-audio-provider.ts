@@ -4,15 +4,19 @@ import {provide} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
+  type PlaylistTrack,
 } from '../utils/audio-context';
 
 /**
  * A headless (invisible) WebComponent that manages an internal <audio> tag
  * and provides state to any child components via @lit/context.
+ * It also handles playlist orchestration and auto-advancing tracks.
  */
 @customElement('ui-audio-provider')
 export class UiAudioProvider extends LitElement {
   @property({type: String}) src = '';
+  @property({type: Array}) items: PlaylistTrack[] = [];
+  @property({type: Boolean}) autoAdvance = true;
 
   @query('audio') private _audioEl!: HTMLAudioElement;
 
@@ -32,6 +36,9 @@ export class UiAudioProvider extends LitElement {
     duration: 0,
     volume: 1,
     muted: false,
+    items: [],
+    currentIndex: -1,
+    autoAdvance: true,
     analyserNode: undefined,
     play: () => this.play(),
     pause: () => this.pause(),
@@ -39,6 +46,9 @@ export class UiAudioProvider extends LitElement {
     seek: (time: number) => this._seek(time),
     setVolume: (volume: number) => this._setVolume(volume),
     toggleMute: () => this._toggleMute(),
+    next: () => this.next(),
+    previous: () => this.previous(),
+    select: (index: number) => this.select(index),
   };
 
   static styles = css`
@@ -77,12 +87,26 @@ export class UiAudioProvider extends LitElement {
         error: undefined,
       });
     }
+    if (changed.has('items')) {
+      this._updateState({items: this.items});
+      // If we have items but no src, initialize to the first item
+      if (this.items.length > 0 && !this.src && this.state.currentIndex === -1) {
+        this.select(0);
+      }
+    }
+    if (changed.has('autoAdvance')) {
+      this._updateState({autoAdvance: this.autoAdvance});
+    }
   }
 
   updated(changed: Map<string, any>) {
     if (changed.has('src') && this._audioEl) {
       // Force the browser to load the new audio file!
       this._audioEl.load();
+      // If it was playing, keep playing
+      if (this.state.isPlaying) {
+        this.play();
+      }
     }
   }
 
@@ -178,6 +202,31 @@ export class UiAudioProvider extends LitElement {
     this._updateState({muted: this._audioEl.muted});
   }
 
+  public next() {
+    if (this.items.length === 0) return;
+    const nextIndex = (this.state.currentIndex + 1) % this.items.length;
+    this.select(nextIndex);
+  }
+
+  public previous() {
+    if (this.items.length === 0) return;
+    const prevIndex =
+      (this.state.currentIndex - 1 + this.items.length) % this.items.length;
+    this.select(prevIndex);
+  }
+
+  public select(index: number) {
+    if (index >= 0 && index < this.items.length) {
+      const track = this.items[index];
+      this.src = track.src;
+      this._updateState({
+        currentIndex: index,
+        src: track.src,
+        currentTime: 0,
+      });
+    }
+  }
+
   // --- Audio Event Listeners ---
 
   private _handleLoadedMetadata() {
@@ -185,8 +234,14 @@ export class UiAudioProvider extends LitElement {
   }
 
   private _handleEnded() {
-    this._updateState({isPlaying: false, currentTime: 0});
-    this._audioEl.currentTime = 0;
+    if (this.autoAdvance && this.items.length > 0) {
+      // If we're at the last track, loop back to start
+      this.next();
+      this.play();
+    } else {
+      this._updateState({isPlaying: false, currentTime: 0});
+      this._audioEl.currentTime = 0;
+    }
   }
 
   private _handlePlaying() {

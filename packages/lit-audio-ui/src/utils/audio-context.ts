@@ -1,6 +1,18 @@
 import {createContext} from '@lit/context';
 
 /**
+ * Represents a single track in a playlist.
+ */
+export interface PlaylistTrack {
+  id?: string;
+  src: string;
+  title?: string;
+  artist?: string;
+  artwork?: string;
+  [key: string]: any;
+}
+
+/**
  * The unified state and control surface of our audio player.
  */
 export interface AudioPlayerState {
@@ -13,6 +25,11 @@ export interface AudioPlayerState {
   muted: boolean;
   error?: string;
 
+  // Playlist Support
+  items: PlaylistTrack[];
+  currentIndex: number;
+  autoAdvance: boolean;
+
   // Expose an explicit reference to the underlying AnalyserNode
   // so that visualizers (like ui-live-waveform) can connect to it!
   analyserNode?: AnalyserNode;
@@ -24,6 +41,11 @@ export interface AudioPlayerState {
   seek: (time: number) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
+
+  // Playlist Methods
+  next: () => void;
+  previous: () => void;
+  select: (index: number) => void;
 }
 
 /**

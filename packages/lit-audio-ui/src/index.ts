@@ -19,6 +19,7 @@ export * from './components/scream-voice-button';
 export * from './components/ui-voice-button';
 export * from './components/ui-waveform';
 export * from './components/ui-live-waveform';
+export * from './components/ui-spectrum-visualizer';
 export * from './components/ui-audio-player';
 export * from './components/ui-mic-selector';
 export * from './components/ui-voice-picker';
@@ -28,9 +29,13 @@ export * from './components/ui-scrolling-waveform';
 export * from './components/ui-showcase-card';
 
 export * from './components/ui-shimmering-text';
+export * from './components/ui-3d-flip';
+export * from './components/ui-playlist';
 
 export * from './components/ui-audio-provider';
 export * from './components/ui-audio-play-button';
+export * from './components/ui-audio-next-button';
+export * from './components/ui-audio-prev-button';
 export * from './components/ui-audio-progress-slider';
 export * from './components/ui-audio-time-display';
 export * from './utils/audio-context';
