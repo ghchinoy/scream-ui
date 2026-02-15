@@ -10,50 +10,40 @@ A specialized skill for AI agents to autonomously implement high-performance aud
 ## Protocol: The "Lit Way"
 
 ### 1. Bootstrapping the Provider
-Always wrap atomic components in a `<ui-audio-provider>`. This component manages the underlying `AudioContext` and shared state.
+Always wrap atomic components in a `<ui-audio-provider>` (for playback) or `<ui-speech-provider>` (for recording). These components manage the state machine and shared context.
+
+### 2. Headless Backend Orchestration (Manual Mode)
+For production integrations with a backend/agent, use `manual` mode. This prevents the provider from auto-starting local media and allows the backend to drive the state.
 
 ```html
-<ui-audio-provider src="path/to/audio.mp3">
-  <!-- Atomic consumers go here -->
-  <ui-audio-play-button></ui-audio-play-button>
-</ui-audio-provider>
+<ui-speech-provider manual .state="${backendState}" @speech-request-start="${onMicClick}">
+  <ui-speech-record-button></ui-speech-record-button>
+</ui-speech-provider>
 ```
 
-### 2. Passing Audio Data
-Components that require live frequency data (like `ui-live-waveform` or `ui-scrolling-waveform`) need an `AnalyserNode`. Retrieve this from the provider's `state-change` event.
+### 3. Passing Audio Data
+Components requiring live frequency data (like `ui-live-waveform`) need an `AnalyserNode`. Retrieve this from the provider's `state-change` event.
 
+### 4. Theming & Branding (Zero-JS)
+The library uses Material Design 3 tokens with semantic overrides. Use these for instant branding:
+- `--md-sys-color-primary`: Main theme color.
+- `--ui-speech-record-color`: Custom color for the record button active state.
+- `--ui-speech-wave-color`: Custom color for the recording/preview waveform.
+- `--ui-speech-preview-font-size`: Custom typography for transcription text.
+
+### 5. Positioning in 3D Environments
+If a component (like `ui-mic-selector`) is inside a 3D transformed container (perspective/translateZ), ensure `md-menu` uses `positioning="popover"` to prevent detachment.
+
+### 6. Lazy-Loading Heavy Components
+The `ui-orb` component is heavy (Three.js). Always use dynamic imports for it:
 ```javascript
-const provider = document.querySelector('ui-audio-provider');
-const visualizer = document.querySelector('ui-live-waveform');
-
-provider.addEventListener('state-change', (e) => {
-  const { analyserNode } = e.detail;
-  if (analyserNode) {
-    visualizer.analyserNode = analyserNode;
-  }
-});
-```
-
-### 3. Theming & Styling
-The library uses Material Design 3 tokens. Use the following CSS variables to ensure visual consistency:
-- `--md-sys-color-primary`: Primary accent color for bars/icons.
-- `--md-sys-color-surface-container`: Background color for player cards.
-- `--md-sys-color-on-surface`: Default text/icon color.
-
-### 4. Lazy-Loading Heavy Components
-The `ui-orb` component is heavy due to Three.js. Recommend lazy-loading it only when needed:
-
-```javascript
-// The agent should recommend this pattern for performance
 await import('@ghchinoy/lit-audio-ui/components/ui-orb.js');
 ```
 
-## Reference Components
-- **Playback:** `ui-audio-play-button`, `ui-audio-progress-slider`, `ui-audio-volume-slider`, `ui-audio-time-display`.
-- **Visualization:** `ui-waveform` (static), `ui-live-waveform` (real-time), `ui-scrolling-waveform` (procedural), `ui-orb` (3D).
-- **Voice/Input:** `ui-voice-button`, `ui-mic-selector`, `ui-voice-picker`, `ui-speech-provider`, `ui-speech-record-button`, `ui-speech-preview`, `ui-speech-cancel-button`.
+## Simulation Mode
+For development without microphone access, enable the `simulation` property on `<ui-speech-provider>`. This generates procedural audio data and mock transcription events.
 
 ## Quality Gates
-- Ensure `crossorigin="anonymous"` is set on audio sources if using external URLs to prevent CORS errors in visualizers.
-- Verify that `ui-audio-provider` has a valid `src` before playback.
-- Use `MutationObserver` if real-time theme reactivity is required for Canvas/WebGL components.
+- Ensure `crossorigin="anonymous"` is set on audio/video tags to allow analysis.
+- Use `color-scheme: light dark;` on host elements to support native dark-mode sensitivity.
+- Verify that `manual` mode handlers clear intervals/timeouts during state transitions.
