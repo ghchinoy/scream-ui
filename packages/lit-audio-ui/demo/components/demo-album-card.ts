@@ -135,51 +135,60 @@ export class DemoAlbumCard extends LitElement {
     }
 
     .flip-btn {
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       color: white;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
+      pointer-events: auto; /* Ensure it's clickable above overlays */
     }
 
     .flip-btn:hover {
-      background: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.3);
       transform: scale(1.1);
     }
 
     .material-symbols-outlined {
       font-family: 'Material Symbols Outlined';
-      font-size: 20px;
+      font-size: 18px;
     }
   `;
 
   render() {
     return html`
-      <ui-audio-provider .items="${this._playlist}" @state-change="${() => this.requestUpdate()}">
+      <ui-audio-provider
+        .items="${this._playlist}"
+        @state-change="${() => this.requestUpdate()}"
+      >
         <div class="album-container">
           <ui-3d-flip id="flip-engine">
             <!-- FRONT SIDE -->
             <div slot="front" class="art-wrapper" @click=${this._toggleFlip}>
-              <img class="album-art" src="${this._getCurrentTrack()?.artwork}" alt="Cover" />
-              
+              <img
+                class="album-art"
+                src="${this._getCurrentTrack()?.artwork}"
+                alt="Cover"
+              />
+
               <div class="track-overlay">
                 <h4 class="track-title">${this._getCurrentTrack()?.title}</h4>
                 <p class="track-artist">${this._getCurrentTrack()?.artist}</p>
               </div>
 
               <div class="visualizer-overlay">
-                <ui-spectrum-visualizer 
-                  height="60" 
-                  barWidth="3" 
+                <ui-spectrum-visualizer
+                  height="60"
+                  barWidth="3"
                   barGap="1"
-                  color="rgba(255,255,255,0.8)">
+                  color="rgba(255,255,255,0.8)"
+                >
                 </ui-spectrum-visualizer>
               </div>
             </div>
@@ -196,11 +205,19 @@ export class DemoAlbumCard extends LitElement {
               </div>
             </div>
 
-            <!-- CUSTOM FLIP ICONS -->
-            <div slot="flip-icon" class="flip-btn">
+            <!-- CUSTOM FLIP ICONS - Placed outside the art-wrapper click zone if needed -->
+            <div
+              slot="flip-icon"
+              class="flip-btn"
+              @click=${(e: Event) => e.stopPropagation()}
+            >
               <span class="material-symbols-outlined">queue_music</span>
             </div>
-            <div slot="flip-icon-back" class="flip-btn" style="background: var(--md-sys-color-primary); color: white; border: none;">
+            <div
+              slot="flip-icon-back"
+              class="flip-btn"
+              style="background: var(--md-sys-color-primary); color: white; border: none;"
+            >
               <span class="material-symbols-outlined">image</span>
             </div>
           </ui-3d-flip>

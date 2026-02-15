@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import '@material/web/icon/icon.js';
+
 // Export all components from the library
 export * from './components/scream-voice-button';
 export * from './components/ui-voice-button';

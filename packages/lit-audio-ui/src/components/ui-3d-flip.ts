@@ -31,7 +31,7 @@ import '@material/web/icon/icon.js';
 @customElement('ui-3d-flip')
 export class Ui3dFlip extends LitElement {
   @property({type: Boolean, reflect: true}) flipped = false;
-  @property({type: String}) axis: 'x' | 'y' = 'y';
+  @property({type: String, reflect: true}) axis: 'x' | 'y' = 'y';
   @property({type: String}) duration = '0.6s';
 
   static styles = css`
@@ -51,7 +51,7 @@ export class Ui3dFlip extends LitElement {
       transform-style: preserve-3d;
     }
 
-    :host([flipped][axis='y']) .flip-container {
+    :host([flipped]) .flip-container {
       transform: rotateY(180deg);
     }
 
