@@ -152,12 +152,14 @@ export class DemoLyriaPlayer extends LitElement {
               </div>
 
               <div class="music-controls">
-                <div style="display: flex; gap: 4px;">
+                <div style="display: flex; gap: 4px; flex-shrink: 0;">
                   <ui-audio-prev-button></ui-audio-prev-button>
                   <ui-audio-play-button></ui-audio-play-button>
                   <ui-audio-next-button></ui-audio-next-button>
                 </div>
-                <ui-audio-volume-slider style="width: 100px;"></ui-audio-volume-slider>
+                <div style="flex: 1; display: flex; justify-content: flex-end; min-width: 120px;">
+                  <ui-audio-volume-slider style="width: 100%;"></ui-audio-volume-slider>
+                </div>
               </div>
             </div>
           </div>
