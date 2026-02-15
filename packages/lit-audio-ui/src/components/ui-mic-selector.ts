@@ -105,6 +105,7 @@ export class UiMicSelector extends LitElement {
 
     md-menu-item {
       font-family: inherit;
+      --md-menu-item-label-text-font: inherit;
     }
 
     md-menu-item div[slot='headline'] {
@@ -122,6 +123,7 @@ export class UiMicSelector extends LitElement {
 
     md-text-button {
       font-family: inherit;
+      --md-text-button-label-text-font: inherit;
     }
 
     .preview-waveform {

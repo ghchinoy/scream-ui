@@ -158,6 +158,8 @@ export class UiVoicePicker extends LitElement {
       width: 100%;
       --md-outlined-text-field-container-shape: 8px;
       font-family: inherit;
+      --md-outlined-text-field-label-text-font: inherit;
+      --md-outlined-text-field-input-text-font: inherit;
     }
 
     md-menu-item {
@@ -168,6 +170,7 @@ export class UiVoicePicker extends LitElement {
         --md-sys-color-on-surface-variant
       );
       --md-menu-item-label-text-color: var(--md-sys-color-on-surface);
+      --md-menu-item-label-text-font: inherit;
       font-family: inherit;
     }
 
