@@ -114,7 +114,7 @@ export class DemoPodcastPlayer extends LitElement {
   }
 
   async firstUpdated() {
-    await import('../../src/components/ui-orb.js');
+    await import('../../src/components/molecules/ui-orb.js');
   }
 
   private _handleState(e: CustomEvent) {

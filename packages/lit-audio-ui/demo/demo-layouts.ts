@@ -15,6 +15,7 @@
  */
 
 // Import modular demo components
+import '../src/index.js';
 import './components/demo-podcast-player.js';
 import './components/demo-lyria-player.js';
 import './components/demo-album-card.js';

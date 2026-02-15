@@ -4,7 +4,7 @@ import {consume} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '../utils/audio-context';
+} from '../../utils/audio-context';
 import '@material/web/slider/slider.js';
 
 @customElement('ui-audio-progress-slider')

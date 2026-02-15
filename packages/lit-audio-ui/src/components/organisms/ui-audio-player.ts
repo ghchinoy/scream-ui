@@ -1,9 +1,9 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import './ui-audio-provider';
-import './ui-audio-play-button';
-import './ui-audio-progress-slider';
-import './ui-audio-time-display';
+import '../providers/ui-audio-provider.js';
+import '../atoms/ui-audio-play-button.js';
+import '../atoms/ui-audio-progress-slider.js';
+import '../atoms/ui-audio-time-display.js';
 
 export interface AudioPlayerItem {
   id: string | number;

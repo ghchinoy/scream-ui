@@ -20,7 +20,7 @@ import {consume} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '../utils/audio-context';
+} from '../../utils/audio-context';
 import '@material/web/iconbutton/icon-button.js';
 import '@material/web/icon/icon.js';
 

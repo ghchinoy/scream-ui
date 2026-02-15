@@ -20,7 +20,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/icon/icon.js';
-import './ui-live-waveform';
+import './ui-live-waveform.js';
 
 export type VoiceButtonState =
   | 'idle'

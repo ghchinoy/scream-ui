@@ -20,8 +20,8 @@ import {consume} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '../utils/audio-context';
-import {getNormalizedFrequencyData} from '../utils/audio-utils';
+} from '../../utils/audio-context';
+import {getNormalizedFrequencyData} from '../../utils/audio-utils';
 
 /**
  * A standard frequency spectrum visualizer (bars).

@@ -22,7 +22,7 @@ import '@material/web/menu/menu-item.js';
 import '@material/web/divider/divider.js';
 import '@material/web/button/text-button.js';
 import '@material/web/button/filled-tonal-button.js';
-import './ui-live-waveform';
+import './ui-live-waveform.js';
 
 export interface AudioDevice {
   deviceId: string;

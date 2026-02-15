@@ -7,16 +7,18 @@
   "main": "dist/scream-audio-ui.umd.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/scream-audio-ui.umd.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./components/*": "./dist/components/*.js",
-    "./utils/*": "./dist/utils/*.js"
-  },
-  "files": [
+      "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "require": "./dist/scream-audio-ui.umd.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./atoms/*": "./dist/components/atoms/*.js",
+      "./molecules/*": "./dist/components/molecules/*.js",
+      "./organisms/*": "./dist/components/organisms/*.js",
+      "./providers/*": "./dist/components/providers/*.js",
+      "./utils/*": "./dist/utils/*.js"
+    },  "files": [
     "dist"
   ],
   "publishConfig": {

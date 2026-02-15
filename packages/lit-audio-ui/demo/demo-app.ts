@@ -3,7 +3,7 @@ import './demo-layouts.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Lazy-load the heavy Orb component
-  await import('../src/components/ui-orb.js');
+  await import('../src/components/molecules/ui-orb.js');
 
   // 2. Setup Static Waveform
   const staticWaveform = document.getElementById('demo-static-waveform') as any;

@@ -1,8 +1,8 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {consume} from '@lit/context';
-import {speechContext, type SpeechContext} from '../utils/speech-context';
-import './ui-live-waveform';
+import {speechContext, type SpeechContext} from '../../utils/speech-context';
+import './ui-live-waveform.js';
 
 @customElement('ui-speech-preview')
 export class UiSpeechPreview extends LitElement {

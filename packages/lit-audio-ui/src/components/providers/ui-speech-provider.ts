@@ -5,8 +5,8 @@ import {
   speechContext,
   type SpeechContext,
   type SpeechState,
-} from '../utils/speech-context';
-import {createMockAnalyser} from '../utils/audio-utils';
+} from '../../utils/speech-context';
+import {createMockAnalyser} from '../../utils/audio-utils';
 
 /**
  * A headless provider component that manages the speech recording lifecycle.

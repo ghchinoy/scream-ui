@@ -21,7 +21,7 @@ import '@material/web/menu/menu.js';
 import '@material/web/menu/menu-item.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/textfield/outlined-text-field.js';
-import './ui-live-waveform';
+import './ui-live-waveform.js';
 
 export interface VoiceLabel {
   accent?: string;
