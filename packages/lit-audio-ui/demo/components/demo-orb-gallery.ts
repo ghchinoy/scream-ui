@@ -17,6 +17,9 @@
 import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
+/**
+ * A gallery showcasing the ui-orb component configured with the iconic Google brand colors.
+ */
 @customElement('demo-orb-gallery')
 export class DemoOrbGallery extends LitElement {
   static styles = css`
@@ -56,41 +59,48 @@ export class DemoOrbGallery extends LitElement {
   render() {
     return html`
       <div class="gallery-grid">
-        <div class="orb-item">
-          <div class="orb-container">
-            <ui-orb agentState="listening"></ui-orb>
-          </div>
-          <div class="orb-label">Default (Listening)</div>
-        </div>
-
-        <div class="orb-item">
-          <div class="orb-container">
-            <ui-orb 
-              agentState="thinking" 
-              .colors="${['#81C995', '#66BB6A']}">
-            </ui-orb>
-          </div>
-          <div class="orb-label">Forest Green (Thinking)</div>
-        </div>
-
+        <!-- RED -->
         <div class="orb-item">
           <div class="orb-container">
             <ui-orb 
               agentState="talking" 
-              .colors="${['#FDE293', '#FFF176']}">
+              .colors="${['#EA4335', '#FBBC04']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Electric Sun (Talking)</div>
+          <div class="orb-label">Google Red</div>
         </div>
 
+        <!-- YELLOW -->
+        <div class="orb-item">
+          <div class="orb-container">
+            <ui-orb 
+              agentState="thinking" 
+              .colors="${['#FBBC04', '#34A853']}">
+            </ui-orb>
+          </div>
+          <div class="orb-label">Google Yellow</div>
+        </div>
+
+        <!-- GREEN -->
         <div class="orb-item">
           <div class="orb-container">
             <ui-orb 
               agentState="listening" 
-              .colors="${['#F28B82', '#E57373']}">
+              .colors="${['#34A853', '#4285F4']}">
             </ui-orb>
           </div>
-          <div class="orb-label">Sunset Coral (Listening)</div>
+          <div class="orb-label">Google Green</div>
+        </div>
+
+        <!-- BLUE -->
+        <div class="orb-item">
+          <div class="orb-container">
+            <ui-orb 
+              agentState="talking" 
+              .colors="${['#4285F4', '#EA4335']}">
+            </ui-orb>
+          </div>
+          <div class="orb-label">Google Blue</div>
         </div>
       </div>
     `;

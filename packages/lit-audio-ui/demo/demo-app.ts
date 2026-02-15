@@ -97,9 +97,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       card.id = anchorId;
       card.style.scrollMarginTop = '7rem';
       const rawTitle = card.getAttribute('title');
-      const cleanTitle = rawTitle.includes('ui-')
-        ? rawTitle.split(' ')[0]
-        : rawTitle;
+      let cleanTitle = rawTitle;
+      if (rawTitle.includes('ui-')) {
+        // If it's a gallery, show "Component Gallery", otherwise just the component name
+        const parts = rawTitle.split(' ');
+        const componentName = parts[0].replace('ui-', '');
+        const capitalized =
+          componentName.charAt(0).toUpperCase() + componentName.slice(1);
+        cleanTitle = parts.length > 1 ? capitalized + ' ' + parts[1] : capitalized;
+      }
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = '#' + anchorId;
