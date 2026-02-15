@@ -145,6 +145,8 @@ export class UiVoicePicker extends LitElement {
       );
       max-width: 400px;
       font-family: inherit;
+      --md-sys-typescale-body-medium-font: inherit;
+      border: 1px solid var(--md-sys-color-outline-variant);
     }
 
     .search-container {
@@ -160,6 +162,7 @@ export class UiVoicePicker extends LitElement {
       font-family: inherit;
       --md-outlined-text-field-label-text-font: inherit;
       --md-outlined-text-field-input-text-font: inherit;
+      --md-sys-typescale-body-large-font: inherit;
     }
 
     md-menu-item {
@@ -171,6 +174,7 @@ export class UiVoicePicker extends LitElement {
       );
       --md-menu-item-label-text-color: var(--md-sys-color-on-surface);
       --md-menu-item-label-text-font: inherit;
+      --md-sys-typescale-label-large-font: inherit;
       font-family: inherit;
     }
 

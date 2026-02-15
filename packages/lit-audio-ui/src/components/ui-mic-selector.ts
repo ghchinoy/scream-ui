@@ -101,11 +101,16 @@ export class UiMicSelector extends LitElement {
       --md-menu-container-shape: 12px;
       min-width: 280px;
       font-family: inherit;
+      /* Force typescale fonts to inherit project font */
+      --md-sys-typescale-body-medium-font: inherit;
+      --md-sys-typescale-label-large-font: inherit;
+      border: 1px solid var(--md-sys-color-outline-variant);
     }
 
     md-menu-item {
       font-family: inherit;
       --md-menu-item-label-text-font: inherit;
+      --md-sys-typescale-label-large-font: inherit;
     }
 
     md-menu-item div[slot='headline'] {
@@ -124,6 +129,7 @@ export class UiMicSelector extends LitElement {
     md-text-button {
       font-family: inherit;
       --md-text-button-label-text-font: inherit;
+      --md-sys-typescale-label-large-font: inherit;
     }
 
     .preview-waveform {
