@@ -211,7 +211,7 @@ export class UiMicSelector extends LitElement {
       <md-menu
         id="device-menu"
         anchor="anchor-button"
-        positioning="popover"
+        positioning="fixed"
         @closed=${() => (this._isMenuOpen = false)}
         @opened=${() => (this._isMenuOpen = true)}
       >
@@ -363,8 +363,7 @@ export class UiMicSelector extends LitElement {
     const audioInputs = deviceList
       .filter(device => device.kind === 'audioinput')
       .map(device => {
-        let cleanLabel =
-          device.label || 'Microphone ${device.deviceId.slice(0, 8)}';
+        let cleanLabel = device.label || 'Microphone';
         cleanLabel = cleanLabel.replace(/\s*\([^)]*\)/g, '').trim();
 
         return {

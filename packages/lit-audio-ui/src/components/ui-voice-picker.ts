@@ -76,8 +76,11 @@ export class UiVoicePicker extends LitElement {
       justify-content: space-between;
       width: 100%;
       padding: 8px 16px;
-      background: transparent;
-      border: 1px solid var(--md-sys-color-outline, #79747e);
+      background: var(
+        --ui-voice-picker-anchor-bg,
+        var(--md-sys-color-surface-container-high, #e2e2e2)
+      );
+      border: 1px solid var(--md-sys-color-outline-variant, #c4c7c5);
       border-radius: 8px;
       color: var(--md-sys-color-on-surface, #1e1e1e);
       cursor: pointer;
@@ -119,8 +122,8 @@ export class UiVoicePicker extends LitElement {
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: var(--md-sys-color-primary-container);
-      color: var(--md-sys-color-on-primary-container);
+      background: var(--md-sys-color-primary-container, #d1e4ff);
+      color: var(--md-sys-color-on-primary-container, #001d36);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -131,12 +134,15 @@ export class UiVoicePicker extends LitElement {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--md-sys-color-on-surface);
+      color: var(--md-sys-color-on-surface, #1e1e1e);
     }
 
     md-menu {
       --md-menu-container-shape: 12px;
-      --md-menu-container-color: var(--md-sys-color-surface-container, #f3f3f3);
+      --md-menu-container-color: var(
+        --md-sys-color-surface-container,
+        var(--md-sys-color-surface, #f3f3f3)
+      );
       max-width: 400px;
       font-family: inherit;
     }
@@ -161,6 +167,7 @@ export class UiVoicePicker extends LitElement {
       --md-menu-item-focus-state-layer-color: var(
         --md-sys-color-on-surface-variant
       );
+      --md-menu-item-label-text-color: var(--md-sys-color-on-surface);
       font-family: inherit;
     }
 
@@ -323,7 +330,7 @@ export class UiVoicePicker extends LitElement {
       <md-menu
         id="voice-menu"
         anchor="voice-anchor"
-        positioning="popover"
+        positioning="fixed"
         @closed=${this._handleMenuClosed}
       >
         <!-- The click.stop modifier stops the menu from closing when searching -->
