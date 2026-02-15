@@ -32,7 +32,17 @@ export interface AudioDevice {
 
 /**
  * A native Lit WebComponent that provides a dropdown menu for selecting audio input devices.
- * Replaces the React/Radix MicSelector.
+ * It automatically handles permission requests, device enumeration, and provides a 
+ * live preview waveform of the selected input.
+ *
+ * @element ui-mic-selector
+ *
+ * @prop {string} value - The deviceId of the currently selected audio input.
+ * @prop {boolean} muted - Whether the microphone is visually/logically muted in the selector.
+ * @prop {boolean} disabled - Whether the selector interaction is disabled.
+ *
+ * @fires device-change - Dispatched when a new device is selected. detail: { deviceId }
+ * @fires mute-change - Dispatched when the mute state is toggled. detail: { muted }
  */
 @customElement('ui-mic-selector')
 export class UiMicSelector extends LitElement {

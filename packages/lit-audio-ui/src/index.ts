@@ -41,9 +41,15 @@ export * from './components/ui-speech-cancel-button';
 export * from './components/ui-speech-preview';
 export * from './utils/speech-context';
 
+export * from './components/ui-audio-volume-slider';
+
+// Export utilities
+export * from './utils/audio-utils';
+
 // Export types
 export * from './components/ui-orb';
 export type {AudioPlayerState} from './utils/audio-context';
 export type {SpeechState, SpeechContext} from './utils/speech-context';
+export type {AudioDevice} from './components/ui-mic-selector';
+export type {VoiceItem, VoiceLabel} from './components/ui-voice-picker';
 
-export * from './components/ui-audio-volume-slider';

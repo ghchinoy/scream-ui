@@ -37,7 +37,21 @@ export interface VoiceItem {
 
 /**
  * A native Lit WebComponent that provides a searchable dropdown menu for selecting
- * a voice persona, matching the React/Radix Command component.
+ * a voice persona. It supports custom data mapping, optional 3D 'Orb' avatars,
+ * and built-in audio preview capabilities.
+ *
+ * @element ui-voice-picker
+ *
+ * @prop {Array} voices - The list of voice objects to display.
+ * @prop {string} value - The ID of the currently selected voice.
+ * @prop {string} placeholder - Text to display when no voice is selected.
+ * @prop {string} idKey - Key in the voice object to use as the unique ID (default: 'voiceId').
+ * @prop {string} titleKey - Key in the voice object to use as the display name (default: 'name').
+ * @prop {string} subtitleKey - Key in the voice object to use as the category/subtitle (default: 'category').
+ * @prop {string} previewUrlKey - Key in the voice object containing the preview audio URL.
+ * @prop {boolean} useOrbs - Whether to display 3D ui-orb avatars for each voice.
+ *
+ * @fires voice-change - Dispatched when a voice is selected. detail: { voiceId }
  */
 @customElement('ui-voice-picker')
 export class UiVoicePicker extends LitElement {

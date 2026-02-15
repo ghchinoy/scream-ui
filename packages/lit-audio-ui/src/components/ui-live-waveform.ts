@@ -21,6 +21,23 @@ import {
   getNormalizedFrequencyData,
 } from '../utils/audio-utils';
 
+/**
+ * A real-time audio visualizer component that renders a symmetric bar waveform
+ * from an AnalyserNode. It also features a procedural 'processing' animation
+ * for states where audio is being analyzed but not actively streaming.
+ *
+ * @element ui-live-waveform
+ *
+ * @prop {boolean} active - Whether the visualizer is actively listening to the analyserNode.
+ * @prop {boolean} processing - Enables a procedural 'thinking' animation.
+ * @prop {AnalyserNode} analyserNode - The Web Audio AnalyserNode providing the frequency data.
+ * @prop {number} barWidth - Width of each waveform bar in pixels.
+ * @prop {number} barGap - Gap between bars in pixels.
+ * @prop {string} barColor - Color of the bars. Supports CSS variables. Fallbacks to --md-sys-color-primary.
+ * @prop {boolean} fadeEdges - Whether to apply a gradient fade to the horizontal edges of the canvas.
+ * @prop {number} height - The height of the visualizer container in pixels.
+ * @prop {number} sensitivity - Multiplier for the audio amplitude.
+ */
 @customElement('ui-live-waveform')
 export class UiLiveWaveform extends LitElement {
   @property({type: Boolean}) active: boolean = false;

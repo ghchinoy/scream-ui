@@ -8,6 +8,30 @@ import {
 } from '../utils/speech-context';
 import {createMockAnalyser} from '../utils/audio-utils';
 
+/**
+ * A headless provider component that manages the speech recording lifecycle.
+ * It provides a `SpeechContext` to all children components, allowing them to
+ * react to recording states and access transcripts.
+ *
+ * It supports three modes:
+ * 1. Auto (Default): Handles getUserMedia and provides a real MediaStream.
+ * 2. Simulation: Provides a mock AnalyserNode and fake transcription for demos.
+ * 3. Manual: Only emits intent events, leaving state management to a backend/agent.
+ *
+ * @element ui-speech-provider
+ *
+ * @prop {string} state - The current recording state ('idle', 'connecting', 'recording', 'processing', 'success', 'error').
+ * @prop {boolean} simulation - Enable mock transcription and audio data for demos.
+ * @prop {boolean} manual - If true, the provider will not start recording automatically but will emit requests.
+ * @prop {string} transcript - The final confirmed transcript.
+ * @prop {string} partialTranscript - The live, interim transcript.
+ *
+ * @fires speech-start - Dispatched when recording actually begins.
+ * @fires speech-stop - Dispatched when recording is stopped.
+ * @fires speech-request-start - Dispatched in 'manual' mode when a child wants to start.
+ * @fires speech-request-stop - Dispatched in 'manual' mode when a child wants to stop.
+ * @fires state-change - Dispatched whenever the internal context state changes.
+ */
 @customElement('ui-speech-provider')
 export class UiSpeechProvider extends LitElement {
   @provide({context: speechContext})

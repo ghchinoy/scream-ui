@@ -4,6 +4,18 @@ import * as THREE from 'three';
 
 export type AgentState = null | 'thinking' | 'listening' | 'talking';
 
+/**
+ * A 3D WebGL 'Orb' component used to visualize AI agent states.
+ * It features procedural noise-based animations that react to input/output volume levels.
+ *
+ * @element ui-orb
+ *
+ * @prop {Array} colors - An array of two hex color strings [color1, color2] for the gradient.
+ * @prop {string} agentState - The visual state of the agent ('thinking', 'listening', 'talking', or null for idle).
+ * @prop {number} inputVolume - Current input (e.g. user) volume level (0.0 to 1.0).
+ * @prop {number} outputVolume - Current output (e.g. agent) volume level (0.0 to 1.0).
+ * @prop {string} volumeMode - If 'auto', the orb will slightly oscillate itself. If 'manual', it relies on volume props.
+ */
 @customElement('ui-orb')
 export class UiOrb extends LitElement {
   @property({type: Array}) colors?: [string, string];
