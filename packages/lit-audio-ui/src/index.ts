@@ -45,6 +45,7 @@ export * from './components/molecules/ui-voice-button';
 export * from './components/molecules/scream-voice-button';
 export * from './components/molecules/ui-typing-indicator';
 export * from './components/molecules/ui-chat-item';
+export * from './components/molecules/ui-chat-list';
 
 // --- ORGANISMS (Composite Components) ---
 export * from './components/organisms/ui-audio-player';
