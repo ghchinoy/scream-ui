@@ -81,31 +81,31 @@
 
     <div class="test-grid">
       
-      <!-- OPTION A: MODERN SLEEK (ElevenLabs Homage) -->
+      <!-- OPTION A: MODERN SLEEK (High Contrast) -->
       <div class="test-column">
-        <h2>Option A: Modern Sleek</h2>
+        <h2>Option A: High Contrast</h2>
         <div class="chat-window">
           <div class="chat-messages">
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
               Hello! I'm Gemini. How can I help you today?
-              <div slot="meta">10:42 AM</div>
+              <div slot="meta">Gemini • 10:42 AM</div>
             </ui-chat-item>
 
+            <!-- User without avatar - should align right and be clean -->
             <ui-chat-item direction="outbound">
-              <div slot="avatar" class="mock-avatar">ME</div>
               Can you help me build a high-performance audio library?
               <div slot="meta">10:43 AM</div>
             </ui-chat-item>
 
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
               Absolutely. We should use Lit WebComponents for maximum speed.
               <div slot="meta">10:43 AM</div>
             </ui-chat-item>
 
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
               <ui-typing-indicator></ui-typing-indicator>
             </ui-chat-item>
           </div>

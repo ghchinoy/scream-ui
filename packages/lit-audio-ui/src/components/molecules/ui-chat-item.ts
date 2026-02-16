@@ -46,7 +46,7 @@ export class UiChatItem extends LitElement {
       display: flex;
       gap: 12px;
       width: 100%;
-      align-items: flex-end;
+      align-items: flex-start;
     }
 
     .item-container.outbound {
@@ -57,6 +57,14 @@ export class UiChatItem extends LitElement {
       width: 32px;
       height: 32px;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hide avatar slot if no children are present */
+    .avatar-slot:not(:has(*)) {
+      display: none;
     }
 
     .content-wrapper {
@@ -66,14 +74,21 @@ export class UiChatItem extends LitElement {
       max-width: 80%;
     }
 
+    .item-container.inbound .content-wrapper {
+      align-items: flex-start;
+    }
+
     .item-container.outbound .content-wrapper {
       align-items: flex-end;
     }
 
     .meta-slot {
       font-size: 0.7rem;
+      font-weight: 500;
       opacity: 0.6;
       padding: 0 4px;
+      display: flex;
+      gap: 8px;
     }
   `;
 

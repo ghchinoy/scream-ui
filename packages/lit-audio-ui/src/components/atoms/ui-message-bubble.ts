@@ -44,25 +44,24 @@ export class UiMessageBubble extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 12px 16px;
-      font-size: 0.9rem;
+      padding: 14px 18px;
+      font-size: 0.95rem;
       line-height: 1.5;
-      overflow: hidden;
       box-sizing: border-box;
       transition: background-color 0.2s, color 0.2s;
     }
 
     /* Variant: Contained */
     :host([variant='contained']) .bubble {
-      border-radius: 12px;
+      border-radius: 16px;
     }
 
     :host([variant='contained'][direction='inbound']) .bubble {
       background: var(
         --ui-message-bubble-inbound-bg,
-        var(--md-sys-color-surface-container-low, #f3f3f3)
+        var(--md-sys-color-secondary-container, #e1e2e1)
       );
-      color: var(--md-sys-color-on-surface);
+      color: var(--md-sys-color-on-secondary-container);
       border-bottom-left-radius: 4px;
     }
 
