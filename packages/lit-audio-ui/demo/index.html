@@ -147,36 +147,37 @@
                     <ui-speech-preview placeholder="Brandable speech input..."></ui-speech-preview>
                  </ui-speech-provider>
               </div>
-                            <div class="workbench-controls">
-                              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                  <label>Record Color</label>
-                                  <input type="color" id="theme-record-color" value="#ff4444" />
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                  <label>Waveform Color</label>
-                                  <input type="color" id="theme-wave-color" value="#00ccff" />
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                  <label>Text Size</label>
-                                  <select id="theme-text-size">
-                                    <option value="12px">Small (12px)</option>
-                                    <option value="14px" selected>Normal (14px)</option>
-                                    <option value="18px">Large (18px)</option>
-                                    <option value="24px">X-Large (24px)</option>
-                                  </select>
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                  <label>Font Style</label>
-                                  <select id="theme-font-family">
-                                    <option value="inherit">Project Default</option>
-                                    <option value="monospace">Monospace</option>
-                                    <option value="serif">Serif</option>
-                                    <option value="cursive">Cursive</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>            </div>
+              <div class="workbench-controls">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label>Record Color</label>
+                    <input type="color" id="theme-record-color" value="#ff4444" />
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label>Waveform Color</label>
+                    <input type="color" id="theme-wave-color" value="#00ccff" />
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label>Text Size</label>
+                    <select id="theme-text-size">
+                      <option value="12px">Small (12px)</option>
+                      <option value="14px" selected>Normal (14px)</option>
+                      <option value="18px">Large (18px)</option>
+                      <option value="24px">X-Large (24px)</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label>Font Style</label>
+                    <select id="theme-font-family">
+                      <option value="inherit">Project Default</option>
+                      <option value="monospace">Monospace</option>
+                      <option value="serif">Serif</option>
+                      <option value="cursive">Cursive</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div slot="code">&lt;style&gt;
   :root {
     --ui-speech-record-color: #ff4444;
