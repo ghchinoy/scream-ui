@@ -162,18 +162,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 11. Setup Theming Workbench
-  const themeTarget = await findEl('theme-workbench-target');
-  const recordColorInput = await findEl('theme-record-color');
-  const waveColorInput = await findEl('theme-wave-color');
-  const textSizeInput = await findEl('theme-text-size');
-  const fontFamilyInput = await findEl('theme-font-family');
-
-  recordColorInput?.addEventListener('input', (e: any) => themeTarget?.style.setProperty('--ui-speech-record-color', e.target.value));
-  waveColorInput?.addEventListener('input', (e: any) => themeTarget?.style.setProperty('--ui-speech-wave-color', e.target.value));
-  textSizeInput?.addEventListener('change', (e: any) => themeTarget?.style.setProperty('--ui-speech-preview-font-size', e.target.value));
-  fontFamilyInput?.addEventListener('change', (e: any) => themeTarget?.style.setProperty('--ui-speech-preview-font-family', e.target.value));
-
   // 12. Setup Orb Demo
   const orb = (await findEl('demo-orb')) as any;
   const orbBtn = await findEl('orb-state-btn');
@@ -203,41 +191,5 @@ document.addEventListener('DOMContentLoaded', async () => {
       orbStateIndex = orbStates.indexOf(state);
       syncOrbButtons(state);
     });
-  });
-
-  // 14. Setup Manual Backend Demo
-  const manualProvider = (await findEl('manual-provider')) as any;
-  const backendStatus = await findEl('manual-backend-status');
-  let manualInterval: any;
-
-  manualProvider?.addEventListener('speech-request-start', () => {
-    if (backendStatus) backendStatus.textContent = 'Backend: HANDSHAKE...';
-    setTimeout(() => {
-      manualProvider.state = 'recording';
-      if (backendStatus) backendStatus.textContent = 'Backend: STREAMING';
-      let i = 0;
-      const words = ['Simulating', ' actual', ' backend', ' data', ' stream...'];
-      manualInterval = setInterval(() => {
-        if (i < words.length) {
-          manualProvider.partialTranscript += words[i];
-          i++;
-        }
-      }, 600);
-    }, 1000);
-  });
-
-  manualProvider?.addEventListener('speech-request-stop', () => {
-    clearInterval(manualInterval);
-    if (backendStatus) backendStatus.textContent = 'Backend: PROCESSING...';
-    manualProvider.state = 'processing';
-    setTimeout(() => {
-      manualProvider.state = 'success';
-      if (backendStatus) backendStatus.textContent = 'Backend: SUCCESS';
-      setTimeout(() => {
-        manualProvider.state = 'idle';
-        manualProvider.partialTranscript = '';
-        if (backendStatus) backendStatus.textContent = 'Backend: IDLE';
-      }, 1500);
-    }, 2000);
   });
 });
