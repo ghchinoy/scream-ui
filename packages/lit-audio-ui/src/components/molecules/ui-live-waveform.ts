@@ -19,7 +19,7 @@ import {customElement, property, query} from 'lit/decorators.js';
 import {
   applyCanvasEdgeFade,
   getNormalizedFrequencyData,
-} from '../../utils/audio-utils';
+} from '../../utils/audio-utils.js';
 
 /**
  * A real-time audio visualizer component that renders a symmetric bar waveform

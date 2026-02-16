@@ -4,7 +4,7 @@ import {consume} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '../../utils/audio-context';
+} from '../../utils/audio-context.js';
 
 /**
  * A reactive time display component that shows playback progress.

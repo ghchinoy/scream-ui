@@ -4,7 +4,7 @@ import {consume} from '@lit/context';
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '../../utils/audio-context';
+} from '../../utils/audio-context.js';
 import '@material/web/iconbutton/filled-icon-button.js';
 import '@material/web/progress/circular-progress.js';
 import '@material/web/icon/icon.js';

@@ -5,7 +5,7 @@ import {
   audioPlayerContext,
   type AudioPlayerState,
   type PlaylistTrack,
-} from '../../utils/audio-context';
+} from '../../utils/audio-context.js';
 
 /**
  * A headless (invisible) WebComponent that manages an internal <audio> tag

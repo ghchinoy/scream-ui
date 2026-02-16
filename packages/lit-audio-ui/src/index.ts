@@ -17,52 +17,52 @@
 import '@material/web/icon/icon.js';
 
 // --- ATOMS (Basic Building Blocks) ---
-export * from './components/atoms/ui-audio-play-button';
-export * from './components/atoms/ui-audio-next-button';
-export * from './components/atoms/ui-audio-prev-button';
-export * from './components/atoms/ui-audio-progress-slider';
-export * from './components/atoms/ui-audio-time-display';
-export * from './components/atoms/ui-audio-volume-slider';
-export * from './components/atoms/ui-speech-record-button';
-export * from './components/atoms/ui-speech-cancel-button';
-export * from './components/atoms/ui-shimmering-text';
-export * from './components/atoms/ui-message-bubble';
-export * from './components/atoms/ui-typing-dot';
+export * from './components/atoms/ui-audio-play-button.js';
+export * from './components/atoms/ui-audio-next-button.js';
+export * from './components/atoms/ui-audio-prev-button.js';
+export * from './components/atoms/ui-audio-progress-slider.js';
+export * from './components/atoms/ui-audio-time-display.js';
+export * from './components/atoms/ui-audio-volume-slider.js';
+export * from './components/atoms/ui-speech-record-button.js';
+export * from './components/atoms/ui-speech-cancel-button.js';
+export * from './components/atoms/ui-shimmering-text.js';
+export * from './components/atoms/ui-message-bubble.js';
+export * from './components/atoms/ui-typing-dot.js';
 
 // --- MOLECULES (Functional Units) ---
-export * from './components/molecules/ui-waveform';
-export * from './components/molecules/ui-live-waveform';
-export * from './components/molecules/ui-scrolling-waveform';
-export * from './components/molecules/ui-spectrum-visualizer';
-export * from './components/molecules/ui-mic-selector';
-export * from './components/molecules/ui-voice-picker';
-export * from './components/molecules/ui-speech-preview';
-export * from './components/molecules/ui-orb';
-export * from './components/molecules/ui-3d-flip';
-export * from './components/molecules/ui-playlist';
-export * from './components/molecules/ui-showcase-card';
-export * from './components/molecules/ui-voice-button';
-export * from './components/molecules/scream-voice-button';
-export * from './components/molecules/ui-typing-indicator';
-export * from './components/molecules/ui-chat-item';
-export * from './components/molecules/ui-chat-list';
+export * from './components/molecules/ui-waveform.js';
+export * from './components/molecules/ui-live-waveform.js';
+export * from './components/molecules/ui-scrolling-waveform.js';
+export * from './components/molecules/ui-spectrum-visualizer.js';
+export * from './components/molecules/ui-mic-selector.js';
+export * from './components/molecules/ui-voice-picker.js';
+export * from './components/molecules/ui-speech-preview.js';
+export * from './components/molecules/ui-orb.js';
+export * from './components/molecules/ui-3d-flip.js';
+export * from './components/molecules/ui-playlist.js';
+export * from './components/molecules/ui-showcase-card.js';
+export * from './components/molecules/ui-voice-button.js';
+export * from './components/molecules/scream-voice-button.js';
+export * from './components/molecules/ui-typing-indicator.js';
+export * from './components/molecules/ui-chat-item.js';
+export * from './components/molecules/ui-chat-list.js';
 
 // --- ORGANISMS (Composite Components) ---
-export * from './components/organisms/ui-audio-player';
+export * from './components/organisms/ui-audio-player.js';
 
 // --- PROVIDERS (State Orchestration) ---
-export * from './components/providers/ui-audio-provider';
-export * from './components/providers/ui-speech-provider';
+export * from './components/providers/ui-audio-provider.js';
+export * from './components/providers/ui-speech-provider.js';
 
 // --- UTILS ---
-export * from './utils/audio-utils';
-export * from './utils/audio-context';
-export * from './utils/speech-context';
+export * from './utils/audio-utils.js';
+export * from './utils/audio-context.js';
+export * from './utils/speech-context.js';
 
 // --- TYPES ---
-export type {AudioPlayerState, PlaylistTrack} from './utils/audio-context';
-export type {SpeechState, SpeechContext} from './utils/speech-context';
-export type {AudioDevice} from './components/molecules/ui-mic-selector';
-export type {VoiceItem, VoiceLabel} from './components/molecules/ui-voice-picker';
-export type {AgentState} from './components/molecules/ui-orb';
-export type {VoiceButtonState} from './components/molecules/ui-voice-button';
+export type {AudioPlayerState, PlaylistTrack} from './utils/audio-context.js';
+export type {SpeechState, SpeechContext} from './utils/speech-context.js';
+export type {AudioDevice} from './components/molecules/ui-mic-selector.js';
+export type {VoiceItem, VoiceLabel} from './components/molecules/ui-voice-picker.js';
+export type {AgentState} from './components/molecules/ui-orb.js';
+export type {VoiceButtonState} from './components/molecules/ui-voice-button.js';
