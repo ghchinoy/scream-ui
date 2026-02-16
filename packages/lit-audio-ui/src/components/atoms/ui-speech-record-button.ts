@@ -61,9 +61,7 @@ export class UiSpeechRecordButton extends LitElement {
   `;
 
   render() {
-    if (!this._context) return html``;
-
-    const {state} = this._context;
+    const state = this._context?.state || 'idle';
     const isRecording = state === 'recording';
     const isProcessing = state === 'processing' || state === 'connecting';
 
@@ -76,7 +74,7 @@ export class UiSpeechRecordButton extends LitElement {
     return html`
       <md-filled-icon-button
         class="${state}"
-        ?disabled=${isProcessing}
+        ?disabled=${isProcessing || !this._context}
         @click=${this._handleClick}
       >
         <md-icon>${icon}</md-icon>

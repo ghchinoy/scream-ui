@@ -55,9 +55,13 @@ export class UiSpeechPreview extends LitElement {
   `;
 
   render() {
-    if (!this._context) return html``;
+    const {
+      state = 'idle',
+      transcript = '',
+      partialTranscript = '',
+      analyserNode = undefined,
+    } = this._context || {};
 
-    const {state, transcript, partialTranscript, analyserNode} = this._context;
     const isRecording = state === 'recording';
     const isProcessing = state === 'processing' || state === 'connecting';
     const hasText = transcript || partialTranscript;

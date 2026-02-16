@@ -40,6 +40,7 @@ export class UiSpeechProvider extends LitElement {
     state: 'idle',
     transcript: '',
     partialTranscript: '',
+    analyserNode: undefined,
     start: () => this.start(),
     stop: () => this.stop(),
     cancel: () => this.cancel(),

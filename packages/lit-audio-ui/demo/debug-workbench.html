@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug: Theming & Manual Backend</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+      :root {
+        font-family: 'Inter', system-ui, sans-serif;
+        --md-sys-color-primary: #0066cc;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-surface: #ffffff;
+        --md-sys-color-on-surface: #1e1e1e;
+        --md-sys-color-surface-container-low: #f7f7f7;
+        --md-sys-color-outline-variant: #c4c7c5;
+      }
+      body {
+        margin: 0;
+        padding: 40px;
+        background: #f5f5f5;
+      }
+      .debug-card {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        border: 1px solid #ddd;
+        max-width: 800px;
+        margin: 0 auto 40px auto;
+      }
+      .workbench-controls {
+        background: var(--md-sys-color-surface-container-low);
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      label { font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px; }
+      input[type="color"], select { width: 100%; height: 36px; border-radius: 4px; border: 1px solid #ccc; }
+    </style>
+  </head>
+  <body>
+    <h1>Debug Sandbox</h1>
+
+    <!-- 1. THEMING WORKBENCH -->
+    <div class="debug-card">
+      <h2>1. Theming Workbench</h2>
+      <div id="theme-workbench-target" style="padding: 40px; border: 2px dashed #ccc; border-radius: 16px; display: flex; gap: 20px; align-items: center; justify-content: center;">
+         <ui-speech-provider simulation>
+            <ui-speech-record-button></ui-speech-record-button>
+            <ui-speech-preview placeholder="Brandable speech input..."></ui-speech-preview>
+         </ui-speech-provider>
+      </div>
+
+      <div class="workbench-controls">
+        <div class="grid">
+          <div>
+            <label>Record Color</label>
+            <input type="color" id="theme-record-color" value="#ff4444" />
+          </div>
+          <div>
+            <label>Waveform Color</label>
+            <input type="color" id="theme-wave-color" value="#00ccff" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MANUAL BACKEND CONTROL -->
+    <div class="debug-card">
+      <h2>2. Manual Backend Control</h2>
+      <div style="padding: 40px; border: 2px solid #ddd; border-radius: 16px; display: flex; gap: 20px; align-items: center; justify-content: center;">
+         <ui-speech-provider id="manual-provider" manual>
+            <ui-speech-record-button></ui-speech-record-button>
+            <ui-speech-preview placeholder="Orchestrated by backend..."></ui-speech-preview>
+         </ui-speech-provider>
+      </div>
+      <div class="workbench-controls">
+        <span id="manual-backend-status" style="font-family: monospace;">STATUS: IDLE</span>
+      </div>
+    </div>
+
+    <script type="module" src="../src/index.ts"></script>
+    <script type="module">
+      // LOGIC FOR THEMEING
+      const themeTarget = document.getElementById('theme-workbench-target');
+      const recordColor = document.getElementById('theme-record-color');
+      const waveColor = document.getElementById('theme-wave-color');
+
+      recordColor.addEventListener('input', (e) => {
+        themeTarget.style.setProperty('--ui-speech-record-color', e.target.value);
+      });
+      waveColor.addEventListener('input', (e) => {
+        themeTarget.style.setProperty('--ui-speech-wave-color', e.target.value);
+      });
+
+      // LOGIC FOR MANUAL PROVIDER
+      const manualProvider = document.getElementById('manual-provider');
+      const status = document.getElementById('manual-backend-status');
+
+      manualProvider.addEventListener('speech-request-start', () => {
+        status.textContent = 'STATUS: HANDSHAKE...';
+        setTimeout(() => {
+          manualProvider.state = 'recording';
+          status.textContent = 'STATUS: RECORDING (Backend active)';
+        }, 1000);
+      });
+
+      manualProvider.addEventListener('speech-request-stop', () => {
+        status.textContent = 'STATUS: PROCESSING...';
+        manualProvider.state = 'processing';
+        setTimeout(() => {
+          manualProvider.state = 'success';
+          status.textContent = 'STATUS: SUCCESS';
+          setTimeout(() => {
+            manualProvider.state = 'idle';
+            status.textContent = 'STATUS: IDLE';
+          }, 1500);
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>
