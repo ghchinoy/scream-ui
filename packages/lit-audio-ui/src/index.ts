@@ -26,6 +26,8 @@ export * from './components/atoms/ui-audio-volume-slider';
 export * from './components/atoms/ui-speech-record-button';
 export * from './components/atoms/ui-speech-cancel-button';
 export * from './components/atoms/ui-shimmering-text';
+export * from './components/atoms/ui-message-bubble';
+export * from './components/atoms/ui-typing-dot';
 
 // --- MOLECULES (Functional Units) ---
 export * from './components/molecules/ui-waveform';
@@ -41,6 +43,8 @@ export * from './components/molecules/ui-playlist';
 export * from './components/molecules/ui-showcase-card';
 export * from './components/molecules/ui-voice-button';
 export * from './components/molecules/scream-voice-button';
+export * from './components/molecules/ui-typing-indicator';
+export * from './components/molecules/ui-chat-item';
 
 // --- ORGANISMS (Composite Components) ---
 export * from './components/organisms/ui-audio-player';

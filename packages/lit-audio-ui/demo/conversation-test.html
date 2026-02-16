@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Conversation Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+      :root {
+        font-family: 'Inter', system-ui, sans-serif;
+        --md-sys-color-primary: #0066cc;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-surface: #ffffff;
+        --md-sys-color-on-surface: #1e1e1e;
+        --md-sys-color-surface-container-low: #f7f7f7;
+        --md-sys-color-surface-container-highest: #e3e3e3;
+        --md-sys-color-outline-variant: #c4c7c5;
+      }
+      body {
+        margin: 0;
+        padding: 40px;
+        background: #f5f5f5;
+        color: #1e1e1e;
+      }
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+      }
+      .test-column {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      h2 {
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.6;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 8px;
+      }
+      .chat-window {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid var(--md-sys-color-outline-variant);
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      }
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .chat-footer {
+        padding: 16px;
+        border-top: 1px solid var(--md-sys-color-outline-variant);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .mock-avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Conversation UI - Style Options</h1>
+    <p>Reviewing three directions for the new <code>sui-nh9.1</code> primitives.</p>
+
+    <div class="test-grid">
+      
+      <!-- OPTION A: MODERN SLEEK (ElevenLabs Homage) -->
+      <div class="test-column">
+        <h2>Option A: Modern Sleek</h2>
+        <div class="chat-window">
+          <div class="chat-messages">
+            <ui-chat-item direction="inbound">
+              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              Hello! I'm Gemini. How can I help you today?
+              <div slot="meta">10:42 AM</div>
+            </ui-chat-item>
+
+            <ui-chat-item direction="outbound">
+              <div slot="avatar" class="mock-avatar">ME</div>
+              Can you help me build a high-performance audio library?
+              <div slot="meta">10:43 AM</div>
+            </ui-chat-item>
+
+            <ui-chat-item direction="inbound">
+              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              Absolutely. We should use Lit WebComponents for maximum speed.
+              <div slot="meta">10:43 AM</div>
+            </ui-chat-item>
+
+            <ui-chat-item direction="inbound">
+              <div slot="avatar" class="mock-avatar" style="background: #6750a4; color: white;">AI</div>
+              <ui-typing-indicator></ui-typing-indicator>
+            </ui-chat-item>
+          </div>
+          <div class="chat-footer">
+            <div style="flex: 1; height: 40px; background: #eee; border-radius: 20px; display: flex; align-items: center; padding: 0 16px; opacity: 0.5;">Type a message...</div>
+            <ui-speech-record-button size="sm"></ui-speech-record-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTION B: MATERIAL TONAL (MD3 Aligned) -->
+      <div class="test-column">
+        <h2>Option B: Material Tonal</h2>
+        <div class="chat-window" style="background: var(--md-sys-color-surface-container-low);">
+          <div class="chat-messages">
+            <ui-chat-item direction="inbound" variant="flat" style="--ui-message-bubble-inbound-bg: transparent;">
+              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
+              I'm using the <b>Flat</b> variant here.
+              <div slot="meta">System • Just now</div>
+            </ui-chat-item>
+
+            <ui-chat-item direction="outbound">
+              <div slot="avatar" class="mock-avatar">ME</div>
+              This uses the container color for inbound messages.
+            </ui-chat-item>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTION C: CUSTOM BRANDING (Zero-JS Demo) -->
+      <div class="test-column">
+        <h2>Option C: Custom Branding</h2>
+        <div class="chat-window" style="--md-sys-color-primary: #EA4335;">
+          <div class="chat-messages" style="--ui-message-bubble-outbound-bg: #EA4335; --ui-message-bubble-inbound-bg: #FBBC04;">
+            <ui-chat-item direction="inbound">
+              <div slot="avatar" class="mock-avatar" style="background: #34A853; color: white;">B</div>
+              Bright colors for specific brands!
+            </ui-chat-item>
+            <ui-chat-item direction="outbound">
+              <div slot="avatar" class="mock-avatar">ME</div>
+              Looks vibrant.
+            </ui-chat-item>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="../src/index.ts"></script>
+  </body>
+</html>
