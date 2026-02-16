@@ -97,6 +97,7 @@ Thumbs.db
 sources/
 drivectl-mcp.log
 plans/
+docs/
 
 # Ignore our test scripts
 test-*.js
