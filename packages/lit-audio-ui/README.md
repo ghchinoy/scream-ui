@@ -19,7 +19,7 @@ By leveraging **Lit** and native Web Components, this library offers distinct ad
 
 ## How to Use (For AI Agents)
 
-If you are an AI coding agent integrating this library into an application, please refer to the [AGENT_SKILL.md](./AGENT_SKILL.md) for specialized integration protocols, state management patterns, and "Zero-JS" branding guidelines. This document is designed to help you autonomously implement robust audio interfaces that adhere to the library's "Lit Way" architecture.
+If you are an AI coding agent integrating this library into an application, please refer to the [AGENT_SKILL.md](https://github.com/ghchinoy/scream-ui/blob/main/packages/lit-audio-ui/AGENT_SKILL.md) for specialized integration protocols, state management patterns, and "Zero-JS" branding guidelines. This document is designed to help you autonomously implement robust audio interfaces that adhere to the library's "Lit Way" architecture.
 
 
 ## How to Use the Lit Components (For Users)
