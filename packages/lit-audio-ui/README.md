@@ -17,6 +17,11 @@ By leveraging **Lit** and native Web Components, this library offers distinct ad
 * **Atomic Composition:** Powered by `@lit/context`, the complex monolithic audio players are broken down into atomic, highly composable state machines.
 
 
+## How to Use (For AI Agents)
+
+If you are an AI coding agent integrating this library into an application, please refer to the [AGENT_SKILL.md](./AGENT_SKILL.md) for specialized integration protocols, state management patterns, and "Zero-JS" branding guidelines. This document is designed to help you autonomously implement robust audio interfaces that adhere to the library's "Lit Way" architecture.
+
+
 ## How to Use the Lit Components (For Users)
 
 As a Web Components library, you can use these elements directly in your HTML or inside any frontend framework.
