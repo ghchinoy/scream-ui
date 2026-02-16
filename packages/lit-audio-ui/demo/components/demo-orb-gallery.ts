@@ -18,7 +18,7 @@ import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 /**
- * A gallery showcasing the ui-orb component with a variety of color schemes.
+ * A gallery showcasing the ui-orb component with a variety of color schemes and seed configurations.
  * The order pays a subtle homage to the iconic brand colors.
  */
 @customElement('demo-orb-gallery')
@@ -55,6 +55,11 @@ export class DemoOrbGallery extends LitElement {
       color: var(--md-sys-color-on-surface-variant);
       text-align: center;
     }
+    .orb-meta {
+      font-size: 10px;
+      font-family: monospace;
+      opacity: 0.6;
+    }
   `;
 
   render() {
@@ -65,10 +70,12 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="talking" 
+              seed="12345"
               .colors="${['#EA4335', '#C5221F']}">
             </ui-orb>
           </div>
           <div class="orb-label">Crimson Ember</div>
+          <div class="orb-meta">seed: 12345</div>
         </div>
 
         <!-- YELLOW -->
@@ -76,10 +83,12 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="thinking" 
+              seed="67890"
               .colors="${['#FBBC04', '#F9AB00']}">
             </ui-orb>
           </div>
           <div class="orb-label">Electric Sun</div>
+          <div class="orb-meta">seed: 67890</div>
         </div>
 
         <!-- GREEN -->
@@ -87,10 +96,12 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="listening" 
+              seed="11111"
               .colors="${['#34A853', '#1E8E3E']}">
             </ui-orb>
           </div>
           <div class="orb-label">Forest Green</div>
+          <div class="orb-meta">seed: 11111</div>
         </div>
 
         <!-- BLUE -->
@@ -98,10 +109,12 @@ export class DemoOrbGallery extends LitElement {
           <div class="orb-container">
             <ui-orb 
               agentState="talking" 
+              seed="99999"
               .colors="${['#4285F4', '#1967D2']}">
             </ui-orb>
           </div>
           <div class="orb-label">Ocean Blue</div>
+          <div class="orb-meta">seed: 99999</div>
         </div>
       </div>
     `;
