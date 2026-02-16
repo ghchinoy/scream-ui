@@ -58,7 +58,8 @@ export class UiPlaylist extends LitElement {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-primary, #0066cc);
+      background: var(--md-sys-color-surface-container-low);
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
     }
 
@@ -70,12 +71,14 @@ export class UiPlaylist extends LitElement {
     md-list-item {
       --md-list-item-label-text-font: inherit;
       --md-list-item-supporting-text-font: inherit;
+      --md-list-item-label-text-color: var(--md-sys-color-on-surface);
+      --md-list-item-supporting-text-color: var(--md-sys-color-on-surface-variant);
       cursor: pointer;
     }
 
     md-list-item[selected] {
       --md-list-item-label-text-color: var(--md-sys-color-primary);
-      background: var(--md-sys-color-primary-container, rgba(0, 102, 204, 0.1));
+      background: var(--md-sys-color-primary-container);
     }
 
     .now-playing-icon {

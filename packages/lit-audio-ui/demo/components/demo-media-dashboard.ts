@@ -69,6 +69,7 @@ export class DemoMediaDashboard extends LitElement {
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: var(--md-sys-color-on-surface);
     }
 
     @media (max-width: 700px) {
@@ -122,7 +123,7 @@ export class DemoMediaDashboard extends LitElement {
 
     .viz-container {
       height: 120px;
-      background: rgba(0,0,0,0.1);
+      background: var(--md-sys-color-surface-container-lowest, rgba(0,0,0,0.05));
       border-radius: 12px;
       overflow: hidden;
       position: relative;
