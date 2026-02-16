@@ -162,6 +162,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // 8. Setup Voice Button State Cycle
+  const voiceBtn = (await findEl('demo-voice-btn')) as any;
+  const voiceStateText = await findEl('demo-voice-btn-state');
+  const stateCycle = ['recording', 'processing', 'success', 'error'];
+  let cycleIndex = -1;
+  let successToggle = true;
+
+  voiceBtn?.addEventListener('voice-button-click', () => {
+    cycleIndex = (cycleIndex + 1) % stateCycle.length;
+    const newState = stateCycle[cycleIndex];
+    voiceBtn.setAttribute('state', newState);
+    
+    // In a real app, we'd use a real analyser here
+    if (newState === 'recording') {
+      voiceBtn.analyserNode = typeof analyser !== 'undefined' ? analyser : null;
+    } else {
+      voiceBtn.analyserNode = undefined;
+    }
+
+    if (newState === 'processing') {
+      setTimeout(() => {
+        if (voiceBtn.getAttribute('state') === 'processing') {
+          const finalState = successToggle ? 'success' : 'error';
+          successToggle = !successToggle;
+          cycleIndex = stateCycle.indexOf(finalState);
+          voiceBtn.setAttribute('state', finalState);
+          if (voiceStateText) voiceStateText.textContent = `State: ${finalState}`;
+        }
+      }, 2500);
+    }
+    if (voiceStateText) voiceStateText.textContent = `State: ${newState}`;
+  });
+
+  // 9. Setup Mic Selector
+  const micSelector = await findEl('demo-mic-selector');
+  const micStateText = await findEl('demo-mic-state');
+  micSelector?.addEventListener('device-change', (e: any) => {
+    if (micStateText) micStateText.textContent = `Selected ID: ${e.detail.deviceId}`;
+  });
+
+  // 10. Setup Voice Picker
+  const voicePicker = (await findEl('demo-voice-picker')) as any;
+  const voicePickerState = await findEl('demo-voice-picker-state');
+  if (voicePicker) {
+    voicePicker.idKey = 'customId';
+    voicePicker.titleKey = 'displayName';
+    voicePicker.subtitleKey = 'trait';
+    voicePicker.previewUrlKey = 'sampleAudio';
+    voicePicker.useOrbs = true;
+    voicePicker.colorKey = 'orbColor';
+    voicePicker.voices = [
+      {
+        customId: 'v1',
+        displayName: 'Aoede',
+        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav',
+        trait: 'American • Female',
+        orbColor: ['#F28B82', '#E57373'],
+      },
+      {
+        customId: 'v2',
+        displayName: 'Zephyr',
+        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav',
+        trait: 'British • Female',
+        orbColor: ['#81C995', '#66BB6A'],
+      },
+      {
+        customId: 'v3',
+        displayName: 'Lyria Lo-Fi Beat',
+        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav',
+        trait: 'Upbeat lo-fi hip hop',
+        orbColor: ['#FDE293', '#FFF176'],
+      },
+      {
+        customId: 'v4',
+        displayName: 'Orus',
+        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav',
+        trait: 'Australian • Male',
+        orbColor: ['#AECBFA', '#64B5F6'],
+      },
+    ];
+    voicePicker.addEventListener('voice-change', (e: any) => {
+      if (voicePickerState) voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
+    });
+  }
+
   // 12. Setup Orb Demo
   const orb = (await findEl('demo-orb')) as any;
   const orbBtn = await findEl('orb-state-btn');
