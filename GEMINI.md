@@ -82,9 +82,16 @@ When porting React/Tailwind/Radix components from `sources/ui/` into the `packag
 
 ### 1. Framework Independence (No React, No Tailwind)
 - **Do not wrap React components**. Rewrite them as pure native WebComponents using `LitElement`.
+- **Atomic Design Hierarchy**: Organize components into strict sub-directories: `atoms/` (primitives), `molecules/` (functional units), `organisms/` (composites), and `providers/` (headless state).
 - **Replace Hooks**: `useRef` becomes `@query()`. `useEffect` for initialization becomes `firstUpdated()`. `useEffect` for reactive changes becomes `updated(changedProperties)`.
 - **Styling**: Translate Tailwind utility classes into scoped standard CSS within `static styles = css... `. Use Material Design 3 design tokens (`--md-sys-color-primary`) instead of hardcoded colors or Tailwind variables.
-- **Theme Awareness**: Components that use Canvas or Three.js (like `ui-orb`) must explicitly listen for theme changes to update internal uniforms. Use a `MutationObserver` on `document.documentElement` to watch for `class` attribute changes (`.dark`) and call a re-color method.
+- **Theme Awareness**: Use `color-scheme: light dark;` on host elements. Components that use Canvas or Three.js (like `ui-orb`) must explicitly listen for theme changes to update internal uniforms. Use a `MutationObserver` on `document.documentElement` to watch for `class` attribute changes (`.dark`) and call a re-color method.
+- **Positioning in 3D Contexts**: Never use `positioning="fixed"` for dropdowns/menus if they might be nested inside 3D transformed containers (perspective/translateZ). Use `positioning="popover"` to leverage the modern Popover API and Anchor Positioning, preventing detached UI.
+- **MWC Font Inheritance**: Material Web Components (MWC) often default to Roboto. Explicitly override these tokens in your styles to ensure they inherit the host project's typography:
+  ```css
+  md-menu-item { --md-menu-item-label-text-font: inherit; }
+  md-outlined-text-field { --md-outlined-text-field-input-text-font: inherit; }
+  ```
 - **Controls**: Replace complex Radix primitives (like sliders or menus) with `@material/web` components (e.g., `<md-slider>`, `<md-filled-button>`).
 - **Layout Convention**: Center component showcase cards within their demo containers using `margin: 0 auto;` and a defined `max-width`.
 
