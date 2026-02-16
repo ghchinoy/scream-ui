@@ -4,41 +4,42 @@ A specialized skill for AI agents to autonomously implement high-performance aud
 
 ## Capabilities
 - Orchestrate complex audio playback using a headless provider.
-- Implement real-time 2D and 3D audio visualizations.
+- Implement real-time 2D and 3D audio visualizations (Orb, Waveforms, Spectrum).
 - Construct accessible, theme-aware audio interfaces.
+- Manage multi-track playlists with automatic state synchronization.
 
 ## Protocol: The "Lit Way"
 
 ### 1. Bootstrapping the Provider
 Always wrap atomic components in a `<ui-audio-provider>` (for playback) or `<ui-speech-provider>` (for recording). These components manage the state machine and shared context.
 
-### 2. Headless Backend Orchestration (Manual Mode)
-For production integrations with a backend/agent, use `manual` mode. This prevents the provider from auto-starting local media and allows the backend to drive the state.
+### 2. Playlist & State Synchronization
+When using `<ui-audio-provider>` with the `items` property:
+- Listen to the `@state-change` event on the provider.
+- Use `e.detail.currentIndex` to synchronize your parent component's metadata (e.g., Title, Artist, Album Art).
+- The provider handles internal track advancing automatically when `autoAdvance` is true.
 
-```html
-<ui-speech-provider manual .state="${backendState}" @speech-request-start="${onMicClick}">
-  <ui-speech-record-button></ui-speech-record-button>
-</ui-speech-provider>
-```
-
-### 3. Passing Audio Data
-Components requiring live frequency data (like `ui-live-waveform`) need an `AnalyserNode`. Retrieve this from the provider's `state-change` event.
+### 3. Visualizer "Bridge" Logic
+Most visual components (`ui-orb`, `ui-spectrum-visualizer`, `ui-live-waveform`) require an `analyserNode`. 
+- They attempt to consume this from context automatically.
+- **Tip:** Ensure the provider has finished initializing its AudioContext (triggered by the first user interaction) before expecting visualizations to appear.
 
 ### 4. Theming & Branding (Zero-JS)
-The library uses Material Design 3 tokens with semantic overrides. Use these for instant branding:
-- `--md-sys-color-primary`: Main theme color.
-- `--ui-speech-record-color`: Custom color for the record button active state.
-- `--ui-speech-wave-color`: Custom color for the recording/preview waveform.
-- `--ui-speech-preview-font-size`: Custom typography for transcription text.
+The library uses Material Design 3 tokens with semantic overrides. Use these for dark-theme consistency:
+- `--md-sys-color-primary`: Main theme color (e.g., `#d0bcff`).
+- `--md-sys-color-surface-container-low`: Primary background for pickers and lists.
+- `--ui-speech-wave-color`: Custom color for waveforms inside buttons (prevents 'black-on-black' issues).
+- `--md-list-item-label-text-color`: high-contrast text color for playlists.
 
-### 5. Positioning in 3D Environments
-If a component (like `ui-mic-selector`) is inside a 3D transformed container (perspective/translateZ), ensure `md-menu` uses `positioning="popover"` to prevent detachment.
+### 5. Layout & 3D Environments
+If a component is inside a 3D transformed container (perspective/translateZ):
+- Ensure `md-menu` (inside pickers) uses `positioning="popover"`.
+- Use the `<ui-3d-flip>` utility for compact "back-of-card" tracklists.
+- Apply `font-family: inherit` to library components to avoid default serif fonts.
 
-### 6. Lazy-Loading Heavy Components
-The `ui-orb` component is heavy (Three.js). Always use dynamic imports for it:
-```javascript
-await import('@ghchinoy/lit-audio-ui/components/ui-orb.js');
-```
+### 6. Component Utility Registry
+- `<ui-audio-time-display>`: Defaults to `full` mode (`current / total`). Use `format="elapsed"` or `format="remaining"` for single values.
+- `<ui-spectrum-visualizer>`: Requires a `.height` property for reliable rendering.
 
 ## Simulation Mode
 For development without microphone access, enable the `simulation` property on `<ui-speech-provider>`. This generates procedural audio data and mock transcription events.

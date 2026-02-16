@@ -19,7 +19,8 @@
       "./providers/*": "./dist/components/providers/*.js",
       "./utils/*": "./dist/utils/*.js"
     },  "files": [
-    "dist"
+    "dist",
+    "AGENT_SKILL.md"
   ],
   "publishConfig": {
     "access": "public"
