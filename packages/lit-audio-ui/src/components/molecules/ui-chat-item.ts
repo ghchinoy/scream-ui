@@ -46,7 +46,7 @@ export class UiChatItem extends LitElement {
       display: flex;
       gap: 12px;
       width: 100%;
-      align-items: flex-start;
+      align-items: flex-end;
     }
 
     .item-container.inbound {
