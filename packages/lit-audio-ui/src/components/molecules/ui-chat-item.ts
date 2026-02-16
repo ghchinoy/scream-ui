@@ -49,8 +49,13 @@ export class UiChatItem extends LitElement {
       align-items: flex-start;
     }
 
+    .item-container.inbound {
+      justify-content: flex-start;
+    }
+
     .item-container.outbound {
       flex-direction: row-reverse;
+      justify-content: flex-start; /* This correctly pushes to the right because of row-reverse */
     }
 
     .avatar-slot {

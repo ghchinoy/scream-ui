@@ -29,8 +29,10 @@ import {customElement, property} from 'lit/decorators.js';
  */
 @customElement('ui-message-bubble')
 export class UiMessageBubble extends LitElement {
-  @property({type: String}) variant: 'contained' | 'flat' = 'contained';
-  @property({type: String}) direction: 'inbound' | 'outbound' = 'inbound';
+  @property({type: String, reflect: true}) variant: 'contained' | 'flat' =
+    'contained';
+  @property({type: String, reflect: true}) direction: 'inbound' | 'outbound' =
+    'inbound';
 
   static styles = css`
     :host {
@@ -59,9 +61,9 @@ export class UiMessageBubble extends LitElement {
     :host([variant='contained'][direction='inbound']) .bubble {
       background: var(
         --ui-message-bubble-inbound-bg,
-        var(--md-sys-color-secondary-container, #e1e2e1)
+        var(--md-sys-color-surface-container-high, #e2e2e2)
       );
-      color: var(--md-sys-color-on-secondary-container);
+      color: var(--md-sys-color-on-surface);
       border-bottom-left-radius: 4px;
     }
 
