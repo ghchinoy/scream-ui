@@ -21,13 +21,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   await import('../src/components/molecules/ui-orb.js');
 
   // Helper to find elements regardless of where they are in the DOM
-  function findEl(id: string): HTMLElement | null {
-    return document.getElementById(id);
+  async function findEl(id: string): Promise<HTMLElement | null> {
+    const el = document.getElementById(id);
+    if (el) return el;
+
+    // Retry polling for projected content
+    return new Promise(resolve => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        const found = document.getElementById(id);
+        if (found || attempts > 10) {
+          clearInterval(interval);
+          resolve(found);
+        }
+        attempts++;
+      }, 100);
+    });
   }
 
   // 2. Setup Static Waveform
-  const staticWaveform = findEl('demo-static-waveform') as any;
-  const regenerateStaticBtn = findEl('btn-regenerate-static');
+  const staticWaveform = (await findEl('demo-static-waveform')) as any;
+  const regenerateStaticBtn = await findEl('btn-regenerate-static');
 
   function generateStaticData() {
     const mockData = Array.from({length: 200}, () => Math.random() * 0.8 + 0.1);
@@ -46,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   regenerateStaticBtn?.addEventListener('click', generateStaticData);
 
   // 3. Theme Toggle Logic
-  const themeToggle = findEl('theme-toggle');
+  const themeToggle = await findEl('theme-toggle');
   const htmlEl = document.documentElement;
 
   if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
@@ -79,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 5. Auto-generate Side Navigation
-  const navList = findEl('nav-list');
+  const navList = await findEl('nav-list');
   const sections = document.querySelectorAll('.demo-section');
 
   sections.forEach((section: any, secIndex) => {
@@ -118,9 +132,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 6. Setup Live Waveform
-  const liveWaveform = findEl('demo-live-waveform') as any;
-  const audioElement = findEl('demo-audio-player') as HTMLAudioElement;
-  const processingBtn = findEl('btn-processing');
+  const liveWaveform = (await findEl('demo-live-waveform')) as any;
+  const audioElement = (await findEl('demo-audio-player')) as HTMLAudioElement;
+  const processingBtn = await findEl('btn-processing');
 
   let analyser: AnalyserNode;
   let isConnected = false;
@@ -149,11 +163,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 11. Setup Theming Workbench
-  const themeTarget = findEl('theme-workbench-target');
-  const recordColorInput = findEl('theme-record-color');
-  const waveColorInput = findEl('theme-wave-color');
-  const textSizeInput = findEl('theme-text-size');
-  const fontFamilyInput = findEl('theme-font-family');
+  const themeTarget = await findEl('theme-workbench-target');
+  const recordColorInput = await findEl('theme-record-color');
+  const waveColorInput = await findEl('theme-wave-color');
+  const textSizeInput = await findEl('theme-text-size');
+  const fontFamilyInput = await findEl('theme-font-family');
 
   recordColorInput?.addEventListener('input', (e: any) => themeTarget?.style.setProperty('--ui-speech-record-color', e.target.value));
   waveColorInput?.addEventListener('input', (e: any) => themeTarget?.style.setProperty('--ui-speech-wave-color', e.target.value));
@@ -161,8 +175,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   fontFamilyInput?.addEventListener('change', (e: any) => themeTarget?.style.setProperty('--ui-speech-preview-font-family', e.target.value));
 
   // 12. Setup Orb Demo
-  const orb = findEl('demo-orb') as any;
-  const orbBtn = findEl('orb-state-btn');
+  const orb = (await findEl('demo-orb')) as any;
+  const orbBtn = await findEl('orb-state-btn');
   const orbStates = [null, 'listening', 'thinking', 'talking'];
   let orbStateIndex = 0;
   const directBtns = document.querySelectorAll('.orb-direct-btn');
@@ -192,8 +206,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 14. Setup Manual Backend Demo
-  const manualProvider = findEl('manual-provider') as any;
-  const backendStatus = findEl('manual-backend-status');
+  const manualProvider = (await findEl('manual-provider')) as any;
+  const backendStatus = await findEl('manual-backend-status');
   let manualInterval: any;
 
   manualProvider?.addEventListener('speech-request-start', () => {

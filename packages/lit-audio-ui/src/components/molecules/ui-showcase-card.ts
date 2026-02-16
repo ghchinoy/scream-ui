@@ -8,11 +8,6 @@ export class UiShowcaseCard extends LitElement {
   @property({type: String}) description = '';
   @property({type: String, reflect: true}) mode: 'preview' | 'code' = 'preview';
 
-  // Disable Shadow DOM so that demo IDs are accessible to global scripts in index.html
-  override createRenderRoot() {
-    return this;
-  }
-
   static styles = css`
     :host {
       display: block;
