@@ -6,7 +6,7 @@ import '@material/web/button/text-button.js';
 export class UiShowcaseCard extends LitElement {
   @property({type: String}) title = 'Component';
   @property({type: String}) description = '';
-  @property({type: String}) mode: 'preview' | 'code' = 'preview';
+  @property({type: String, reflect: true}) mode: 'preview' | 'code' = 'preview';
 
   static styles = css`
     :host {
@@ -78,11 +78,15 @@ export class UiShowcaseCard extends LitElement {
     }
 
     .preview-panel {
-      display: none;
+      display: block; /* Keep in DOM for script access */
     }
 
-    .preview-panel.active {
-      display: block;
+    :host([mode='code']) .preview-panel {
+      position: absolute;
+      visibility: hidden;
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
     }
 
     .code-panel {
@@ -99,7 +103,7 @@ export class UiShowcaseCard extends LitElement {
       border: 1px solid var(--md-sys-color-outline-variant);
     }
 
-    .code-panel.active {
+    :host([mode='code']) .code-panel {
       display: block;
     }
   `;
@@ -129,13 +133,11 @@ export class UiShowcaseCard extends LitElement {
       </div>
 
       <div class="content-area">
-        <div class="preview-panel ${this.mode === 'preview' ? 'active' : ''}">
+        <div class="preview-panel">
           <slot></slot>
         </div>
 
-        <pre
-          class="code-panel ${this.mode === 'code' ? 'active' : ''}"
-        ><code><slot name="code"></slot></code></pre>
+        <pre class="code-panel"><code><slot name="code"></slot></code></pre>
       </div>
     `;
   }
