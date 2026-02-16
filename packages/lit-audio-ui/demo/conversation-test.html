@@ -87,7 +87,9 @@
         <div class="chat-window">
           <div class="chat-messages">
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
+              <div slot="avatar" class="mock-avatar" style="overflow: hidden;">
+                <ui-orb agentState="listening"></ui-orb>
+              </div>
               Hello! I'm Gemini. How can I help you today?
               <div slot="meta">Gemini • 10:42 AM</div>
             </ui-chat-item>
@@ -99,13 +101,17 @@
             </ui-chat-item>
 
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
+              <div slot="avatar" class="mock-avatar" style="overflow: hidden;">
+                <ui-orb agentState="talking"></ui-orb>
+              </div>
               Absolutely. We should use Lit WebComponents for maximum speed.
               <div slot="meta">10:43 AM</div>
             </ui-chat-item>
 
             <ui-chat-item direction="inbound">
-              <div slot="avatar" class="mock-avatar" style="background: var(--md-sys-color-primary); color: white;">G</div>
+              <div slot="avatar" class="mock-avatar" style="overflow: hidden;">
+                <ui-orb agentState="thinking"></ui-orb>
+              </div>
               <ui-typing-indicator></ui-typing-indicator>
             </ui-chat-item>
           </div>
