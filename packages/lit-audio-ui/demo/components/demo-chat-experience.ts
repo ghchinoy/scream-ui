@@ -29,7 +29,12 @@ interface Message {
 @customElement('demo-chat-experience')
 export class DemoChatExperience extends LitElement {
   @state() private _messages: Message[] = [
-    { id: '1', text: "Hello! I'm your AI assistant. Ask me anything about this library.", sender: 'agent', timestamp: '10:42 AM' }
+    {
+      id: '1',
+      text: "Hello! I'm your AI assistant. Ask me anything about this library.",
+      sender: 'agent',
+      timestamp: '10:42 AM',
+    },
   ];
   @state() private _inputValue = '';
 
@@ -49,7 +54,7 @@ export class DemoChatExperience extends LitElement {
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .input-area {
@@ -109,8 +114,14 @@ export class DemoChatExperience extends LitElement {
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `;
 
@@ -118,30 +129,49 @@ export class DemoChatExperience extends LitElement {
     return html`
       <div class="chat-container">
         <ui-chat-list>
-          ${repeat(this._messages, (m) => m.id, (m) => html`
-            <ui-chat-item .direction=${m.sender === 'user' ? 'outbound' : 'inbound'}>
-              <div slot="avatar">
-                ${m.sender === 'agent' 
-                  ? html`<ui-orb agentState=${m.isTyping ? 'thinking' : 'talking'} style="width:32px; height:32px;"></ui-orb>`
-                  : html`<div style="width:32px; height:32px; border-radius:50%; background:#ddd; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700;">ME</div>`
-                }
-              </div>
-              ${m.isTyping ? html`<ui-typing-indicator></ui-typing-indicator>` : m.text}
-              <div slot="meta">${m.timestamp}</div>
-            </ui-chat-item>
-          `)}
+          ${repeat(
+            this._messages,
+            m => m.id,
+            m => html`
+              <ui-chat-item
+                .direction=${m.sender === 'user' ? 'outbound' : 'inbound'}
+              >
+                <div slot="avatar">
+                  ${m.sender === 'agent'
+                    ? html`<ui-orb
+                        agentState=${m.isTyping ? 'thinking' : 'talking'}
+                        style="width:32px; height:32px;"
+                      ></ui-orb>`
+                    : html`<div
+                        style="width:32px; height:32px; border-radius:50%; background:#ddd; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700;"
+                      >
+                        ME
+                      </div>`}
+                </div>
+                ${m.isTyping
+                  ? html`<ui-typing-indicator></ui-typing-indicator>`
+                  : m.text}
+                <div slot="meta">${m.timestamp}</div>
+              </ui-chat-item>
+            `,
+          )}
         </ui-chat-list>
 
         <div class="input-area">
           <ui-speech-record-button size="sm"></ui-speech-record-button>
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Ask a question..."
             .value=${this._inputValue}
-            @input=${(e: any) => this._inputValue = e.target.value}
-            @keypress=${(e: KeyboardEvent) => e.key === 'Enter' && this._handleSend()}
+            @input=${(e: any) => (this._inputValue = e.target.value)}
+            @keypress=${(e: KeyboardEvent) =>
+              e.key === 'Enter' && this._handleSend()}
           />
-          <button class="send-btn" @click=${this._handleSend} ?disabled=${!this._inputValue}>
+          <button
+            class="send-btn"
+            @click=${this._handleSend}
+            ?disabled=${!this._inputValue}
+          >
             <span class="material-symbols-outlined">send</span>
           </button>
         </div>
@@ -156,12 +186,15 @@ export class DemoChatExperience extends LitElement {
       id: Date.now().toString(),
       text: this._inputValue,
       sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
     };
 
     this._messages = [...this._messages, userMsg];
     this._inputValue = '';
-    
+
     // Trigger agent response
     this._simulateAgentResponse();
   }
@@ -172,13 +205,13 @@ export class DemoChatExperience extends LitElement {
       text: '',
       sender: 'agent',
       timestamp: 'Thinking...',
-      isTyping: true
+      isTyping: true,
     };
 
     // Show typing indicator after a short delay
     setTimeout(() => {
       this._messages = [...this._messages, typingMsg];
-      
+
       // Replace with actual response
       setTimeout(() => {
         this._messages = this._messages.filter(m => m.id !== 'typing');
@@ -186,7 +219,10 @@ export class DemoChatExperience extends LitElement {
           id: (Date.now() + 1).toString(),
           text: this._getRandomResponse(),
           sender: 'agent',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
         };
         this._messages = [...this._messages, response];
       }, 2000);
@@ -196,10 +232,10 @@ export class DemoChatExperience extends LitElement {
   private _getRandomResponse() {
     const responses = [
       "That's a great question! Our visualizers use high-performance Canvas math for 60fps rendering.",
-      "I recommend using the ui-audio-provider for full playlist support.",
-      "The ui-orb is powered by Three.js and reacts to volume in real-time.",
-      "You can easily theme everything using standard CSS variables.",
-      "Would you like to see a demo of our new 3D flip utility?"
+      'I recommend using the ui-audio-provider for full playlist support.',
+      'The ui-orb is powered by Three.js and reacts to volume in real-time.',
+      'You can easily theme everything using standard CSS variables.',
+      'Would you like to see a demo of our new 3D flip utility?',
     ];
     return responses[Math.floor(Math.random() * responses.length)];
   }

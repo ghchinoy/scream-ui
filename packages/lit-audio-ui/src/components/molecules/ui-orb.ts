@@ -6,15 +6,6 @@ export type AgentState = null | 'thinking' | 'listening' | 'talking';
 
 /**
  * A 3D WebGL 'Orb' component used to visualize AI agent states.
- * It features procedural noise-based animations that react to input/output volume levels.
- *
- * @element ui-orb
- *
- * @prop {Array} colors - An array of two hex color strings [color1, color2] for the gradient.
- * @prop {string} agentState - The visual state of the agent ('thinking', 'listening', 'talking', or null for idle).
- * @prop {number} inputVolume - Current input (e.g. user) volume level (0.0 to 1.0).
- * @prop {number} outputVolume - Current output (e.g. agent) volume level (0.0 to 1.0).
- * @prop {string} volumeMode - If 'auto', the orb will slightly oscillate itself. If 'manual', it relies on volume props.
  */
 @customElement('ui-orb')
 export class UiOrb extends LitElement {
@@ -34,7 +25,6 @@ export class UiOrb extends LitElement {
   private _animationFrameId: number = 0;
   private _resizeObserver?: ResizeObserver;
 
-  // State refs for animation loop
   private _animSpeed = 0.1;
   private _curIn = 0;
   private _curOut = 0;
@@ -43,7 +33,7 @@ export class UiOrb extends LitElement {
   private _textureLoader = new THREE.TextureLoader();
   private _perlinNoiseTexture?: THREE.Texture;
 
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       width: 100%;
@@ -61,15 +51,15 @@ export class UiOrb extends LitElement {
     }
   `;
 
-  render() {
+  override render() {
     return html`<div class="container"></div>`;
   }
 
-  firstUpdated() {
+  protected override firstUpdated() {
     this._initThree();
   }
 
-  updated(changedProperties: Map<string, any>) {
+  protected override updated(changedProperties: Map<string, any>) {
     if (changedProperties.has('colors')) {
       this._updateColors();
     }
@@ -94,18 +84,17 @@ export class UiOrb extends LitElement {
       this._targetColor1.set(this.colors[0]);
       this._targetColor2.set(this.colors[1]);
     } else {
-      // Fallback to MD3 tokens from computed style
       const style = getComputedStyle(this);
       const primary =
-        style.getPropertyValue('--md-sys-color-primary').trim() || '#CADCFC';
+        style.getPropertyValue('--md-sys-color-primary').trim() || '#7D56F4';
       const secondary =
-        style.getPropertyValue('--md-sys-color-secondary').trim() || '#A0B9D1';
+        style.getPropertyValue('--md-sys-color-secondary').trim() || '#205';
       this._targetColor1.set(primary);
       this._targetColor2.set(secondary);
     }
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
     if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
     if (this._resizeObserver) this._resizeObserver.disconnect();
@@ -123,7 +112,6 @@ export class UiOrb extends LitElement {
     this._targetColor2 = new THREE.Color();
     this._updateColors();
 
-    // Load texture
     try {
       this._perlinNoiseTexture = await this._textureLoader.loadAsync(
         'https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png',
@@ -132,15 +120,13 @@ export class UiOrb extends LitElement {
       this._perlinNoiseTexture.wrapT = THREE.RepeatWrapping;
     } catch (e) {
       console.warn('Failed to load perlin noise texture for orb.', e);
-      return; // Need texture to run shader
+      return;
     }
 
     const width = this._container.clientWidth;
     const height = this._container.clientHeight;
 
     this._scene = new THREE.Scene();
-
-    // Orthographic camera for 2D shader work
     this._camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 0.1, 10);
     this._camera.position.z = 1;
 
@@ -196,18 +182,6 @@ export class UiOrb extends LitElement {
     });
     this._resizeObserver.observe(this._container);
 
-    // Watch for theme changes on HTML tag
-    const observer = new MutationObserver(() => {
-      if (!this._mesh) return;
-      const dark = document.documentElement.classList.contains('dark');
-      this._mesh.material.uniforms.uInverted.value = dark ? 1 : 0;
-      this._updateColors();
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
     this._lastTime = performance.now();
     this._animate();
   }
@@ -220,7 +194,7 @@ export class UiOrb extends LitElement {
     if (!this._mesh || !this._renderer || !this._scene || !this._camera) return;
 
     const now = performance.now();
-    const delta = (now - this._lastTime) / 1000; // in seconds
+    const delta = (now - this._lastTime) / 1000;
     this._lastTime = now;
 
     const u = this._mesh.material.uniforms;
@@ -289,9 +263,7 @@ export class UiOrb extends LitElement {
 
   private _vertexShader = `
 uniform float uTime;
-uniform sampler2D uPerlinTexture;
 varying vec2 vUv;
-
 void main() {
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -428,20 +400,6 @@ void main() {
         }
     }
     
-    float ringRadius1 = sharpRing(decomposed, uTime * 0.1);
-    float ringRadius2 = smoothRing(decomposed, uTime * 0.1);
-    float inputRadius1 = radius + uInputVolume * 0.2;
-    float inputRadius2 = radius + uInputVolume * 0.15;
-    float opacity1 = mix(0.2, 0.6, uInputVolume);
-    float opacity2 = mix(0.15, 0.45, uInputVolume);
-
-    float ringAlpha1 = (inputRadius2 >= ringRadius1) ? opacity1 : 0.0;
-    float ringAlpha2 = smoothstep(ringRadius2 - 0.05, ringRadius2 + 0.05, inputRadius1) * opacity2;
-    float totalRingAlpha = max(ringAlpha1, ringAlpha2);
-    
-    vec3 ringColor = vec3(1.0);
-    color.rgb = 1.0 - (1.0 - color.rgb) * (1.0 - ringColor * totalRingAlpha);
-
     vec3 color1 = vec3(0.0, 0.0, 0.0);
     vec3 color2 = uColor1;
     vec3 color3 = uColor2;

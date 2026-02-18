@@ -68,10 +68,11 @@ export class DemoOrbGallery extends LitElement {
         <!-- RED -->
         <div class="orb-item">
           <div class="orb-container">
-            <ui-orb 
-              agentState="talking" 
+            <ui-orb
+              agentState="talking"
               seed="12345"
-              .colors="${['#EA4335', '#C5221F']}">
+              .colors="${['#EA4335', '#C5221F']}"
+            >
             </ui-orb>
           </div>
           <div class="orb-label">Crimson Ember</div>
@@ -81,10 +82,11 @@ export class DemoOrbGallery extends LitElement {
         <!-- YELLOW -->
         <div class="orb-item">
           <div class="orb-container">
-            <ui-orb 
-              agentState="thinking" 
+            <ui-orb
+              agentState="thinking"
               seed="67890"
-              .colors="${['#FBBC04', '#F9AB00']}">
+              .colors="${['#FBBC04', '#F9AB00']}"
+            >
             </ui-orb>
           </div>
           <div class="orb-label">Electric Sun</div>
@@ -94,10 +96,11 @@ export class DemoOrbGallery extends LitElement {
         <!-- GREEN -->
         <div class="orb-item">
           <div class="orb-container">
-            <ui-orb 
-              agentState="listening" 
+            <ui-orb
+              agentState="listening"
               seed="11111"
-              .colors="${['#34A853', '#1E8E3E']}">
+              .colors="${['#34A853', '#1E8E3E']}"
+            >
             </ui-orb>
           </div>
           <div class="orb-label">Forest Green</div>
@@ -107,10 +110,11 @@ export class DemoOrbGallery extends LitElement {
         <!-- BLUE -->
         <div class="orb-item">
           <div class="orb-container">
-            <ui-orb 
-              agentState="talking" 
+            <ui-orb
+              agentState="talking"
               seed="99999"
-              .colors="${['#4285F4', '#1967D2']}">
+              .colors="${['#4285F4', '#1967D2']}"
+            >
             </ui-orb>
           </div>
           <div class="orb-label">Ocean Blue</div>

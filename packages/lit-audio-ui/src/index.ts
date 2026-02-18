@@ -63,6 +63,9 @@ export * from './utils/speech-context.js';
 export type {AudioPlayerState, PlaylistTrack} from './utils/audio-context.js';
 export type {SpeechState, SpeechContext} from './utils/speech-context.js';
 export type {AudioDevice} from './components/molecules/ui-mic-selector.js';
-export type {VoiceItem, VoiceLabel} from './components/molecules/ui-voice-picker.js';
+export type {
+  VoiceItem,
+  VoiceLabel,
+} from './components/molecules/ui-voice-picker.js';
 export type {AgentState} from './components/molecules/ui-orb.js';
 export type {VoiceButtonState} from './components/molecules/ui-voice-button.js';

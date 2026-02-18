@@ -90,7 +90,11 @@ export class UiAudioProvider extends LitElement {
     if (changed.has('items')) {
       this._updateState({items: this.items});
       // If we have items but no src, initialize to the first item
-      if (this.items.length > 0 && !this.src && this.state.currentIndex === -1) {
+      if (
+        this.items.length > 0 &&
+        !this.src &&
+        this.state.currentIndex === -1
+      ) {
         this.select(0);
       }
     }

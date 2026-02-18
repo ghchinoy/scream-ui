@@ -65,15 +65,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
     htmlEl.classList.add('dark');
-    if (themeToggle) themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span>';
+    if (themeToggle)
+      themeToggle.innerHTML =
+        '<span class="material-symbols-outlined">light_mode</span>';
   }
 
   themeToggle?.addEventListener('click', () => {
     htmlEl.classList.toggle('dark');
     if (htmlEl.classList.contains('dark')) {
-      themeToggle.innerHTML = '<span class="material-symbols-outlined">light_mode</span>';
+      themeToggle.innerHTML =
+        '<span class="material-symbols-outlined">light_mode</span>';
     } else {
-      themeToggle.innerHTML = '<span class="material-symbols-outlined">dark_mode</span> Dark Mode';
+      themeToggle.innerHTML =
+        '<span class="material-symbols-outlined">dark_mode</span> Dark Mode';
     }
     forceStaticWaveformRedraw();
   });
@@ -84,8 +88,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     swatch.addEventListener('click', (e: any) => {
       const primary = e.target.dataset.primary;
       const onPrimary = e.target.dataset.onprimary;
-      document.documentElement.style.setProperty('--md-sys-color-primary', primary);
-      document.documentElement.style.setProperty('--md-sys-color-on-primary', onPrimary);
+      document.documentElement.style.setProperty(
+        '--md-sys-color-primary',
+        primary,
+      );
+      document.documentElement.style.setProperty(
+        '--md-sys-color-on-primary',
+        onPrimary,
+      );
       swatches.forEach((s: any) => (s.style.borderColor = 'transparent'));
       e.target.style.borderColor = 'var(--md-sys-color-on-surface)';
       forceStaticWaveformRedraw();
@@ -99,7 +109,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   sections.forEach((section: any, secIndex) => {
     const secTitle = section.dataset.title;
     const secHeader = document.createElement('li');
-    secHeader.style.cssText = 'font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--md-sys-color-primary); margin-top:1.5rem; margin-bottom:0.5rem;';
+    secHeader.style.cssText =
+      'font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--md-sys-color-primary); margin-top:1.5rem; margin-bottom:0.5rem;';
     if (secIndex === 0) secHeader.style.marginTop = '0';
     secHeader.textContent = secTitle;
     navList?.appendChild(secHeader);
@@ -109,23 +120,32 @@ document.addEventListener('DOMContentLoaded', async () => {
       const anchorId = `component-${secIndex}-${cardIndex}`;
       card.id = anchorId;
       card.style.scrollMarginTop = '7rem';
-      
+
       const rawTitle = card.getAttribute('title');
       let cleanTitle = rawTitle;
       if (rawTitle.includes('ui-')) {
         const parts = rawTitle.split(' ');
         const componentName = parts[0].replace('ui-', '');
-        const capitalized = componentName.charAt(0).toUpperCase() + componentName.slice(1);
-        cleanTitle = parts.length > 1 ? `${capitalized} ${parts[1]}` : capitalized;
+        const capitalized =
+          componentName.charAt(0).toUpperCase() + componentName.slice(1);
+        cleanTitle =
+          parts.length > 1 ? `${capitalized} ${parts[1]}` : capitalized;
       }
 
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = `#${anchorId}`;
       a.textContent = cleanTitle;
-      a.style.cssText = 'text-decoration:none; color:var(--md-sys-color-on-surface-variant); font-size:0.9rem; transition:color 0.2s;';
-      a.addEventListener('mouseover', () => (a.style.color = 'var(--md-sys-color-primary)'));
-      a.addEventListener('mouseout', () => (a.style.color = 'var(--md-sys-color-on-surface-variant)'));
+      a.style.cssText =
+        'text-decoration:none; color:var(--md-sys-color-on-surface-variant); font-size:0.9rem; transition:color 0.2s;';
+      a.addEventListener(
+        'mouseover',
+        () => (a.style.color = 'var(--md-sys-color-primary)'),
+      );
+      a.addEventListener(
+        'mouseout',
+        () => (a.style.color = 'var(--md-sys-color-on-surface-variant)'),
+      );
       li.appendChild(a);
       navList?.appendChild(li);
     });
@@ -141,7 +161,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   audioElement?.addEventListener('play', () => {
     if (!isConnected) {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
       analyser = audioCtx.createAnalyser();
       analyser.fftSize = 1024;
       const source = audioCtx.createMediaElementSource(audioElement);
@@ -158,7 +180,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   processingBtn?.addEventListener('click', () => {
     if (liveWaveform) {
       liveWaveform.processing = !liveWaveform.processing;
-      processingBtn.textContent = liveWaveform.processing ? 'Stop Processing' : 'Toggle Processing';
+      processingBtn.textContent = liveWaveform.processing
+        ? 'Stop Processing'
+        : 'Toggle Processing';
     }
   });
 
@@ -173,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     cycleIndex = (cycleIndex + 1) % stateCycle.length;
     const newState = stateCycle[cycleIndex];
     voiceBtn.setAttribute('state', newState);
-    
+
     // In a real app, we'd use a real analyser here
     if (newState === 'recording') {
       voiceBtn.analyserNode = typeof analyser !== 'undefined' ? analyser : null;
@@ -188,7 +212,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           successToggle = !successToggle;
           cycleIndex = stateCycle.indexOf(finalState);
           voiceBtn.setAttribute('state', finalState);
-          if (voiceStateText) voiceStateText.textContent = `State: ${finalState}`;
+          if (voiceStateText)
+            voiceStateText.textContent = `State: ${finalState}`;
         }
       }, 2500);
     }
@@ -199,7 +224,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const micSelector = await findEl('demo-mic-selector');
   const micStateText = await findEl('demo-mic-state');
   micSelector?.addEventListener('device-change', (e: any) => {
-    if (micStateText) micStateText.textContent = `Selected ID: ${e.detail.deviceId}`;
+    if (micStateText)
+      micStateText.textContent = `Selected ID: ${e.detail.deviceId}`;
   });
 
   // 10. Setup Voice Picker
@@ -216,34 +242,39 @@ document.addEventListener('DOMContentLoaded', async () => {
       {
         customId: 'v1',
         displayName: 'Aoede',
-        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav',
+        sampleAudio:
+          'https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav',
         trait: 'American • Female',
         orbColor: ['#F28B82', '#E57373'],
       },
       {
         customId: 'v2',
         displayName: 'Zephyr',
-        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav',
+        sampleAudio:
+          'https://storage.googleapis.com/scream-ui-samples/speech_sample-Zephyr-20260213-082026.wav',
         trait: 'British • Female',
         orbColor: ['#81C995', '#66BB6A'],
       },
       {
         customId: 'v3',
         displayName: 'Lyria Lo-Fi Beat',
-        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/music_sample.wav',
+        sampleAudio:
+          'https://storage.googleapis.com/scream-ui-samples/music_sample.wav',
         trait: 'Upbeat lo-fi hip hop',
         orbColor: ['#FDE293', '#FFF176'],
       },
       {
         customId: 'v4',
         displayName: 'Orus',
-        sampleAudio: 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav',
+        sampleAudio:
+          'https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav',
         trait: 'Australian • Male',
         orbColor: ['#AECBFA', '#64B5F6'],
       },
     ];
     voicePicker.addEventListener('voice-change', (e: any) => {
-      if (voicePickerState) voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
+      if (voicePickerState)
+        voicePickerState.textContent = `Selected Voice: ${e.detail.voiceId}`;
     });
   }
 
@@ -258,7 +289,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (orbBtn) orbBtn.textContent = `Cycle State: ${state || 'idle'}`;
     directBtns.forEach((btn: any) => {
       const btnState = btn.dataset.state === 'null' ? null : btn.dataset.state;
-      btn.style.background = btnState === state ? 'var(--md-sys-color-primary-container)' : 'var(--md-sys-color-surface)';
+      btn.style.background =
+        btnState === state
+          ? 'var(--md-sys-color-primary-container)'
+          : 'var(--md-sys-color-surface)';
     });
   };
 

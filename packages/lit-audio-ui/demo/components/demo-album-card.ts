@@ -26,14 +26,16 @@ export class DemoAlbumCard extends LitElement {
       src: 'https://storage.googleapis.com/scream-ui-samples/starlight_silicon.mp3',
       title: 'Starlight Silicon',
       artist: 'Scream Labs',
-      artwork: 'https://storage.googleapis.com/scream-ui-samples/starlight_silicon.png',
+      artwork:
+        'https://storage.googleapis.com/scream-ui-samples/starlight_silicon.png',
     },
     {
       id: 'deep-learning',
       src: 'https://storage.googleapis.com/scream-ui-samples/deep_learning.mp3',
       title: 'Deep Learning',
       artist: 'Neural Orchestra',
-      artwork: 'https://storage.googleapis.com/scream-ui-samples/deep_learning.png',
+      artwork:
+        'https://storage.googleapis.com/scream-ui-samples/deep_learning.png',
     },
     {
       id: 'ether',
@@ -79,7 +81,7 @@ export class DemoAlbumCard extends LitElement {
       left: 0;
       right: 0;
       height: 80px;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
       display: flex;
       align-items: flex-end;
       padding: 0 12px 8px 12px;
@@ -92,7 +94,7 @@ export class DemoAlbumCard extends LitElement {
       left: 0;
       right: 0;
       padding: 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
       color: white;
       text-align: left;
       pointer-events: none;
@@ -102,14 +104,14 @@ export class DemoAlbumCard extends LitElement {
       margin: 0;
       font-weight: 700;
       font-size: 1.1rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .track-artist {
       margin: 0;
       font-size: 0.85rem;
       opacity: 0.9;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .back-content {
@@ -206,11 +208,7 @@ export class DemoAlbumCard extends LitElement {
             </div>
 
             <!-- CUSTOM FLIP ICONS -->
-            <div
-              slot="flip-icon"
-              class="flip-btn"
-              @click=${this._toggleFlip}
-            >
+            <div slot="flip-icon" class="flip-btn" @click=${this._toggleFlip}>
               <span class="material-symbols-outlined">queue_music</span>
             </div>
             <div

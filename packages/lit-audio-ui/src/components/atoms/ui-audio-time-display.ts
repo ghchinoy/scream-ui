@@ -49,9 +49,9 @@ export class UiAudioTimeDisplay extends LitElement {
       return html`-${this._formatTime(remain)}`;
     } else {
       // 'combined'
-      return html`${this._formatTime(current)}${this.separator}${
-        total ? this._formatTime(total) : '--:--'
-      }`;
+      return html`${this._formatTime(current)}${this.separator}${total
+        ? this._formatTime(total)
+        : '--:--'}`;
     }
   }
 

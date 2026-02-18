@@ -74,10 +74,7 @@ export class DemoSmartTextarea extends LitElement {
 
   render() {
     return html`
-      <ui-speech-provider
-        simulation
-        @state-change=${this._handleStateChange}
-      >
+      <ui-speech-provider simulation @state-change=${this._handleStateChange}>
         <div class="textarea-container">
           <textarea
             .value=${this._text}

@@ -72,7 +72,9 @@ export class UiPlaylist extends LitElement {
       --md-list-item-label-text-font: inherit;
       --md-list-item-supporting-text-font: inherit;
       --md-list-item-label-text-color: var(--md-sys-color-on-surface);
-      --md-list-item-supporting-text-color: var(--md-sys-color-on-surface-variant);
+      --md-list-item-supporting-text-color: var(
+        --md-sys-color-on-surface-variant
+      );
       cursor: pointer;
     }
 
@@ -111,8 +113,12 @@ export class UiPlaylist extends LitElement {
                     ?selected=${index === currentIndex}
                     @click=${() => this.playerState?.select(index)}
                   >
-                    <div slot="headline">${track.title || 'Untitled Track'}</div>
-                    <div slot="supporting-text">${track.artist || 'Unknown Artist'}</div>
+                    <div slot="headline">
+                      ${track.title || 'Untitled Track'}
+                    </div>
+                    <div slot="supporting-text">
+                      ${track.artist || 'Unknown Artist'}
+                    </div>
                     ${index === currentIndex
                       ? html`<md-icon slot="start" class="now-playing-icon"
                           >${this.playerState?.isPlaying

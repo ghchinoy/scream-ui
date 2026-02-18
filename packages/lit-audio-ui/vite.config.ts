@@ -9,13 +9,16 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
+    emptyOutDir: false, // Don't wipe, so standalone build can coexist
     lib: {
       entry: 'src/index.ts',
       name: 'ScreamAudioUI',
+      formats: ['es', 'umd'],
+      fileName: (format) => `scream-audio-ui.${format}.js`,
     },
     rollupOptions: {
-      external: [/^lit/, /^@material\/web/, 'three'],
+      // DEFAULT BUILD: Externalize dependencies for standard Lit apps
+      external: [/^lit/, /^@material\/web/, 'three', '@lit/context'],
       output: [
         {
           format: 'es',
@@ -27,11 +30,14 @@ export default defineConfig({
           format: 'umd',
           name: 'ScreamAudioUI',
           entryFileNames: 'scream-audio-ui.umd.js',
-          globals: (id) => {
-            if (id.startsWith('lit')) return 'Lit';
-            if (id.startsWith('@material/web')) return 'MaterialWeb';
-            if (id === 'three') return 'THREE';
-            return id;
+          globals: {
+            'lit': 'Lit',
+            'lit/decorators.js': 'LitDecorators',
+            '@lit/context': 'LitContext',
+            'three': 'THREE',
+            '@material/web/button/filled-button.js': 'MdFilledButton',
+            '@material/web/button/outlined-button.js': 'MdOutlinedButton',
+            '@material/web/icon/icon.js': 'MdIcon',
           },
         }
       ],

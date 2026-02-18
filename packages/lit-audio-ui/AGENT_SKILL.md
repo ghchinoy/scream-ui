@@ -13,38 +13,45 @@ A specialized skill for AI agents to autonomously implement high-performance aud
 ### 1. Bootstrapping the Provider
 Always wrap atomic components in a `<ui-audio-provider>` (for playback) or `<ui-speech-provider>` (for recording). These components manage the state machine and shared context.
 
-### 2. Playlist & State Synchronization
-When using `<ui-audio-provider>` with the `items` property:
-- Listen to the `@state-change` event on the provider.
-- Use `e.detail.currentIndex` to synchronize your parent component's metadata (e.g., Title, Artist, Album Art).
-- The provider handles internal track advancing automatically when `autoAdvance` is true.
+### 2. Registry Collision Mitigation (CRITICAL)
+In plain HTML/back-end environments (Go, Python), browsers may crash if Material Web components are loaded multiple times (e.g., `md-elevation` error).
+- **Solution:** Use a "Fat Bundle" (single-file library) OR an **Import Map**.
+- **Import Map Example:**
+  ```html
+  <script type="importmap">
+  {
+    "imports": {
+      "lit": "https://esm.sh/lit@3.3.1",
+      "@material/web/": "https://esm.sh/@material/web@2.0.0/"
+    }
+  }
+  </script>
+  ```
 
-### 3. Visualizer "Bridge" Logic
-Most visual components (`ui-orb`, `ui-spectrum-visualizer`, `ui-live-waveform`) require an `analyserNode`. 
+### 3. State-Driven Visuals (The "Sentiment" Pattern)
+Drive visual components like `<ui-orb>` using application-specific logic.
+- **Pattern:** Map market/AI sentiment to the `colors` property.
+- **Example:** Green ramps for `improving`, red/warm ramps for `worsening`.
+- **Manual Mode:** Set `volumeMode="manual"` to explicitly pass `inputVolume` (mic) and `outputVolume` (agent) for precise synchronization.
+
+### 4. Visualizer "Bridge" Logic
+Most visual components require an `analyserNode`. 
 - They attempt to consume this from context automatically.
-- **Tip:** Ensure the provider has finished initializing its AudioContext (triggered by the first user interaction) before expecting visualizations to appear.
+- **Tip:** When bridging to Gemini Live, manually map the PCM byte stream volume to the orb's `inputVolume` or `outputVolume`.
 
-### 4. Theming & Branding (Zero-JS)
-The library uses Material Design 3 tokens with semantic overrides. Use these for dark-theme consistency:
-- `--md-sys-color-primary`: Main theme color (e.g., `#d0bcff`).
-- `--md-sys-color-surface-container-low`: Primary background for pickers and lists.
-- `--ui-speech-wave-color`: Custom color for waveforms inside buttons (prevents 'black-on-black' issues).
-- `--md-list-item-label-text-color`: high-contrast text color for playlists.
-
-### 5. Layout & 3D Environments
-If a component is inside a 3D transformed container (perspective/translateZ):
-- Ensure `md-menu` (inside pickers) uses `positioning="popover"`.
-- Use the `<ui-3d-flip>` utility for compact "back-of-card" tracklists.
-- Apply `font-family: inherit` to library components to avoid default serif fonts.
+### 5. Theming & Branding (Zero-JS)
+The library uses Material Design 3 tokens. Use these for dark-theme consistency:
+- `--md-sys-color-primary`: Main theme color.
+- `--ui-speech-wave-color`: Custom color for waveforms inside buttons.
 
 ### 6. Component Utility Registry
-- `<ui-audio-time-display>`: Defaults to `full` mode (`current / total`). Use `format="elapsed"` or `format="remaining"` for single values.
+- `<ui-audio-time-display>`: Use `format="elapsed"` or `format="remaining"` for single values.
 - `<ui-spectrum-visualizer>`: Requires a `.height` property for reliable rendering.
 
 ## Simulation Mode
 For development without microphone access, enable the `simulation` property on `<ui-speech-provider>`. This generates procedural audio data and mock transcription events.
 
 ## Quality Gates
-- Ensure `crossorigin="anonymous"` is set on audio/video tags to allow analysis.
-- Use `color-scheme: light dark;` on host elements to support native dark-mode sensitivity.
-- Verify that `manual` mode handlers clear intervals/timeouts during state transitions.
+- **CORS:** Ensure `crossorigin="anonymous"` is set on audio/video tags.
+- **Layout:** Use `positioning="popover"` for `md-menu` inside 3D containers.
+- **Performance:** In plain HTML projects, prefer the single-file `.es.js` bundle to minimize network waterfall.

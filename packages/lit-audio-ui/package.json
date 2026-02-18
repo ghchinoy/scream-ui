@@ -1,6 +1,6 @@
 {
   "name": "@ghchinoy/lit-audio-ui",
-  "version": "0.4.5",
+  "version": "0.4.10",
   "description": "A pure Lit WebComponents port of modern audio UI components",
   "author": "G. Hussain Chinoy",
   "license": "Apache-2.0",
@@ -13,6 +13,7 @@
       "require": "./dist/scream-audio-ui.umd.js",
       "types": "./dist/index.d.ts"
     },
+    "./standalone": "./dist/standalone/scream-audio-ui.standalone.js",
     "./atoms/*": "./dist/components/atoms/*.js",
     "./molecules/*": "./dist/components/molecules/*.js",
     "./organisms/*": "./dist/components/organisms/*.js",
@@ -30,32 +31,34 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:lib && npm run build:demo",
+    "build": "npm run clean && npm run build:lib && npm run build:standalone && npm run build:demo",
+    "clean": "rimraf dist dist-demo",
     "build:lib": "tsc && vite build",
+    "build:standalone": "vite build -c vite.standalone.config.ts",
     "build:demo": "vite build -c vite.demo.config.ts",
     "preview": "vite preview dist-demo",
     "lint": "gts lint",
-    "clean": "gts clean",
-    "compile": "tsc",
     "fix": "gts fix",
     "prepare": "npm run build:lib"
   },
-  "dependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "@lit/context": "^1.1.6",
     "@material/web": "^2.0.0",
     "lit": "^3.3.1",
-    "three": "^0.182.0"
-  },
-  "peerDependencies": {
-    "lit": "^3.0.0",
     "three": ">=0.150.0"
   },
   "devDependencies": {
+    "@lit/context": "^1.1.6",
+    "@material/web": "^2.0.0",
+    "lit": "^3.3.1",
+    "three": "^0.182.0",
     "@types/three": "^0.182.0",
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "@typescript-eslint/parser": "^8.55.0",
     "eslint-plugin-lit": "^1.15.0",
     "gts": "^7.0.0",
+    "rimraf": "^6.0.1",
     "typescript": "~5.6.3",
     "vite": "^8.0.0-beta.13"
   }

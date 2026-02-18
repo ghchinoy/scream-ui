@@ -21,9 +21,8 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true
-      },
-      "include": ["src", "demo", "vite.config.ts", "vite.demo.config.ts"]
-    }
-    
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src", "demo", "vite.config.ts", "vite.demo.config.ts"]
+}

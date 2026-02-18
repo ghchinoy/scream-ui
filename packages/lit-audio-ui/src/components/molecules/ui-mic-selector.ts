@@ -32,7 +32,7 @@ export interface AudioDevice {
 
 /**
  * A native Lit WebComponent that provides a dropdown menu for selecting audio input devices.
- * It automatically handles permission requests, device enumeration, and provides a 
+ * It automatically handles permission requests, device enumeration, and provides a
  * live preview waveform of the selected input.
  *
  * @element ui-mic-selector

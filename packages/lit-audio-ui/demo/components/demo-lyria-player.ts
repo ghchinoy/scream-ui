@@ -120,10 +120,10 @@ export class DemoLyriaPlayer extends LitElement {
       >
         <div class="music-player-card">
           <div class="player-layout">
-            <img 
-              class="album-art" 
-              src="${this._getCurrentTrack()?.artwork}" 
-              alt="Album Art" 
+            <img
+              class="album-art"
+              src="${this._getCurrentTrack()?.artwork}"
+              alt="Album Art"
             />
 
             <div class="player-controls">
@@ -132,7 +132,9 @@ export class DemoLyriaPlayer extends LitElement {
                 <p class="track-artist">${this._getCurrentTrack()?.artist}</p>
               </div>
 
-              <div style="height: 40px; border-radius: 8px; overflow: hidden; position: relative;">
+              <div
+                style="height: 40px; border-radius: 8px; overflow: hidden; position: relative;"
+              >
                 <ui-scrolling-waveform
                   id="music-scroller"
                   speed="50"
@@ -144,11 +146,17 @@ export class DemoLyriaPlayer extends LitElement {
               </div>
 
               <div style="display: flex; align-items: center; gap: 12px;">
-                <ui-audio-time-display format="elapsed" style="font-size: 12px; opacity: 0.8;"></ui-audio-time-display>
+                <ui-audio-time-display
+                  format="elapsed"
+                  style="font-size: 12px; opacity: 0.8;"
+                ></ui-audio-time-display>
                 <div style="flex: 1;">
                   <ui-audio-progress-slider></ui-audio-progress-slider>
                 </div>
-                <ui-audio-time-display format="remaining" style="font-size: 12px; opacity: 0.8;"></ui-audio-time-display>
+                <ui-audio-time-display
+                  format="remaining"
+                  style="font-size: 12px; opacity: 0.8;"
+                ></ui-audio-time-display>
               </div>
 
               <div class="music-controls">
@@ -157,8 +165,12 @@ export class DemoLyriaPlayer extends LitElement {
                   <ui-audio-play-button></ui-audio-play-button>
                   <ui-audio-next-button></ui-audio-next-button>
                 </div>
-                <div style="flex: 1; display: flex; justify-content: flex-end; min-width: 120px;">
-                  <ui-audio-volume-slider style="width: 100%;"></ui-audio-volume-slider>
+                <div
+                  style="flex: 1; display: flex; justify-content: flex-end; min-width: 120px;"
+                >
+                  <ui-audio-volume-slider
+                    style="width: 100%;"
+                  ></ui-audio-volume-slider>
                 </div>
               </div>
             </div>

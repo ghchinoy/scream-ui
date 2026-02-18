@@ -33,7 +33,8 @@ export class DemoMediaDashboard extends LitElement {
       src: 'https://storage.googleapis.com/scream-ui-samples/neural_flux.mp3',
       title: 'Neural Flux',
       artist: 'Digital Echo',
-      artwork: 'https://storage.googleapis.com/scream-ui-samples/neural_flux.png',
+      artwork:
+        'https://storage.googleapis.com/scream-ui-samples/neural_flux.png',
     },
     {
       id: 'dash-3',
@@ -98,7 +99,7 @@ export class DemoMediaDashboard extends LitElement {
       height: 64px;
       border-radius: 8px;
       object-fit: cover;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .track-meta {
@@ -123,7 +124,10 @@ export class DemoMediaDashboard extends LitElement {
 
     .viz-container {
       height: 120px;
-      background: var(--md-sys-color-surface-container-lowest, rgba(0,0,0,0.05));
+      background: var(
+        --md-sys-color-surface-container-lowest,
+        rgba(0, 0, 0, 0.05)
+      );
       border-radius: 12px;
       overflow: hidden;
       position: relative;
@@ -191,33 +195,45 @@ export class DemoMediaDashboard extends LitElement {
     }
 
     @keyframes pulse {
-      0% { opacity: 0.4; }
-      50% { opacity: 1; }
-      100% { opacity: 0.4; }
+      0% {
+        opacity: 0.4;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.4;
+      }
     }
   `;
 
   render() {
     return html`
-      <ui-audio-provider id="dash-provider" .items="${this._playlist}" @state-change="${() => this.requestUpdate()}">
+      <ui-audio-provider
+        id="dash-provider"
+        .items="${this._playlist}"
+        @state-change="${() => this.requestUpdate()}"
+      >
         <div class="dashboard-grid">
-          
           <!-- MAIN HERO -->
           <div class="hero-section">
             <div class="now-playing-header">
-              <img class="mini-art" src="${this._getCurrentTrack()?.artwork}" alt="Art" />
+              <img
+                class="mini-art"
+                src="${this._getCurrentTrack()?.artwork}"
+                alt="Art"
+              />
               <div class="track-meta">
                 <h3 class="track-title">${this._getCurrentTrack()?.title}</h3>
                 <p class="track-artist">${this._getCurrentTrack()?.artist}</p>
               </div>
-              ${this._isBuffering() ? html`<span class="buffering-indicator">Buffering...</span>` : ''}
+              ${this._isBuffering()
+                ? html`<span class="buffering-indicator">Buffering...</span>`
+                : ''}
             </div>
 
             <div class="viz-container">
-              <ui-spectrum-visualizer 
-                height="120" 
-                barWidth="4" 
-                barGap="2">
+              <ui-spectrum-visualizer height="120" barWidth="4" barGap="2">
               </ui-spectrum-visualizer>
             </div>
           </div>
@@ -227,7 +243,9 @@ export class DemoMediaDashboard extends LitElement {
             <div class="playlist-scroll">
               <ui-playlist header="Up Next"></ui-playlist>
             </div>
-            <div style="padding: 16px; border-top: 1px solid var(--md-sys-color-outline-variant);">
+            <div
+              style="padding: 16px; border-top: 1px solid var(--md-sys-color-outline-variant);"
+            >
               <ui-audio-volume-slider></ui-audio-volume-slider>
             </div>
           </div>
@@ -242,19 +260,23 @@ export class DemoMediaDashboard extends LitElement {
 
             <div class="progress-area">
               <ui-audio-progress-slider></ui-audio-progress-slider>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <ui-audio-time-display 
-                  format="combined" 
-                  separator=" of " 
-                  style="font-size: 11px; font-weight: 600; opacity: 0.8;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center;"
+              >
+                <ui-audio-time-display
+                  format="combined"
+                  separator=" of "
+                  style="font-size: 11px; font-weight: 600; opacity: 0.8;"
+                >
                 </ui-audio-time-display>
-                <span style="font-size: 10px; opacity: 0.5; font-family: monospace;">
+                <span
+                  style="font-size: 10px; opacity: 0.5; font-family: monospace;"
+                >
                   INDEX: ${this._getCurrentIndex() + 1}/${this._playlist.length}
                 </span>
               </div>
             </div>
           </div>
-
         </div>
       </ui-audio-provider>
     `;

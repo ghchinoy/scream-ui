@@ -112,7 +112,8 @@ export class UiSpectrumVisualizer extends LitElement {
     const styles = getComputedStyle(this);
     let barColor = this.color;
     if (!barColor) {
-      barColor = styles.getPropertyValue('--md-sys-color-primary').trim() || '#0066cc';
+      barColor =
+        styles.getPropertyValue('--md-sys-color-primary').trim() || '#0066cc';
     }
 
     ctx.fillStyle = barColor;
@@ -121,7 +122,7 @@ export class UiSpectrumVisualizer extends LitElement {
       // Map bar index to frequency data (linear for simple spectrum)
       const dataIndex = Math.floor((i / barCount) * (frequencies.length * 0.6));
       const value = frequencies[dataIndex] || 0;
-      
+
       const barHeight = value * rect.height;
       const x = i * step;
       const y = rect.height - barHeight;

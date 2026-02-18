@@ -1,17 +1,5 @@
 /**
  * Copyright 2026 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 import {LitElement, html, css, type PropertyValues} from 'lit';
@@ -22,21 +10,7 @@ import {
 } from '../../utils/audio-utils.js';
 
 /**
- * A real-time audio visualizer component that renders a symmetric bar waveform
- * from an AnalyserNode. It also features a procedural 'processing' animation
- * for states where audio is being analyzed but not actively streaming.
- *
- * @element ui-live-waveform
- *
- * @prop {boolean} active - Whether the visualizer is actively listening to the analyserNode.
- * @prop {boolean} processing - Enables a procedural 'thinking' animation.
- * @prop {AnalyserNode} analyserNode - The Web Audio AnalyserNode providing the frequency data.
- * @prop {number} barWidth - Width of each waveform bar in pixels.
- * @prop {number} barGap - Gap between bars in pixels.
- * @prop {string} barColor - Color of the bars. Supports CSS variables. Fallbacks to --md-sys-color-primary.
- * @prop {boolean} fadeEdges - Whether to apply a gradient fade to the horizontal edges of the canvas.
- * @prop {number} height - The height of the visualizer container in pixels.
- * @prop {number} sensitivity - Multiplier for the audio amplitude.
+ * A real-time audio visualizer component.
  */
 @customElement('ui-live-waveform')
 export class UiLiveWaveform extends LitElement {
@@ -63,35 +37,19 @@ export class UiLiveWaveform extends LitElement {
   private _resizeObserver?: ResizeObserver;
   private _themeObserver?: MutationObserver;
 
-  // State for rendering
   private _dataArray?: Uint8Array;
   private _currentBars: number[] = [];
-
-  // State for the "processing" transition animation
   private _processingTime: number = 0;
   private _transitionProgress: number = 0;
   private _lastActiveData: number[] = [];
 
-  static styles = css`
-    :host {
-      display: block;
-      width: 100%;
-    }
-    .container {
-      position: relative;
-      width: 100%;
-    }
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: block;
-      height: 100%;
-      width: 100%;
-    }
+  static override styles = css`
+    :host { display: block; width: 100%; }
+    .container { position: relative; width: 100%; }
+    canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; }
   `;
 
-  render() {
+  override render() {
     return html`
       <div class="container" style="height: ${this.height}px;">
         <canvas></canvas>
@@ -99,72 +57,45 @@ export class UiLiveWaveform extends LitElement {
     `;
   }
 
-  firstUpdated() {
-    this._resizeObserver = new ResizeObserver(() => {
-      this._handleResize();
-    });
+  protected override firstUpdated() {
+    this._resizeObserver = new ResizeObserver(() => { this._handleResize(); });
     this._resizeObserver.observe(this._container);
-
-    // Watch for theme changes to pick up new CSS variables
-    this._themeObserver = new MutationObserver(() => {
-      this._renderFrame();
-    });
+    this._themeObserver = new MutationObserver(() => { this._renderFrame(); });
     this._themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class', 'style'],
     });
-
-    // Start loop
     this._startAnimationLoop();
   }
 
-  updated(changedProperties: PropertyValues) {
+  protected override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-
     if (changedProperties.has('analyserNode') && this.analyserNode) {
       this._dataArray = new Uint8Array(this.analyserNode.frequencyBinCount);
     }
-
-    // Handle the moment we switch into processing
-    if (
-      changedProperties.has('processing') &&
-      this.processing &&
-      !this.active
-    ) {
+    if (changedProperties.has('processing') && this.processing && !this.active) {
       this._processingTime = 0;
       this._transitionProgress = 0;
     }
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
-    if (this._resizeObserver) {
-      this._resizeObserver.disconnect();
-    }
-    if (this._themeObserver) {
-      this._themeObserver.disconnect();
-    }
-    if (this._animationFrameId) {
-      cancelAnimationFrame(this._animationFrameId);
-    }
+    if (this._resizeObserver) this._resizeObserver.disconnect();
+    if (this._themeObserver) this._themeObserver.disconnect();
+    if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
   }
 
   private _handleResize() {
     if (!this._canvas || !this._container) return;
-
     const rect = this._container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-
     this._canvas.width = rect.width * dpr;
     this._canvas.height = rect.height * dpr;
     this._canvas.style.width = `${rect.width}px`;
     this._canvas.style.height = `${rect.height}px`;
-
     const ctx = this._canvas.getContext('2d');
-    if (ctx) {
-      ctx.scale(dpr, dpr);
-    }
-    // Force immediate redraw
+    if (ctx) ctx.scale(dpr, dpr);
     this._renderFrame();
   }
 
@@ -182,99 +113,60 @@ export class UiLiveWaveform extends LitElement {
     const rect = this._canvas.getBoundingClientRect();
     const barCount = Math.floor(rect.width / (this.barWidth + this.barGap));
 
-    // Case 1: We are actively listening to an AnalyserNode
     if (this.active && this.analyserNode && this._dataArray) {
       if (timestamp - this._lastUpdateTime > this.updateRate) {
         this._lastUpdateTime = timestamp;
-
-        // Grab frequency
-        // typecast to any because the utility expects standard Uint8Array<ArrayBuffer>
-        // but TS infers Uint8Array<ArrayBufferLike> here
-        const frequencies = getNormalizedFrequencyData(
-          this.analyserNode,
-          this._dataArray as any,
-        );
-
-        // We typically only want the low/mid frequencies for a voice visualizer (e.g. 5% to 40% of the spectrum)
-        const startFreq = Math.floor(frequencies.length * 0.05); // Start at bin 1 (skip DC offset)
-        const endFreq = Math.floor(frequencies.length * 0.4); // End around 8kHz
+        const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
+        const startFreq = Math.floor(frequencies.length * 0.05);
+        const endFreq = Math.floor(frequencies.length * 0.4);
         const relevantData = frequencies.slice(startFreq, endFreq);
-
         const centerIndex = Math.floor(barCount / 2);
         const newBars = new Array(barCount).fill(0.05);
-
-        // Simple, guaranteed mirroring mapping the exact width of the data to the half width of the bars.
         const maxDataIndex = relevantData.length - 1;
         for (let i = 0; i <= centerIndex; i++) {
-          // Linear mapping from center to edge
           const dataPercent = i / centerIndex;
           const dataIndex = Math.floor(dataPercent * maxDataIndex);
-
           let val = relevantData[dataIndex] || 0;
-
-          // Slight taper on the extreme edges so the bars fade cleanly before the CSS gradient
-          if (dataPercent > 0.8) {
-            val = val * (1 - (dataPercent - 0.8) * 5);
-          }
-
+          if (dataPercent > 0.8) val = val * (1 - (dataPercent - 0.8) * 5);
           const scaledVal = Math.max(0.05, Math.min(1, val * this.sensitivity));
-
           const rightBar = centerIndex + i;
           const leftBar = centerIndex - i;
           if (rightBar < barCount) newBars[rightBar] = scaledVal;
           if (leftBar >= 0) newBars[leftBar] = scaledVal;
         }
-
         this._currentBars = newBars;
         this._lastActiveData = [...newBars];
       }
-    }
-    // Case 2: We are in "processing" state (no live audio, but animating)
-    else if (this.processing && !this.active) {
+    } else if (this.processing && !this.active) {
       this._processingTime += 0.03;
       this._transitionProgress = Math.min(1, this._transitionProgress + 0.02);
-
       const processingData = new Array(barCount).fill(0.05);
-
       const halfCount = Math.floor(barCount / 2);
       for (let i = 0; i < barCount; i++) {
-        // Restore the exact ElevenLabs sine wave math that worked in your first screenshot
         const normalizedPosition = (i - halfCount) / halfCount;
         const centerWeight = 1 - Math.abs(normalizedPosition) * 0.4;
-
-        const wave1 =
-          Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
-        const wave2 =
-          Math.sin(this._processingTime * 0.8 - normalizedPosition * 2) * 0.2;
-        const wave3 =
-          Math.cos(this._processingTime * 2 + normalizedPosition) * 0.15;
+        const wave1 = Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
+        const wave2 = Math.sin(this._processingTime * 0.8 - normalizedPosition * 2) * 0.2;
+        const wave3 = Math.cos(this._processingTime * 2 + normalizedPosition) * 0.15;
         const combinedWave = wave1 + wave2 + wave3;
         const processingValue = (0.2 + combinedWave) * centerWeight;
-
         let finalValue = processingValue;
         if (this._lastActiveData.length > 0 && this._transitionProgress < 1) {
           const lastDataIndex = Math.min(i, this._lastActiveData.length - 1);
           const lastValue = this._lastActiveData[lastDataIndex] || 0;
-          finalValue =
-            lastValue * (1 - this._transitionProgress) +
-            processingValue * this._transitionProgress;
+          finalValue = lastValue * (1 - this._transitionProgress) + processingValue * this._transitionProgress;
         }
-
         processingData[i] = Math.max(0.05, Math.min(1, finalValue));
       }
       this._currentBars = processingData;
-    }
-    // Case 3: Idle. Decay bars down to zero.
-    else {
+    } else {
       if (this._currentBars.length > 0) {
         let allZero = true;
         for (let i = 0; i < this._currentBars.length; i++) {
-          this._currentBars[i] = Math.max(0.05, this._currentBars[i] * 0.85); // fast decay
+          this._currentBars[i] = Math.max(0.05, this._currentBars[i] * 0.85);
           if (this._currentBars[i] > 0.06) allZero = false;
         }
-        if (allZero) {
-          this._currentBars = [];
-        }
+        if (allZero) this._currentBars = [];
       }
     }
   }
@@ -283,15 +175,10 @@ export class UiLiveWaveform extends LitElement {
     if (!this._canvas) return;
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
-
     const rect = this._canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, rect.width, rect.height);
-
-    // Provide a sensible default color if none provided, looking up the CSS variable cascade
     const styles = getComputedStyle(this);
     let computedBarColor = this.barColor || 'currentColor';
-
-    // If it's a CSS variable, resolve it
     if (computedBarColor.startsWith('var(')) {
       const varName = computedBarColor.match(/var\(([^,)]+)/)?.[1].trim();
       if (varName) {
@@ -299,26 +186,19 @@ export class UiLiveWaveform extends LitElement {
         if (resolved) computedBarColor = resolved;
       }
     }
-
-    // Final fallback if we still don't have a valid color (e.g. currentColor resolved to nothing)
     if (computedBarColor === 'currentColor' || !computedBarColor) {
-      const primary = styles.getPropertyValue('--md-sys-color-primary').trim();
-      computedBarColor = primary || '#0066cc';
+      computedBarColor = styles.getPropertyValue('--md-sys-color-primary').trim() || '#0066cc';
     }
-
     const step = this.barWidth + this.barGap;
     const barCount = Math.floor(rect.width / step);
     const centerY = rect.height / 2;
-
     for (let i = 0; i < barCount && i < this._currentBars.length; i++) {
       const value = this._currentBars[i] || 0.05;
       const x = i * step;
       const dynamicHeight = Math.max(this.barHeight, value * rect.height * 0.8);
       const y = centerY - dynamicHeight / 2;
-
       ctx.fillStyle = computedBarColor;
       ctx.globalAlpha = 0.4 + value * 0.6;
-
       if (this.barRadius > 0) {
         ctx.beginPath();
         ctx.roundRect(x, y, this.barWidth, dynamicHeight, this.barRadius);
@@ -327,10 +207,7 @@ export class UiLiveWaveform extends LitElement {
         ctx.fillRect(x, y, this.barWidth, dynamicHeight);
       }
     }
-
-    if (this.fadeEdges) {
-      applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth);
-    }
+    if (this.fadeEdges) { applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth); }
     ctx.globalAlpha = 1;
   }
 }

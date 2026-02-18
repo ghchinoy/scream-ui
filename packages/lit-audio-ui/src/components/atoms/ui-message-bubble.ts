@@ -50,7 +50,9 @@ export class UiMessageBubble extends LitElement {
       font-size: 0.95rem;
       line-height: 1.5;
       box-sizing: border-box;
-      transition: background-color 0.2s, color 0.2s;
+      transition:
+        background-color 0.2s,
+        color 0.2s;
     }
 
     /* Variant: Contained */

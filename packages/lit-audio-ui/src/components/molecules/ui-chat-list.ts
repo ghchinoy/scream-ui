@@ -19,7 +19,7 @@ import {customElement, query} from 'lit/decorators.js';
 
 /**
  * MOLECULE: Chat List
- * A scrollable container for ui-chat-items. 
+ * A scrollable container for ui-chat-items.
  * Automatically handles scrolling to the bottom when new children are added.
  *
  * @element ui-chat-list
