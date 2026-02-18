@@ -16,6 +16,11 @@
 
 import {LitElement, html, css} from 'lit';
 import {customElement, state} from 'lit/decorators.js';
+import '../../src/components/providers/ui-speech-provider.js';
+import '../../src/components/molecules/ui-voice-button.js';
+import '../../src/components/molecules/ui-voice-pill.js';
+import '../../src/components/atoms/ui-speech-record-button.js';
+import '../../src/components/atoms/ui-speech-cancel-button.js';
 
 @customElement('demo-speech-input')
 export class DemoSpeechInput extends LitElement {
@@ -43,6 +48,23 @@ export class DemoSpeechInput extends LitElement {
       display: block;
       font-family: inherit;
     }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--md-sys-color-outline);
+    }
     .speech-input-card {
       background: var(--md-sys-color-surface-container);
       border-radius: 24px;
@@ -52,7 +74,7 @@ export class DemoSpeechInput extends LitElement {
       gap: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
-      max-width: 100%;
+      max-width: fit-content;
     }
     .speech-input-card[state='recording'] {
       border: 1px solid var(--md-sys-color-primary);
@@ -104,51 +126,83 @@ export class DemoSpeechInput extends LitElement {
       transition: all 0.2s ease;
       z-index: -1;
     }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
   `;
 
   render() {
     const isRecording = this._state === 'recording';
 
     return html`
-      <div class="speech-input-card" state="${this._state}">
-        <button
-          class="mic-btn"
-          @click="${this._toggleRecord}"
-          style="color: ${isRecording
-            ? 'var(--md-sys-color-on-primary)'
-            : 'var(--md-sys-color-on-surface)'}"
-        >
-          <span class="material-symbols-outlined"
-            >${isRecording ? 'stop' : 'mic'}</span
-          >
-          <div
-            class="pulse"
-            style="opacity: ${isRecording ? '1' : '0'}; transform: ${isRecording
-              ? 'scale(1)'
-              : 'scale(0)'}"
-          ></div>
-        </button>
+      <ui-speech-provider simulation>
+        <div class="container">
+          <div class="section">
+            <h3>Standard Buttons (Molecules)</h3>
+            <div class="grid">
+              <ui-voice-button label="Record"></ui-voice-button>
+              <ui-voice-pill label="Start Talking"></ui-voice-pill>
+            </div>
+          </div>
 
-        <div class="speech-preview">
-          <span
-            style="flex: 1; white-space: nowrap; overflow: hidden; mask-image: linear-gradient(to right, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, black 80%, transparent);"
-            >${this._transcript}</span
-          >
-          <div
-            style="width: 32px; height: 20px; opacity: ${isRecording
-              ? '1'
-              : '0'}; transition: opacity 0.3s ease;"
-          >
-            <ui-live-waveform
-              height="20"
-              barWidth="2"
-              barGap="1"
-              sensitivity="2.5"
-              ?active="${isRecording}"
-            ></ui-live-waveform>
+          <div class="section">
+            <h3>Atomic Elements (Composition)</h3>
+            <div class="grid">
+              <ui-speech-record-button></ui-speech-record-button>
+              <ui-speech-cancel-button></ui-speech-cancel-button>
+              <div style="width: 100px;">
+                <ui-voice-waveform .height=${32}></ui-voice-waveform>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Custom Inline Input</h3>
+            <div class="speech-input-card" state="${this._state}">
+              <button
+                class="mic-btn"
+                @click="${this._toggleRecord}"
+                style="color: ${isRecording
+                  ? 'var(--md-sys-color-on-primary)'
+                  : 'var(--md-sys-color-on-surface)'}"
+              >
+                <span class="material-symbols-outlined"
+                  >${isRecording ? 'stop' : 'mic'}</span
+                >
+                <div
+                  class="pulse"
+                  style="opacity: ${isRecording ? '1' : '0'}; transform: ${isRecording
+                    ? 'scale(1)'
+                    : 'scale(0)'}"
+                ></div>
+              </button>
+
+              <div class="speech-preview">
+                <span
+                  style="flex: 1; white-space: nowrap; overflow: hidden; mask-image: linear-gradient(to right, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, black 80%, transparent);"
+                  >${this._transcript}</span
+                >
+                <div
+                  style="width: 32px; height: 20px; opacity: ${isRecording
+                    ? '1'
+                    : '0'}; transition: opacity 0.3s ease;"
+                >
+                  <ui-live-waveform
+                    height="20"
+                    barWidth="2"
+                    barGap="1"
+                    sensitivity="2.5"
+                    ?active="${isRecording}"
+                  ></ui-live-waveform>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </ui-speech-provider>
     `;
   }
 

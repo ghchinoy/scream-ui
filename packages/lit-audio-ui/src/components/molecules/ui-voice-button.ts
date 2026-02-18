@@ -5,6 +5,8 @@
 import {LitElement, html, css, type PropertyValues} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {classMap} from 'lit/directives/class-map.js';
+import {consume} from '@lit/context';
+import {speechContext, type SpeechContext} from '../../utils/speech-context.js';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/icon/icon.js';
@@ -19,9 +21,14 @@ export type VoiceButtonState =
 
 /**
  * A native Lit WebComponent replacement for the ElevenLabs React voice-button.
+ * Now refactored to consume speechContext but maintains backward compatibility
+ * for manual state control.
  */
 @customElement('ui-voice-button')
 export class UiVoiceButton extends LitElement {
+  @consume({context: speechContext, subscribe: true})
+  private _context?: SpeechContext;
+
   @property({type: String}) state: VoiceButtonState = 'idle';
   @property({type: String}) label?: string;
   @property({type: String}) trailing?: string;
@@ -97,15 +104,19 @@ export class UiVoiceButton extends LitElement {
 
   protected override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    if (changedProperties.has('state')) {
-      if (this.state === 'success' || this.state === 'error') {
+
+    // Sync from context if available, otherwise use own state property
+    const effectiveState = this._context?.state || this.state;
+
+    if (changedProperties.has('_context') || changedProperties.has('state')) {
+      if (effectiveState === 'success' || effectiveState === 'error') {
         this._showFeedback = true;
-        this._feedbackType = this.state;
+        this._feedbackType = effectiveState as 'success' | 'error';
         if (this._feedbackTimeout) clearTimeout(this._feedbackTimeout);
         this._feedbackTimeout = setTimeout(() => {
           this._showFeedback = false;
           this._feedbackType = null;
-          if (this.state === 'success' || this.state === 'error') {
+          if (!this._context && (this.state === 'success' || this.state === 'error')) {
             this.state = 'idle';
           }
         }, 1500);
@@ -114,8 +125,9 @@ export class UiVoiceButton extends LitElement {
   }
 
   override render() {
-    const isRecording = this.state === 'recording';
-    const isProcessing = this.state === 'processing';
+    const effectiveState = this._context?.state || this.state;
+    const isRecording = effectiveState === 'recording';
+    const isProcessing = effectiveState === 'processing' || effectiveState === 'connecting';
     const isActive = isRecording || isProcessing;
     const isDisabled = this.disabled || isProcessing;
 
@@ -131,6 +143,8 @@ export class UiVoiceButton extends LitElement {
       active: isActive,
     };
 
+    const effectiveAnalyser = this._context?.analyserNode || this.analyserNode;
+
     return html`
       <md-filled-button
         class=${classMap(buttonClasses)}
@@ -145,7 +159,7 @@ export class UiVoiceButton extends LitElement {
                   <ui-live-waveform
                     .active=${isRecording}
                     .processing=${isProcessing}
-                    .analyserNode=${this.analyserNode}
+                    .analyserNode=${effectiveAnalyser}
                     .barWidth=${2}
                     .barGap=${1}
                     barColor="currentColor"
@@ -167,12 +181,21 @@ export class UiVoiceButton extends LitElement {
   }
 
   private _handleClick(_e: Event) {
+    if (this._context) {
+      if (this._context.state === 'idle') {
+        this._context.start();
+      } else if (this._context.state === 'recording') {
+        this._context.stop();
+      }
+    }
+
     this.dispatchEvent(
       new CustomEvent('voice-button-click', {
         bubbles: true,
         composed: true,
-        detail: {state: this.state},
+        detail: {state: this._context?.state || this.state},
       }),
     );
   }
 }
+

@@ -76,6 +76,14 @@
           "name": "*",
           "declaration": {
             "name": "*",
+            "module": "src/components/atoms/ui-voice-waveform.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
             "module": "src/components/atoms/ui-shimmering-text.js"
           }
         },
@@ -189,6 +197,14 @@
           "declaration": {
             "name": "*",
             "module": "src/components/molecules/ui-voice-button.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "module": "src/components/molecules/ui-voice-pill.js"
           }
         },
         {
@@ -1377,6 +1393,85 @@
           "declaration": {
             "name": "UiTypingDot",
             "module": "src/components/atoms/ui-typing-dot.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-voice-waveform.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A specialized version of ui-live-waveform that automatically consumes\nstate from a nearby ui-speech-provider.",
+          "name": "UiVoiceWaveform",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "barWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "2"
+            },
+            {
+              "kind": "field",
+              "name": "barGap",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "barColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "'currentColor'"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "20"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-voice-waveform",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiVoiceWaveform",
+          "declaration": {
+            "name": "UiVoiceWaveform",
+            "module": "src/components/atoms/ui-voice-waveform.ts"
           }
         }
       ]
@@ -3025,9 +3120,17 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A native Lit WebComponent replacement for the ElevenLabs React voice-button.",
+          "description": "A native Lit WebComponent replacement for the ElevenLabs React voice-button.\nNow refactored to consume speechContext but maintains backward compatibility\nfor manual state control.",
           "name": "UiVoiceButton",
           "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
             {
               "kind": "field",
               "name": "state",
@@ -3363,6 +3466,107 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/molecules/ui-voice-pill.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A composite \"Pill\" style voice interaction component.\nIt combines the recording button, a live waveform, and a cancel button\ninto a single cohesive UI element.",
+          "name": "UiVoicePill",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_showFeedback",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_feedbackType",
+              "type": {
+                "text": "'success' | 'error' | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_feedbackTimeout",
+              "type": {
+                "text": "ReturnType<typeof setTimeout> | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } .pill { display: flex; align-items: center; background: var(--md-sys-color-surface-container-highest, #e6e0e9); border-radius: 100px; padding: 4px; gap: 8px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; } .label { padding-left: 12px; font-family: inherit; font-weight: 500; color: var(--md-sys-color-on-surface, #1d1b20); white-space: nowrap; } .waveform-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .active .waveform-container { width: 80px; } .feedback-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--md-sys-color-surface-container-highest); border-radius: inherit; animation: fadeIn 0.3s ease forwards; pointer-events: none; z-index: 2; } .feedback-overlay.success md-icon { color: var(--md-sys-color-primary, #0066cc); } .feedback-overlay.error md-icon { color: var(--md-sys-color-error, #ba1a1a); } @keyframes fadeIn { from { opacity: 0; } to { opacity: 0.9; } } `"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-voice-pill",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiVoicePill",
+          "declaration": {
+            "name": "UiVoicePill",
+            "module": "src/components/molecules/ui-voice-pill.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/molecules/ui-waveform.ts",
       "declarations": [
         {
@@ -3516,51 +3720,6 @@
           "declaration": {
             "name": "UiWaveform",
             "module": "src/components/molecules/ui-waveform.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]
@@ -4041,6 +4200,51 @@
           "declaration": {
             "name": "UiSpeechProvider",
             "module": "src/components/providers/ui-speech-provider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]
