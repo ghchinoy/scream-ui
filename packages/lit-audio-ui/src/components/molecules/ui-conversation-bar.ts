@@ -15,14 +15,14 @@ import '@material/web/divider/divider.js';
 
 /**
  * MOLECULE: Conversation Bar
- * A specialized interaction bar for AI conversations. 
+ * A specialized interaction bar for AI conversations.
  * Combines mic selection, live visualization, and text input.
- * 
+ *
  * @element ui-conversation-bar
- * 
+ *
  * @prop {string} agentId - (Optional) ID of the AI agent.
  * @prop {boolean} simulation - Enable mock transcription for demos.
- * 
+ *
  * @fires message-sent - Dispatched when a text message is sent. detail: { message }
  * @fires state-change - Dispatched when the conversation state changes.
  */
@@ -119,7 +119,10 @@ export class UiConversationBar extends LitElement {
 
   render() {
     return html`
-      <ui-speech-provider .simulation=${this.simulation} .state=${this._isMuted ? 'idle' : 'idle'}>
+      <ui-speech-provider
+        .simulation=${this.simulation}
+        .state=${this._isMuted ? 'idle' : 'idle'}
+      >
         <div class="container">
           <!-- Text Input Area (Expands upwards) -->
           <div class="input-area ${this._keyboardOpen ? 'open' : ''}">
@@ -129,7 +132,8 @@ export class UiConversationBar extends LitElement {
                 rows="2"
                 placeholder="Type a message..."
                 .value=${this._textInput}
-                @input=${(e: Event) => (this._textInput = (e.target as any).value)}
+                @input=${(e: Event) =>
+                  (this._textInput = (e.target as any).value)}
                 @keydown=${this._handleKeyDown}
               ></md-outlined-text-field>
               <md-filled-tonal-button
@@ -147,23 +151,26 @@ export class UiConversationBar extends LitElement {
             <div class="visualizer-section">
               <ui-mic-selector
                 .muted=${this._isMuted}
-                @mute-change=${(e: CustomEvent) => (this._isMuted = e.detail.muted)}
+                @mute-change=${(e: CustomEvent) =>
+                  (this._isMuted = e.detail.muted)}
               ></ui-mic-selector>
-              
+
               <div class="waveform-wrapper">
                 <ui-voice-waveform .height=${20}></ui-voice-waveform>
               </div>
             </div>
 
             <div class="controls">
-              <md-icon-button 
+              <md-icon-button
                 class="keyboard-toggle ${this._keyboardOpen ? 'active' : ''}"
                 @click=${() => (this._keyboardOpen = !this._keyboardOpen)}
                 aria-label="Toggle keyboard"
               >
-                <md-icon>${this._keyboardOpen ? 'keyboard_hide' : 'keyboard'}</md-icon>
+                <md-icon
+                  >${this._keyboardOpen ? 'keyboard_hide' : 'keyboard'}</md-icon
+                >
               </md-icon-button>
-              
+
               <md-icon-button
                 @click=${this._handleCallToggle}
                 aria-label="Toggle voice call"
