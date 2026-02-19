@@ -183,6 +183,10 @@ button, input, select, textarea {
   box-sizing: border-box;
 }
 
+html.dark .waveform-container {
+  background: var(--md-sys-color-surface-container);
+}
+
 .theme-toggle-btn {
   position: fixed;
   top: 1rem;

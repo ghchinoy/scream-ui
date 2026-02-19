@@ -246,7 +246,7 @@ export class UiScrollingWaveform extends LitElement {
           const y = centerY - barHeight / 2;
 
           ctx.fillStyle = computedBarColor;
-          ctx.globalAlpha = 0.3 + bar.height * 0.7; // Taller bars are more opaque
+          ctx.globalAlpha = 0.6 + bar.height * 0.4; // Increased base opacity for dark mode
 
           if (this.barRadius > 0) {
             ctx.beginPath();

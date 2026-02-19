@@ -131,7 +131,7 @@ export class UiWaveform extends LitElement {
       const y = centerY - dynamicHeight / 2;
 
       ctx.fillStyle = computedBarColor;
-      ctx.globalAlpha = 0.3 + value * 0.7;
+      ctx.globalAlpha = 0.6 + value * 0.4;
 
       if (this.barRadius > 0) {
         ctx.beginPath();

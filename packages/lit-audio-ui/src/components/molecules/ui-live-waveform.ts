@@ -228,7 +228,8 @@ export class UiLiveWaveform extends LitElement {
       const dynamicHeight = Math.max(this.barHeight, value * rect.height * 0.8);
       const y = centerY - dynamicHeight / 2;
       ctx.fillStyle = computedBarColor;
-      ctx.globalAlpha = 0.4 + value * 0.6;
+      // Increased base opacity from 0.4 to 0.6 for better dark mode visibility
+      ctx.globalAlpha = 0.6 + value * 0.4;
       if (this.barRadius > 0) {
         ctx.beginPath();
         ctx.roundRect(x, y, this.barWidth, dynamicHeight, this.barRadius);
