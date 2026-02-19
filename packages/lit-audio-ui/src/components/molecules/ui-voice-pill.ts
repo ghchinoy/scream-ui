@@ -16,7 +16,7 @@ import '@material/web/icon/icon.js';
  * A composite "Pill" style voice interaction component.
  * It combines the recording button, a live waveform, and a cancel button
  * into a single cohesive UI element.
- * 
+ *
  * @element ui-voice-pill
  */
 @customElement('ui-voice-pill')
@@ -80,8 +80,12 @@ export class UiVoicePill extends LitElement {
       color: var(--md-sys-color-error, #ba1a1a);
     }
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 0.9; }
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 0.9;
+      }
     }
   `;
 
@@ -97,9 +101,12 @@ export class UiVoicePill extends LitElement {
           this._showFeedback = false;
           this._feedbackType = null;
           // After feedback, we return to idle if not manually overridden
-          if (this._context?.state === 'success' || this._context?.state === 'error') {
-             // Provider should handle transition back to idle, but we can nudge it
-             // or just wait for it. ui-speech-provider simulation does this.
+          if (
+            this._context?.state === 'success' ||
+            this._context?.state === 'error'
+          ) {
+            // Provider should handle transition back to idle, but we can nudge it
+            // or just wait for it. ui-speech-provider simulation does this.
           }
         }, 1500);
       }
@@ -110,25 +117,35 @@ export class UiVoicePill extends LitElement {
     if (!this._context) return html``;
 
     const state = this._context.state;
-    const isActive = state === 'recording' || state === 'processing' || state === 'connecting';
+    const isActive =
+      state === 'recording' || state === 'processing' || state === 'connecting';
 
     return html`
       <div class="pill ${isActive ? 'active' : ''}">
-        ${this.label && !isActive ? html`<span class="label">${this.label}</span>` : ''}
-        
+        ${this.label && !isActive
+          ? html`<span class="label">${this.label}</span>`
+          : ''}
+
         <div class="waveform-container">
           <ui-voice-waveform .height=${24}></ui-voice-waveform>
         </div>
 
-        <ui-speech-record-button size="sm" ?disabled=${this.disabled}></ui-speech-record-button>
+        <ui-speech-record-button
+          size="sm"
+          ?disabled=${this.disabled}
+        ></ui-speech-record-button>
         <ui-speech-cancel-button></ui-speech-cancel-button>
 
         ${this._showFeedback
           ? html`
-            <div class="feedback-overlay ${this._feedbackType}">
-              <md-icon>${this._feedbackType === 'success' ? 'check' : 'close'}</md-icon>
-            </div>
-          `
+              <div class="feedback-overlay ${this._feedbackType}">
+                <md-icon
+                  >${this._feedbackType === 'success'
+                    ? 'check'
+                    : 'close'}</md-icon
+                >
+              </div>
+            `
           : ''}
       </div>
     `;

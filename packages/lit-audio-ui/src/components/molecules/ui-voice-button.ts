@@ -50,7 +50,7 @@ export class UiVoiceButton extends LitElement {
       align-items: center;
       justify-content: center;
       /* Dynamic gap based on state to ensure perfect centering */
-      gap: 0; 
+      gap: 0;
       min-width: 100%;
       transition: gap 0.3s ease;
     }
@@ -64,7 +64,10 @@ export class UiVoiceButton extends LitElement {
       min-width: 140px;
     }
     md-filled-button.recording {
-      --md-filled-button-container-color: var(--ui-speech-record-color, #ffdad6);
+      --md-filled-button-container-color: var(
+        --ui-speech-record-color,
+        #ffdad6
+      );
       --md-filled-button-label-text-color: #410002;
     }
     .waveform-slot {
@@ -97,8 +100,12 @@ export class UiVoiceButton extends LitElement {
       pointer-events: none;
     }
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 0.9; }
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 0.9;
+      }
     }
   `;
 
@@ -116,7 +123,10 @@ export class UiVoiceButton extends LitElement {
         this._feedbackTimeout = setTimeout(() => {
           this._showFeedback = false;
           this._feedbackType = null;
-          if (!this._context && (this.state === 'success' || this.state === 'error')) {
+          if (
+            !this._context &&
+            (this.state === 'success' || this.state === 'error')
+          ) {
             this.state = 'idle';
           }
         }, 1500);
@@ -127,7 +137,8 @@ export class UiVoiceButton extends LitElement {
   override render() {
     const effectiveState = this._context?.state || this.state;
     const isRecording = effectiveState === 'recording';
-    const isProcessing = effectiveState === 'processing' || effectiveState === 'connecting';
+    const isProcessing =
+      effectiveState === 'processing' || effectiveState === 'connecting';
     const isActive = isRecording || isProcessing;
     const isDisabled = this.disabled || isProcessing;
 
@@ -170,10 +181,14 @@ export class UiVoiceButton extends LitElement {
               : ''}
           </div>
           ${this._showFeedback && this._feedbackType === 'success'
-            ? html`<div class="feedback-overlay success"><md-icon>check</md-icon></div>`
+            ? html`<div class="feedback-overlay success">
+                <md-icon>check</md-icon>
+              </div>`
             : ''}
           ${this._showFeedback && this._feedbackType === 'error'
-            ? html`<div class="feedback-overlay error"><md-icon>close</md-icon></div>`
+            ? html`<div class="feedback-overlay error">
+                <md-icon>close</md-icon>
+              </div>`
             : ''}
         </div>
       </md-filled-button>
@@ -198,4 +213,3 @@ export class UiVoiceButton extends LitElement {
     );
   }
 }
-

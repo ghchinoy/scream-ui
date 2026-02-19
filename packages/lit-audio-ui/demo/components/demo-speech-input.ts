@@ -174,9 +174,9 @@ export class DemoSpeechInput extends LitElement {
                 >
                 <div
                   class="pulse"
-                  style="opacity: ${isRecording ? '1' : '0'}; transform: ${isRecording
-                    ? 'scale(1)'
-                    : 'scale(0)'}"
+                  style="opacity: ${isRecording
+                    ? '1'
+                    : '0'}; transform: ${isRecording ? 'scale(1)' : 'scale(0)'}"
                 ></div>
               </button>
 

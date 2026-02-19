@@ -3198,7 +3198,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: inline-block; --ui-waveform-height: 24px; --ui-waveform-width: 96px; } .wrapper { display: flex; align-items: center; justify-content: center; /* Dynamic gap based on state to ensure perfect centering */ gap: 0; min-width: 100%; transition: gap 0.3s ease; } .wrapper.active { gap: 12px; } md-filled-button, md-outlined-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; min-width: 140px; } md-filled-button.recording { --md-filled-button-container-color: var(--ui-speech-record-color, #ffdad6); --md-filled-button-label-text-color: #410002; } .waveform-slot { position: relative; width: 0; height: var(--ui-waveform-height); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; opacity: 0; } .waveform-slot.active { width: var(--ui-waveform-width); opacity: 1; } .feedback-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: inherit; border-radius: inherit; animation: fadeIn 0.3s ease forwards; pointer-events: none; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 0.9; } } `"
+              "default": "css` :host { display: inline-block; --ui-waveform-height: 24px; --ui-waveform-width: 96px; } .wrapper { display: flex; align-items: center; justify-content: center; /* Dynamic gap based on state to ensure perfect centering */ gap: 0; min-width: 100%; transition: gap 0.3s ease; } .wrapper.active { gap: 12px; } md-filled-button, md-outlined-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; min-width: 140px; } md-filled-button.recording { --md-filled-button-container-color: var( --ui-speech-record-color, #ffdad6 ); --md-filled-button-label-text-color: #410002; } .waveform-slot { position: relative; width: 0; height: var(--ui-waveform-height); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; opacity: 0; } .waveform-slot.active { width: var(--ui-waveform-width); opacity: 1; } .feedback-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: inherit; border-radius: inherit; animation: fadeIn 0.3s ease forwards; pointer-events: none; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 0.9; } } `"
             },
             {
               "kind": "method",
@@ -3726,6 +3726,51 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/providers/ui-audio-provider.ts",
       "declarations": [
         {
@@ -4200,51 +4245,6 @@
           "declaration": {
             "name": "UiSpeechProvider",
             "module": "src/components/providers/ui-speech-provider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]

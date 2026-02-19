@@ -44,9 +44,22 @@ export class UiLiveWaveform extends LitElement {
   private _lastActiveData: number[] = [];
 
   static override styles = css`
-    :host { display: block; width: 100%; }
-    .container { position: relative; width: 100%; }
-    canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; }
+    :host {
+      display: block;
+      width: 100%;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
   `;
 
   override render() {
@@ -58,9 +71,13 @@ export class UiLiveWaveform extends LitElement {
   }
 
   protected override firstUpdated() {
-    this._resizeObserver = new ResizeObserver(() => { this._handleResize(); });
+    this._resizeObserver = new ResizeObserver(() => {
+      this._handleResize();
+    });
     this._resizeObserver.observe(this._container);
-    this._themeObserver = new MutationObserver(() => { this._renderFrame(); });
+    this._themeObserver = new MutationObserver(() => {
+      this._renderFrame();
+    });
     this._themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class', 'style'],
@@ -73,7 +90,11 @@ export class UiLiveWaveform extends LitElement {
     if (changedProperties.has('analyserNode') && this.analyserNode) {
       this._dataArray = new Uint8Array(this.analyserNode.frequencyBinCount);
     }
-    if (changedProperties.has('processing') && this.processing && !this.active) {
+    if (
+      changedProperties.has('processing') &&
+      this.processing &&
+      !this.active
+    ) {
       this._processingTime = 0;
       this._transitionProgress = 0;
     }
@@ -116,7 +137,10 @@ export class UiLiveWaveform extends LitElement {
     if (this.active && this.analyserNode && this._dataArray) {
       if (timestamp - this._lastUpdateTime > this.updateRate) {
         this._lastUpdateTime = timestamp;
-        const frequencies = getNormalizedFrequencyData(this.analyserNode, this._dataArray as any);
+        const frequencies = getNormalizedFrequencyData(
+          this.analyserNode,
+          this._dataArray as any,
+        );
         const startFreq = Math.floor(frequencies.length * 0.05);
         const endFreq = Math.floor(frequencies.length * 0.4);
         const relevantData = frequencies.slice(startFreq, endFreq);
@@ -145,16 +169,21 @@ export class UiLiveWaveform extends LitElement {
       for (let i = 0; i < barCount; i++) {
         const normalizedPosition = (i - halfCount) / halfCount;
         const centerWeight = 1 - Math.abs(normalizedPosition) * 0.4;
-        const wave1 = Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
-        const wave2 = Math.sin(this._processingTime * 0.8 - normalizedPosition * 2) * 0.2;
-        const wave3 = Math.cos(this._processingTime * 2 + normalizedPosition) * 0.15;
+        const wave1 =
+          Math.sin(this._processingTime * 1.5 + normalizedPosition * 3) * 0.25;
+        const wave2 =
+          Math.sin(this._processingTime * 0.8 - normalizedPosition * 2) * 0.2;
+        const wave3 =
+          Math.cos(this._processingTime * 2 + normalizedPosition) * 0.15;
         const combinedWave = wave1 + wave2 + wave3;
         const processingValue = (0.2 + combinedWave) * centerWeight;
         let finalValue = processingValue;
         if (this._lastActiveData.length > 0 && this._transitionProgress < 1) {
           const lastDataIndex = Math.min(i, this._lastActiveData.length - 1);
           const lastValue = this._lastActiveData[lastDataIndex] || 0;
-          finalValue = lastValue * (1 - this._transitionProgress) + processingValue * this._transitionProgress;
+          finalValue =
+            lastValue * (1 - this._transitionProgress) +
+            processingValue * this._transitionProgress;
         }
         processingData[i] = Math.max(0.05, Math.min(1, finalValue));
       }
@@ -187,7 +216,8 @@ export class UiLiveWaveform extends LitElement {
       }
     }
     if (computedBarColor === 'currentColor' || !computedBarColor) {
-      computedBarColor = styles.getPropertyValue('--md-sys-color-primary').trim() || '#0066cc';
+      computedBarColor =
+        styles.getPropertyValue('--md-sys-color-primary').trim() || '#0066cc';
     }
     const step = this.barWidth + this.barGap;
     const barCount = Math.floor(rect.width / step);
@@ -207,7 +237,9 @@ export class UiLiveWaveform extends LitElement {
         ctx.fillRect(x, y, this.barWidth, dynamicHeight);
       }
     }
-    if (this.fadeEdges) { applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth); }
+    if (this.fadeEdges) {
+      applyCanvasEdgeFade(ctx!, rect.width, rect.height, this.fadeWidth);
+    }
     ctx.globalAlpha = 1;
   }
 }

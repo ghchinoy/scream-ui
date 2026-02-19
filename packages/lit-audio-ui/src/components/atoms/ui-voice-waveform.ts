@@ -11,7 +11,7 @@ import '../molecules/ui-live-waveform.js';
 /**
  * A specialized version of ui-live-waveform that automatically consumes
  * state from a nearby ui-speech-provider.
- * 
+ *
  * @element ui-voice-waveform
  */
 @customElement('ui-voice-waveform')
@@ -35,7 +35,9 @@ export class UiVoiceWaveform extends LitElement {
     if (!this._context) return html``;
 
     const isRecording = this._context.state === 'recording';
-    const isProcessing = this._context.state === 'processing' || this._context.state === 'connecting';
+    const isProcessing =
+      this._context.state === 'processing' ||
+      this._context.state === 'connecting';
     const isActive = isRecording || isProcessing;
 
     if (!isActive) return html``;
