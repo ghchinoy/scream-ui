@@ -73,6 +73,26 @@ export class DemoLiveConnection extends LitElement {
       width: 200px;
       height: 200px;
     }
+    .info-card {
+      background: var(--md-sys-color-surface-container-low, #f8f9fa);
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 400px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--md-sys-color-on-surface-variant, #49454f);
+      border: 1px solid var(--md-sys-color-outline-variant, #cac4d0);
+    }
+    .info-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      color: var(--md-sys-color-on-surface, #1d1b20);
+    }
+    .info-card p {
+      margin: 0;
+    }
   `;
 
   connectedCallback() {
@@ -303,6 +323,11 @@ export class DemoLiveConnection extends LitElement {
           ></ui-voice-button>
           
         </ui-speech-provider>
+      </div>
+
+      <div class="info-card">
+        <h3>ℹ️ Tap-to-Talk Mock</h3>
+        <p>This sample uses a <b>local mock server</b> without Voice Activity Detection (VAD). You must tap the button to start speaking, and <b>tap it again to stop</b>. The server will only reply with the Gemini TTS stream after receiving the stop signal.</p>
       </div>
     `;
   }
