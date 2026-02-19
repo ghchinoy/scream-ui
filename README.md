@@ -25,6 +25,7 @@ This repository is a monorepo containing the core component library and its deve
 
 -   **[Live Demo & Component Gallery](https://ghchinoy.github.io/scream-ui/)**
 -   **[Atomic Design Primer](docs/research/atomic-design/PRIMER_AND_ANALYSIS.md)** (Local)
+-   **[Framework Integration Guide](packages/lit-audio-ui/FRAMEWORKS.md)** (React, Vue, Svelte)
 -   **[Agent Integration Protocol](packages/lit-audio-ui/AGENT_SKILL.md)**
 
 ## 🛠 Getting Started
