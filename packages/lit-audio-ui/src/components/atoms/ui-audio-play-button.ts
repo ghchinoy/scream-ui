@@ -70,10 +70,12 @@ export class UiAudioPlayButton extends LitElement {
   render() {
     const isPlaying = this.playerState?.isPlaying ?? false;
     const isBuffering = this.playerState?.isBuffering ?? false;
+    const ariaLabel = isPlaying ? 'Pause audio' : 'Play audio';
 
     return html`
       <md-filled-icon-button
         part="button"
+        aria-label="${ariaLabel}"
         @click="${this._handleClick}"
         ?disabled="${!this.playerState?.src}"
       >

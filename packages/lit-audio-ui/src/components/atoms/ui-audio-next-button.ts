@@ -51,6 +51,7 @@ export class UiAudioNextButton extends LitElement {
 
     return html`
       <md-icon-button
+        aria-label="Next track"
         ?disabled=${!hasNext}
         @click=${() => this.playerState?.next()}
       >

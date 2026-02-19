@@ -48,7 +48,7 @@ export class UiSpeechCancelButton extends LitElement {
     }
 
     return html`
-      <md-icon-button @click=${this._handleClick}>
+      <md-icon-button aria-label="Cancel recording" @click=${this._handleClick}>
         <md-icon>close</md-icon>
       </md-icon-button>
     `;

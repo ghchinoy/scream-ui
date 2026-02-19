@@ -71,9 +71,16 @@ export class UiSpeechRecordButton extends LitElement {
     if (state === 'success') icon = 'check';
     if (state === 'error') icon = 'error';
 
+    let ariaLabel = 'Start recording';
+    if (isRecording) ariaLabel = 'Stop recording';
+    if (isProcessing) ariaLabel = 'Processing speech';
+    if (state === 'success') ariaLabel = 'Recording successful';
+    if (state === 'error') ariaLabel = 'Recording failed';
+
     return html`
       <md-filled-icon-button
         class="${state}"
+        aria-label="${ariaLabel}"
         ?disabled=${isProcessing || !this._context}
         @click=${this._handleClick}
       >

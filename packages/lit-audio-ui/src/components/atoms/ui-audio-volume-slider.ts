@@ -47,12 +47,19 @@ export class UiAudioVolumeSlider extends LitElement {
     if (muted || volume === 0) icon = 'volume_off';
     else if (volume < 0.5) icon = 'volume_down';
 
+    const muteAriaLabel = muted ? 'Unmute audio' : 'Mute audio';
+
     return html`
-      <md-icon-button @click="${this._toggleMute}" part="button">
+      <md-icon-button
+        @click="${this._toggleMute}"
+        part="button"
+        aria-label="${muteAriaLabel}"
+      >
         <md-icon>${icon}</md-icon>
       </md-icon-button>
       <md-slider
         part="slider"
+        aria-label="Volume"
         min="0"
         max="1"
         value="${muted ? 0 : volume}"

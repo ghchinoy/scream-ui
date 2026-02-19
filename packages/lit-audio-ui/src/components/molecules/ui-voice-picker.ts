@@ -308,6 +308,8 @@ export class UiVoicePicker extends LitElement {
         class="anchor-button"
         part="button"
         id="voice-anchor"
+        aria-label="Select a voice persona"
+        aria-haspopup="menu"
         @click=${this._toggleMenu}
       >
         <div class="trigger-content">
@@ -353,6 +355,7 @@ export class UiVoicePicker extends LitElement {
         id="voice-menu"
         anchor="voice-anchor"
         positioning="popover"
+        aria-label="Voices"
         @closed=${this._handleMenuClosed}
       >
         <!-- The click.stop modifier stops the menu from closing when searching -->
@@ -362,6 +365,7 @@ export class UiVoicePicker extends LitElement {
         >
           <md-outlined-text-field
             placeholder="Search voices..."
+            aria-label="Search available voices"
             .value=${this._searchQuery}
             @input=${(e: Event) =>
               (this._searchQuery = (e.target as HTMLInputElement).value)}
@@ -382,6 +386,8 @@ export class UiVoicePicker extends LitElement {
                     <!-- Avatar / Preview Button -->
                     <div
                       class="voice-avatar"
+                      aria-label="Preview ${voice[this.titleKey]} voice"
+                      role="button"
                       @click=${(e: Event) => this._togglePreview(e, voice)}
                     >
                       ${this.useOrbs

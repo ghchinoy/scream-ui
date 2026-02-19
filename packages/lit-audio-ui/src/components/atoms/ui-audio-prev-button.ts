@@ -50,6 +50,7 @@ export class UiAudioPrevButton extends LitElement {
 
     return html`
       <md-icon-button
+        aria-label="Previous track"
         ?disabled=${!hasPrev}
         @click=${() => this.playerState?.previous()}
       >

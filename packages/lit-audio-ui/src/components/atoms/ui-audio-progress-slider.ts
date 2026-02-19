@@ -43,6 +43,7 @@ export class UiAudioProgressSlider extends LitElement {
 
     return html`
       <md-slider
+        aria-label="Playback progress"
         min="0"
         max="${duration || 100}"
         value="${currentValue}"

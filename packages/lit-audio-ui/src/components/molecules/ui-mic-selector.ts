@@ -218,6 +218,9 @@ export class UiMicSelector extends LitElement {
       <button
         id="anchor-button"
         class="anchor-button"
+        aria-label="Select audio input"
+        aria-haspopup="menu"
+        aria-expanded=${this._isMenuOpen}
         ?disabled=${this._loading || this.disabled}
         @click=${this._toggleMenu}
       >
@@ -231,6 +234,7 @@ export class UiMicSelector extends LitElement {
         id="device-menu"
         anchor="anchor-button"
         positioning="popover"
+        aria-label="Audio input devices"
         @closed=${() => (this._isMenuOpen = false)}
         @opened=${() => (this._isMenuOpen = true)}
       >
@@ -265,7 +269,12 @@ export class UiMicSelector extends LitElement {
           ? html`
               <md-divider></md-divider>
               <div class="menu-footer">
-                <md-text-button @click=${this._toggleMute}>
+                <md-text-button
+                  @click=${this._toggleMute}
+                  aria-label="${this.muted
+                    ? 'Unmute microphone'
+                    : 'Mute microphone'}"
+                >
                   <md-icon slot="icon"
                     >${this.muted ? 'mic_off' : 'mic'}</md-icon
                   >
