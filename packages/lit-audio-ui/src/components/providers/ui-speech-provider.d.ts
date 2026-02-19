@@ -31,6 +31,7 @@ export declare class UiSpeechProvider extends LitElement {
     manual: boolean;
     transcript: string;
     partialTranscript: string;
+    deviceId?: string;
     private _stream?;
     private _audioCtx?;
     private _analyser?;

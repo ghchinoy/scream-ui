@@ -95,7 +95,13 @@ let UiSpeechProvider = class UiSpeechProvider extends LitElement {
                 this._analyser = createMockAnalyser();
             }
             else {
-                this._stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const constraints = { audio: true };
+                if (this.deviceId) {
+                    constraints.audio = {
+                        deviceId: { exact: this.deviceId },
+                    };
+                }
+                this._stream = await navigator.mediaDevices.getUserMedia(constraints);
                 // Set up audio analysis for visualizers
                 if (!this._audioCtx) {
                     this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -234,6 +240,9 @@ __decorate([
 __decorate([
     property({ type: String })
 ], UiSpeechProvider.prototype, "partialTranscript", void 0);
+__decorate([
+    property({ type: String })
+], UiSpeechProvider.prototype, "deviceId", void 0);
 UiSpeechProvider = __decorate([
     customElement('ui-speech-provider')
 ], UiSpeechProvider);

@@ -17,14 +17,17 @@ import { LitElement } from 'lit';
 import '@ghchinoy/lit-audio-ui/providers/ui-speech-provider.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-voice-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-voice-pill.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-mic-selector.js';
 import '@ghchinoy/lit-audio-ui/atoms/ui-speech-record-button.js';
 import '@ghchinoy/lit-audio-ui/atoms/ui-speech-cancel-button.js';
 export declare class DemoSpeechInput extends LitElement {
     private _state;
     private _transcript;
+    private _selectedDeviceId?;
     private _transcriptInterval;
     private _fakeTranscript;
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
     private _toggleRecord;
+    private _handleDeviceChange;
 }
