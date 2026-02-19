@@ -24,7 +24,7 @@ export class DemoSmartTextarea extends LitElement {
   static styles = css`
     :host {
       display: block;
-      max-width: 500px;
+      width: 100%;
       margin: 0 auto;
     }
     .textarea-container {

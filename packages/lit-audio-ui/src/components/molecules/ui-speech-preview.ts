@@ -15,15 +15,16 @@ export class UiSpeechPreview extends LitElement {
     :host {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--ui-speech-preview-gap, 8px);
       font-family: inherit;
-      min-width: 120px;
+      min-width: 0;
+      color: var(--md-sys-color-primary);
     }
 
     .transcript {
       font-size: var(--ui-speech-preview-font-size, 14px);
       font-family: var(--ui-speech-preview-font-family, inherit);
-      color: var(--md-sys-color-on-surface, #1e1e1e);
+      color: var(--md-sys-color-on-surface);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -31,12 +32,13 @@ export class UiSpeechPreview extends LitElement {
     }
 
     .placeholder {
-      color: var(--md-sys-color-outline, #79747e);
+      color: var(--md-sys-color-on-surface-variant);
+      opacity: 0.7;
       font-style: italic;
     }
 
     .waveform-container {
-      width: 48px;
+      width: 32px;
       height: 24px;
       display: flex;
       align-items: center;
@@ -50,7 +52,7 @@ export class UiSpeechPreview extends LitElement {
       width: 0;
       opacity: 0;
       pointer-events: none;
-      margin-left: -12px;
+      margin-left: -8px;
     }
   `;
 

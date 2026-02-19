@@ -3349,7 +3349,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: inline-flex; align-items: center; gap: 12px; font-family: inherit; min-width: 120px; } .transcript { font-size: var(--ui-speech-preview-font-size, 14px); font-family: var(--ui-speech-preview-font-family, inherit); color: var(--md-sys-color-on-surface, #1e1e1e); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; } .placeholder { color: var(--md-sys-color-outline, #79747e); font-style: italic; } .waveform-container { width: 48px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; border-radius: 4px; transition: all 0.3s ease; } .hidden { width: 0; opacity: 0; pointer-events: none; margin-left: -12px; } `"
+              "default": "css` :host { display: inline-flex; align-items: center; gap: var(--ui-speech-preview-gap, 8px); font-family: inherit; min-width: 0; color: var(--md-sys-color-primary); } .transcript { font-size: var(--ui-speech-preview-font-size, 14px); font-family: var(--ui-speech-preview-font-family, inherit); color: var(--md-sys-color-on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; } .placeholder { color: var(--md-sys-color-on-surface-variant); opacity: 0.7; font-style: italic; } .waveform-container { width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; border-radius: 4px; transition: all 0.3s ease; } .hidden { width: 0; opacity: 0; pointer-events: none; margin-left: -8px; } `"
             },
             {
               "kind": "method",
@@ -4025,6 +4025,51 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/providers/ui-audio-provider.ts",
       "declarations": [
         {
@@ -4499,51 +4544,6 @@
           "declaration": {
             "name": "UiSpeechProvider",
             "module": "src/components/providers/ui-speech-provider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]
