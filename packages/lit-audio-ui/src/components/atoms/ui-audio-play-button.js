@@ -1,0 +1,114 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { consume } from '@lit/context';
+import { audioPlayerContext, } from '../../utils/audio-context.js';
+import '@material/web/iconbutton/filled-icon-button.js';
+import '@material/web/progress/circular-progress.js';
+import '@material/web/icon/icon.js';
+let UiAudioPlayButton = class UiAudioPlayButton extends LitElement {
+    static { this.styles = css `
+    :host {
+      display: inline-flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+
+    md-filled-icon-button {
+      --md-filled-icon-button-container-color: var(
+        --md-sys-color-primary,
+        #0066cc
+      );
+      --md-filled-icon-button-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-hover-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-focus-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-pressed-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+
+      --md-filled-icon-button-toggle-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      --md-filled-icon-button-selected-container-color: var(
+        --md-sys-color-primary,
+        #0066cc
+      );
+      --md-filled-icon-button-selected-icon-color: var(
+        --md-sys-color-on-primary,
+        #ffffff
+      );
+      color: var(--md-sys-color-on-primary, #ffffff);
+    }
+
+    md-filled-icon-button.error {
+      --md-filled-icon-button-container-color: var(
+        --ui-audio-error-color,
+        var(--md-sys-color-error, #ba1a1a)
+      );
+      --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff);
+    }
+
+    md-circular-progress {
+      position: absolute;
+      --md-circular-progress-size: 48px;
+    }
+  `; }
+    render() {
+        const isPlaying = this.playerState?.isPlaying ?? false;
+        const isBuffering = this.playerState?.isBuffering ?? false;
+        const hasError = !!this.playerState?.error;
+        const ariaLabel = hasError
+            ? 'Audio error'
+            : isPlaying
+                ? 'Pause audio'
+                : 'Play audio';
+        return html `
+      <md-filled-icon-button
+        part="button"
+        class="${hasError ? 'error' : ''}"
+        aria-label="${ariaLabel}"
+        @click="${this._handleClick}"
+        ?disabled="${!this.playerState?.src}"
+      >
+        <md-icon
+          >${hasError ? 'error' : isPlaying ? 'pause' : 'play_arrow'}</md-icon
+        >
+      </md-filled-icon-button>
+      ${isBuffering && isPlaying && !hasError
+            ? html `<md-circular-progress indeterminate></md-circular-progress>`
+            : ''}
+    `;
+    }
+    _handleClick() {
+        if (this.playerState) {
+            this.playerState.togglePlay();
+        }
+    }
+};
+__decorate([
+    consume({ context: audioPlayerContext, subscribe: true }),
+    property({ attribute: false })
+], UiAudioPlayButton.prototype, "playerState", void 0);
+UiAudioPlayButton = __decorate([
+    customElement('ui-audio-play-button')
+], UiAudioPlayButton);
+export { UiAudioPlayButton };
+//# sourceMappingURL=ui-audio-play-button.js.map

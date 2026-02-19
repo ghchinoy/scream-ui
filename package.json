@@ -2,8 +2,13 @@
   "name": "scream-ui-root",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "samples/*"
   ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "install": "npm install --workspaces --if-present"
+  },
   "dependencies": {
     "@material/web": "^2.4.1",
     "express": "^5.2.1",

@@ -104,6 +104,12 @@ Customize colors, typography, and layout density via standard CSS variables:
 
 While built with Lit, these are standard Web Components. For seamless integration with React (hooks), Vue, or Svelte, see our **[Framework Integration Guide](./FRAMEWORKS.md)**.
 
+## 📚 Samples & Demos
+
+Check out the following resources in the repository:
+*   **[Interactive Gallery](../../samples/gallery)**: Comprehensive showcase of all components.
+*   **[Reference A2UI Agent](../../samples/reference-agent)**: A minimalist implementation for AI agents to follow.
+
 ## Acknowledgements
 
 Deeply inspired by the beautiful, open-source audio components built by **[ElevenLabs](https://elevenlabs.io/)** (`@elevenlabs/ui`). This project reimplement those designs as standard, universal browser APIs.

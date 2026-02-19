@@ -33,13 +33,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run clean && npm run build:lib && npm run build:standalone && npm run build:demo && npm run analyze",
-    "clean": "rimraf dist dist-demo",
+    "build": "npm run clean && npm run build:lib && npm run build:standalone && npm run analyze",
+    "clean": "rimraf dist",
     "analyze": "cem analyze --globs \"src/**/*.ts\" --outdir .",
     "build:lib": "tsc && vite build",
     "build:standalone": "vite build -c vite.standalone.config.ts",
-    "build:demo": "vite build -c vite.demo.config.ts",
-    "preview": "vite preview dist-demo",
+    "preview": "vite preview",
     "lint": "gts lint",
     "fix": "gts fix",
     "prepare": "npm run build:lib"

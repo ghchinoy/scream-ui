@@ -34,11 +34,12 @@ This repository is a monorepo containing the core component library and its deve
 To explore the components locally:
 
 ```bash
-cd packages/lit-audio-ui
 npm install
+npm run build
+cd samples/gallery
 npm run dev
 ```
-Then visit `http://localhost:5173/demo/index.html`.
+Then visit `http://localhost:5173/scream-ui/`.
 
 ---
 
