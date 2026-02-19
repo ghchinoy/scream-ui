@@ -4,6 +4,7 @@ import '../providers/ui-audio-provider.js';
 import '../atoms/ui-audio-play-button.js';
 import '../atoms/ui-audio-progress-slider.js';
 import '../atoms/ui-audio-time-display.js';
+import '../atoms/ui-audio-player-error.js';
 
 export interface AudioPlayerItem {
   id: string | number;
@@ -64,6 +65,9 @@ export class UiAudioPlayer extends LitElement {
           <div class="slider-container">
             <ui-audio-progress-slider></ui-audio-progress-slider>
           </div>
+
+          <!-- Visual Error Indicator -->
+          <ui-audio-player-error></ui-audio-player-error>
         </div>
       </ui-audio-provider>
     `;

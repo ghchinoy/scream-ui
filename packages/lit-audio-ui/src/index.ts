@@ -22,6 +22,7 @@ export * from './components/atoms/ui-audio-next-button.js';
 export * from './components/atoms/ui-audio-prev-button.js';
 export * from './components/atoms/ui-audio-progress-slider.js';
 export * from './components/atoms/ui-audio-time-display.js';
+export * from './components/atoms/ui-audio-player-error.js';
 export * from './components/atoms/ui-audio-volume-slider.js';
 export * from './components/atoms/ui-speech-record-button.js';
 export * from './components/atoms/ui-speech-cancel-button.js';

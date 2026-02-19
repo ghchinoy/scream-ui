@@ -61,6 +61,14 @@ export class UiAudioPlayButton extends LitElement {
       color: var(--md-sys-color-on-primary, #ffffff);
     }
 
+    md-filled-icon-button.error {
+      --md-filled-icon-button-container-color: var(
+        --ui-audio-error-color,
+        var(--md-sys-color-error, #ba1a1a)
+      );
+      --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff);
+    }
+
     md-circular-progress {
       position: absolute;
       --md-circular-progress-size: 48px;
@@ -70,18 +78,26 @@ export class UiAudioPlayButton extends LitElement {
   render() {
     const isPlaying = this.playerState?.isPlaying ?? false;
     const isBuffering = this.playerState?.isBuffering ?? false;
-    const ariaLabel = isPlaying ? 'Pause audio' : 'Play audio';
+    const hasError = !!this.playerState?.error;
+    const ariaLabel = hasError
+      ? 'Audio error'
+      : isPlaying
+        ? 'Pause audio'
+        : 'Play audio';
 
     return html`
       <md-filled-icon-button
         part="button"
+        class="${hasError ? 'error' : ''}"
         aria-label="${ariaLabel}"
         @click="${this._handleClick}"
         ?disabled="${!this.playerState?.src}"
       >
-        <md-icon>${isPlaying ? 'pause' : 'play_arrow'}</md-icon>
+        <md-icon
+          >${hasError ? 'error' : isPlaying ? 'pause' : 'play_arrow'}</md-icon
+        >
       </md-filled-icon-button>
-      ${isBuffering && isPlaying
+      ${isBuffering && isPlaying && !hasError
         ? html`<md-circular-progress indeterminate></md-circular-progress>`
         : ''}
     `;
