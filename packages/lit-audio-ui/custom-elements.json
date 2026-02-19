@@ -687,531 +687,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/providers/ui-audio-provider.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A headless (invisible) WebComponent that manages an internal <audio> tag\nand provides state to any child components via",
-          "name": "UiAudioProvider",
-          "members": [
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "items",
-              "type": {
-                "text": "PlaylistTrack[]"
-              },
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "autoAdvance",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_audioEl",
-              "type": {
-                "text": "HTMLAudioElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_audioContext",
-              "type": {
-                "text": "AudioContext | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_analyserNode",
-              "type": {
-                "text": "AnalyserNode | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_mediaSource",
-              "type": {
-                "text": "MediaElementAudioSourceNode | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_animationFrameId",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "type": {
-                "text": "AudioPlayerState"
-              },
-              "privacy": "public",
-              "default": "{ src: '', isPlaying: false, isBuffering: false, currentTime: 0, duration: 0, volume: 1, muted: false, items: [], currentIndex: -1, autoAdvance: true, analyserNode: undefined, play: () => this.play(), pause: () => this.pause(), togglePlay: () => this._togglePlay(), seek: (time: number) => this._seek(time), setVolume: (volume: number) => this._setVolume(volume), toggleMute: () => this._toggleMute(), next: () => this.next(), previous: () => this.previous(), select: (index: number) => this.select(index), }"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: contents; /* We are completely invisible, just wrapping children */ } audio { display: none; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "willUpdate",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "Map<string, any>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "Map<string, any>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_updateState",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "updates",
-                  "type": {
-                    "text": "Partial<AudioPlayerState>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_setupAudioContext",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "play",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "pause",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "_togglePlay",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_seek",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "time",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_setVolume",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "volume",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_toggleMute",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "next",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "previous",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "select",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_handleLoadedMetadata",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handleEnded",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handlePlaying",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handlePause",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handleError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_startTrackingTime",
-              "privacy": "private"
-            }
-          ],
-          "events": [
-            {
-              "name": "state-change",
-              "type": {
-                "text": "CustomEvent"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioProvider",
-          "declaration": {
-            "name": "UiAudioProvider",
-            "module": "src/components/providers/ui-audio-provider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/providers/ui-speech-provider.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A headless provider component that manages the speech recording lifecycle.\nIt provides a `SpeechContext` to all children components, allowing them to\nreact to recording states and access transcripts.\n\nIt supports three modes:\n1. Auto (Default): Handles getUserMedia and provides a real MediaStream.\n2. Simulation: Provides a mock AnalyserNode and fake transcription for demos.\n3. Manual: Only emits intent events, leaving state management to a backend/agent.",
-          "name": "UiSpeechProvider",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_context",
-              "type": {
-                "text": "SpeechContext"
-              },
-              "privacy": "private",
-              "default": "{ state: 'idle', transcript: '', partialTranscript: '', analyserNode: undefined, start: () => this.start(), stop: () => this.stop(), cancel: () => this.cancel(), }"
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "type": {
-                "text": "string"
-              },
-              "default": "'idle'",
-              "description": "The current recording state ('idle', 'connecting', 'recording', 'processing', 'success', 'error')."
-            },
-            {
-              "kind": "field",
-              "name": "simulation",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Enable mock transcription and audio data for demos."
-            },
-            {
-              "kind": "field",
-              "name": "manual",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "If true, the provider will not start recording automatically but will emit requests."
-            },
-            {
-              "kind": "field",
-              "name": "transcript",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The final confirmed transcript."
-            },
-            {
-              "kind": "field",
-              "name": "partialTranscript",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The live, interim transcript."
-            },
-            {
-              "kind": "field",
-              "name": "_stream",
-              "type": {
-                "text": "MediaStream | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_audioCtx",
-              "type": {
-                "text": "AudioContext | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_analyser",
-              "type": {
-                "text": "AnalyserNode | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_transcriptInterval",
-              "type": {
-                "text": "any | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_fakeTranscript",
-              "type": {
-                "text": "array"
-              },
-              "privacy": "private",
-              "default": "[ 'I', ' am', ' recording', ' a', ' message', ' using', ' atomic', ' components...', ]"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: contents; } `"
-            },
-            {
-              "kind": "method",
-              "name": "willUpdate",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, any>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "start"
-            },
-            {
-              "kind": "method",
-              "name": "stop"
-            },
-            {
-              "kind": "method",
-              "name": "cancel"
-            },
-            {
-              "kind": "method",
-              "name": "_cleanupStream",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_updateContext",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "update",
-                  "type": {
-                    "text": "Partial<SpeechContext>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "speech-request-start",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Dispatched in 'manual' mode when a child wants to start."
-            },
-            {
-              "name": "speech-start",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Dispatched when recording actually begins."
-            },
-            {
-              "name": "speech-request-stop",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Dispatched in 'manual' mode when a child wants to stop."
-            },
-            {
-              "name": "speech-stop",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Dispatched when recording is stopped."
-            },
-            {
-              "name": "speech-cancel",
-              "type": {
-                "text": "CustomEvent"
-              }
-            },
-            {
-              "name": "state-change",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Dispatched whenever the internal context state changes."
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-speech-provider",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiSpeechProvider",
-          "declaration": {
-            "name": "UiSpeechProvider",
-            "module": "src/components/providers/ui-speech-provider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/atoms/ui-audio-next-button.ts",
       "declarations": [
         {
@@ -2142,6 +1617,531 @@
           "declaration": {
             "name": "UiVoiceWaveform",
             "module": "src/components/atoms/ui-voice-waveform.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/providers/ui-audio-provider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A headless (invisible) WebComponent that manages an internal <audio> tag\nand provides state to any child components via",
+          "name": "UiAudioProvider",
+          "members": [
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "items",
+              "type": {
+                "text": "PlaylistTrack[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "autoAdvance",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "_audioEl",
+              "type": {
+                "text": "HTMLAudioElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_audioContext",
+              "type": {
+                "text": "AudioContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_analyserNode",
+              "type": {
+                "text": "AnalyserNode | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_mediaSource",
+              "type": {
+                "text": "MediaElementAudioSourceNode | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_animationFrameId",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "AudioPlayerState"
+              },
+              "privacy": "public",
+              "default": "{ src: '', isPlaying: false, isBuffering: false, currentTime: 0, duration: 0, volume: 1, muted: false, items: [], currentIndex: -1, autoAdvance: true, analyserNode: undefined, play: () => this.play(), pause: () => this.pause(), togglePlay: () => this._togglePlay(), seek: (time: number) => this._seek(time), setVolume: (volume: number) => this._setVolume(volume), toggleMute: () => this._toggleMute(), next: () => this.next(), previous: () => this.previous(), select: (index: number) => this.select(index), }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: contents; /* We are completely invisible, just wrapping children */ } audio { display: none; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "Map<string, any>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "Map<string, any>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_updateState",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "updates",
+                  "type": {
+                    "text": "Partial<AudioPlayerState>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_setupAudioContext",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "play",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "pause",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "_togglePlay",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_seek",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "time",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_setVolume",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "volume",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_toggleMute",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "next",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "previous",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "select",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleLoadedMetadata",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleEnded",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handlePlaying",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handlePause",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_startTrackingTime",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "state-change",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioProvider",
+          "declaration": {
+            "name": "UiAudioProvider",
+            "module": "src/components/providers/ui-audio-provider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/providers/ui-speech-provider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A headless provider component that manages the speech recording lifecycle.\nIt provides a `SpeechContext` to all children components, allowing them to\nreact to recording states and access transcripts.\n\nIt supports three modes:\n1. Auto (Default): Handles getUserMedia and provides a real MediaStream.\n2. Simulation: Provides a mock AnalyserNode and fake transcription for demos.\n3. Manual: Only emits intent events, leaving state management to a backend/agent.",
+          "name": "UiSpeechProvider",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext"
+              },
+              "privacy": "private",
+              "default": "{ state: 'idle', transcript: '', partialTranscript: '', analyserNode: undefined, start: () => this.start(), stop: () => this.stop(), cancel: () => this.cancel(), }"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "string"
+              },
+              "default": "'idle'",
+              "description": "The current recording state ('idle', 'connecting', 'recording', 'processing', 'success', 'error')."
+            },
+            {
+              "kind": "field",
+              "name": "simulation",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Enable mock transcription and audio data for demos."
+            },
+            {
+              "kind": "field",
+              "name": "manual",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "If true, the provider will not start recording automatically but will emit requests."
+            },
+            {
+              "kind": "field",
+              "name": "transcript",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The final confirmed transcript."
+            },
+            {
+              "kind": "field",
+              "name": "partialTranscript",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The live, interim transcript."
+            },
+            {
+              "kind": "field",
+              "name": "_stream",
+              "type": {
+                "text": "MediaStream | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_audioCtx",
+              "type": {
+                "text": "AudioContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_analyser",
+              "type": {
+                "text": "AnalyserNode | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_transcriptInterval",
+              "type": {
+                "text": "any | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_fakeTranscript",
+              "type": {
+                "text": "array"
+              },
+              "privacy": "private",
+              "default": "[ 'I', ' am', ' recording', ' a', ' message', ' using', ' atomic', ' components...', ]"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: contents; } `"
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, any>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "start"
+            },
+            {
+              "kind": "method",
+              "name": "stop"
+            },
+            {
+              "kind": "method",
+              "name": "cancel"
+            },
+            {
+              "kind": "method",
+              "name": "_cleanupStream",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_updateContext",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "update",
+                  "type": {
+                    "text": "Partial<SpeechContext>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "speech-request-start",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched in 'manual' mode when a child wants to start."
+            },
+            {
+              "name": "speech-start",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched when recording actually begins."
+            },
+            {
+              "name": "speech-request-stop",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched in 'manual' mode when a child wants to stop."
+            },
+            {
+              "name": "speech-stop",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched when recording is stopped."
+            },
+            {
+              "name": "speech-cancel",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "state-change",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched whenever the internal context state changes."
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-speech-provider",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiSpeechProvider",
+          "declaration": {
+            "name": "UiSpeechProvider",
+            "module": "src/components/providers/ui-speech-provider.ts"
           }
         }
       ]
