@@ -152,11 +152,11 @@
 
           <ui-showcase-card title="ui-orb" description="3D WebGL agent visualizer with interactive state control.">
             <div class="control-panel" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-              <button id="orb-state-btn" style="padding: 8px 16px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface); cursor: pointer; font-family: inherit; font-size: 13px;">Cycle State: idle</button>
-              <button class="orb-direct-btn" data-state="null" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Idle</button>
-              <button class="orb-direct-btn" data-state="listening" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Listening</button>
-              <button class="orb-direct-btn" data-state="thinking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Thinking</button>
-              <button class="orb-direct-btn" data-state="talking" style="padding: 6px 12px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; font-family: inherit; font-size: 12px;">Talking</button>
+              <md-filled-tonal-button id="orb-state-btn">Cycle State: idle</md-filled-tonal-button>
+              <md-outlined-button class="orb-direct-btn" data-state="null">Idle</md-outlined-button>
+              <md-outlined-button class="orb-direct-btn" data-state="listening">Listening</md-outlined-button>
+              <md-outlined-button class="orb-direct-btn" data-state="thinking">Thinking</md-outlined-button>
+              <md-outlined-button class="orb-direct-btn" data-state="talking">Talking</md-outlined-button>
             </div>
             <div style="width: 200px; height: 200px; margin: 0 auto; background: var(--md-sys-color-surface-container-highest); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
               <ui-orb id="demo-orb"></ui-orb>

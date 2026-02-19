@@ -214,14 +214,18 @@ export class UiOrb extends LitElement {
       const t = u.uTime.value * 2;
       if (this.agentState === null) {
         targetIn = 0;
-        targetOut = 0.3;
+        targetOut = 0.2;
       } else if (this.agentState === 'listening') {
-        targetIn = this._clamp01(0.55 + Math.sin(t * 3.2) * 0.35);
-        targetOut = 0.45;
+        targetIn = this._clamp01(0.45 + Math.sin(t * 2.5) * 0.25);
+        targetOut = 0.35;
       } else if (this.agentState === 'talking') {
-        targetIn = this._clamp01(0.65 + Math.sin(t * 4.8) * 0.22);
-        targetOut = this._clamp01(0.75 + Math.sin(t * 3.6) * 0.22);
+        targetIn = this._clamp01(0.7 + Math.sin(t * 6.5) * 0.25);
+        targetOut = this._clamp01(0.85 + Math.sin(t * 5.5) * 0.15);
+      } else if (this.agentState === 'thinking') {
+        targetIn = this._clamp01(0.55 + Math.sin(t * 4.5) * 0.15);
+        targetOut = this._clamp01(0.6 + Math.sin(t * 3.5) * 0.1);
       } else {
+        // Fallback for any other state
         const base = 0.38 + 0.07 * Math.sin(t * 0.7);
         const wander = 0.05 * Math.sin(t * 2.1) * Math.sin(t * 0.37 + 1.2);
         targetIn = this._clamp01(base + wander);
@@ -232,7 +236,13 @@ export class UiOrb extends LitElement {
     this._curIn += (targetIn - this._curIn) * 0.2;
     this._curOut += (targetOut - this._curOut) * 0.2;
 
-    const targetSpeed = 0.1 + (1 - Math.pow(this._curOut - 1, 2)) * 0.9;
+    // More aggressive speed multiplier for states
+    let baseSpeed = 0.1;
+    if (this.agentState === 'talking') baseSpeed = 0.4;
+    if (this.agentState === 'thinking') baseSpeed = 0.25;
+    if (this.agentState === 'listening') baseSpeed = 0.15;
+
+    const targetSpeed = baseSpeed + (1 - Math.pow(this._curOut - 1, 2)) * 1.2;
     this._animSpeed += (targetSpeed - this._animSpeed) * 0.12;
 
     u.uAnimation.value += delta * this._animSpeed;

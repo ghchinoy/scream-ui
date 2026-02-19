@@ -289,10 +289,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (orbBtn) orbBtn.textContent = `Cycle State: ${state || 'idle'}`;
     directBtns.forEach((btn: any) => {
       const btnState = btn.dataset.state === 'null' ? null : btn.dataset.state;
-      btn.style.background =
-        btnState === state
-          ? 'var(--md-sys-color-primary-container)'
-          : 'var(--md-sys-color-surface)';
+      if (btnState === state) {
+        btn.setAttribute('selected', '');
+      } else {
+        btn.removeAttribute('selected');
+      }
     });
   };
 
