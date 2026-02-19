@@ -43,9 +43,11 @@ export class UiShowcaseCard extends LitElement {
     .content {
       padding: var(--ui-showcase-card-content-padding, 24px);
       display: flex;
+      flex-direction: column;
+      align-items: stretch;
       justify-content: center;
-      align-items: center;
       min-height: 100px;
+      gap: 16px;
     }
   `;
 

@@ -179,6 +179,8 @@ button, input, select, textarea {
   background: var(--md-sys-color-surface-container-highest);
   border-radius: 8px;
   transition: background-color 0.3s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .theme-toggle-btn {
@@ -198,10 +200,4 @@ button, input, select, textarea {
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   z-index: 100;
-}
-
-@media (prefers-color-scheme: dark) {
-  .waveform-container {
-    background: #2a2a2a;
-  }
 }
