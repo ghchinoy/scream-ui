@@ -31,15 +31,27 @@ This repository is a monorepo containing the core component library and its deve
 
 ## 🛠 Getting Started
 
-To explore the components locally:
+This project uses **NPM Workspaces**. Always run installation from the root.
 
+### 1. Initial Setup
 ```bash
-npm install
-npm run build
+npm install    # Run once at the root to link all packages
+npm run build  # Build the library and all samples
+```
+
+### 2. Explore the Gallery
+```bash
 cd samples/gallery
 npm run dev
 ```
-Then visit `http://localhost:5173/scream-ui/`.
+Visit `http://localhost:5173/scream-ui/`
+
+### 3. Try the Reference Agent
+```bash
+cd samples/reference-agent
+npm run dev
+```
+Visit `http://localhost:5173/`
 
 ---
 

@@ -6,8 +6,7 @@
     "samples/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "install": "npm install --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present"
   },
   "dependencies": {
     "@material/web": "^2.4.1",
