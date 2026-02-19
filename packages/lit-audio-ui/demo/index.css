@@ -67,6 +67,14 @@ button, input, select, textarea {
   font-family: inherit;
 }
 
+md-filled-button,
+md-outlined-button,
+md-filled-tonal-button,
+md-text-button,
+md-icon-button {
+  --md-sys-typescale-label-large-font: inherit;
+}
+
 .side-nav {
   display: none;
   width: 200px;
