@@ -17,7 +17,7 @@ export class UiChatItem extends LitElement {
   static override styles = css`
     :host {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: var(--ui-chat-item-margin-bottom, 8px);
       width: 100%;
     }
     .item-wrapper {

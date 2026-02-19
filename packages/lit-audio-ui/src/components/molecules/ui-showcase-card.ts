@@ -21,10 +21,10 @@ export class UiShowcaseCard extends LitElement {
       background: var(--md-sys-color-surface-container-low, #f7f9fc);
       border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
       overflow: hidden;
-      margin-bottom: 24px;
+      margin-bottom: var(--ui-showcase-card-margin-bottom, 24px);
     }
     .header {
-      padding: 16px 20px;
+      padding: var(--ui-showcase-card-header-padding, 16px 20px);
       border-bottom: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
       display: flex;
       justify-content: space-between;
@@ -41,7 +41,7 @@ export class UiShowcaseCard extends LitElement {
       color: var(--md-sys-color-on-surface-variant, #444);
     }
     .content {
-      padding: 24px;
+      padding: var(--ui-showcase-card-content-padding, 24px);
       display: flex;
       justify-content: center;
       align-items: center;

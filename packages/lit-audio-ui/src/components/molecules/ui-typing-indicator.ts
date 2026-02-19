@@ -30,8 +30,8 @@ export class UiTypingIndicator extends LitElement {
     :host {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 8px 12px;
+      gap: var(--ui-typing-indicator-gap, 4px);
+      padding: var(--ui-typing-indicator-padding, 8px 12px);
       background: var(--md-sys-color-surface-container-low);
       border-radius: 12px;
       border-bottom-left-radius: 4px;

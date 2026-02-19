@@ -30,8 +30,8 @@ export class UiAudioPlayer extends LitElement {
     .player-pill {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 12px 24px;
+      gap: var(--ui-audio-player-gap, 16px);
+      padding: var(--ui-audio-player-padding, 12px 24px);
       background: var(--md-sys-color-surface-container-high, #e2e2e2);
       border-radius: 999px; /* Pill shape */
       width: fit-content;

@@ -42,7 +42,7 @@ export class UiChatList extends LitElement {
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      padding: 1rem;
+      padding: var(--ui-chat-list-padding, 1rem);
       box-sizing: border-box;
       scroll-behavior: smooth;
     }

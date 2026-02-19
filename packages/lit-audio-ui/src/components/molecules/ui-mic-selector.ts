@@ -73,8 +73,8 @@ export class UiMicSelector extends LitElement {
     .anchor-button {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+      gap: var(--ui-mic-selector-gap, 8px);
+      padding: var(--ui-mic-selector-padding, 8px 16px);
       background: var(--md-sys-color-surface-container-high, transparent);
       color: var(--md-sys-color-on-surface);
       border-radius: 999px;

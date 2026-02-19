@@ -40,8 +40,8 @@ export class UiVoicePill extends LitElement {
       align-items: center;
       background: var(--md-sys-color-surface-container-highest, #e6e0e9);
       border-radius: 100px;
-      padding: 4px;
-      gap: 8px;
+      padding: var(--ui-voice-pill-padding, 4px);
+      gap: var(--ui-voice-pill-gap, 8px);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;

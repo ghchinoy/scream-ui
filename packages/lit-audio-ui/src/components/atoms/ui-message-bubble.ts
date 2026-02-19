@@ -45,8 +45,8 @@ export class UiMessageBubble extends LitElement {
     .bubble {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      padding: 14px 18px;
+      gap: var(--ui-message-bubble-gap, 8px);
+      padding: var(--ui-message-bubble-padding, 14px 18px);
       font-size: 0.95rem;
       line-height: 1.5;
       box-sizing: border-box;
@@ -57,7 +57,7 @@ export class UiMessageBubble extends LitElement {
 
     /* Variant: Contained */
     :host([variant='contained']) .bubble {
-      border-radius: 16px;
+      border-radius: var(--ui-message-bubble-radius, 16px);
     }
 
     :host([variant='contained'][direction='inbound']) .bubble {
@@ -66,7 +66,7 @@ export class UiMessageBubble extends LitElement {
         var(--md-sys-color-surface-container-high, #e2e2e2)
       );
       color: var(--md-sys-color-on-surface);
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: var(--ui-message-bubble-corner-radius, 4px);
     }
 
     :host([variant='contained'][direction='outbound']) .bubble {
@@ -75,20 +75,20 @@ export class UiMessageBubble extends LitElement {
         var(--md-sys-color-primary, #0066cc)
       );
       color: var(--md-sys-color-on-primary, #ffffff);
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: var(--ui-message-bubble-corner-radius, 4px);
     }
 
     /* Variant: Flat */
     :host([variant='flat']) .bubble {
-      padding: 8px 0;
+      padding: var(--ui-message-bubble-flat-padding, 8px 0);
       background: transparent;
       color: var(--md-sys-color-on-surface);
     }
 
     :host([variant='flat'][direction='outbound']) .bubble {
-      padding: 12px 16px;
+      padding: var(--ui-message-bubble-flat-outbound-padding, 12px 16px);
       background: var(--md-sys-color-surface-container-highest);
-      border-radius: 12px;
+      border-radius: var(--ui-message-bubble-flat-radius, 12px);
     }
   `;
 

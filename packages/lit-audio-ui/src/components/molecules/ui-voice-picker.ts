@@ -90,7 +90,7 @@ export class UiVoicePicker extends LitElement {
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 8px 16px;
+      padding: var(--ui-voice-picker-padding, 8px 16px);
       background: var(
         --ui-voice-picker-anchor-bg,
         var(--md-sys-color-surface-container-high, transparent)
@@ -129,7 +129,7 @@ export class UiVoicePicker extends LitElement {
     .trigger-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--ui-voice-picker-trigger-gap, 12px);
       overflow: hidden;
     }
 
@@ -196,9 +196,9 @@ export class UiVoicePicker extends LitElement {
     .voice-item-content {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: var(--ui-voice-picker-item-gap, 16px);
       width: 100%;
-      padding: 8px 0;
+      padding: var(--ui-voice-picker-item-padding, 8px 0);
     }
 
     .voice-avatar {

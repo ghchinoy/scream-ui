@@ -53,7 +53,7 @@ export class UiPlaylist extends LitElement {
     }
 
     .playlist-header {
-      padding: 16px 20px;
+      padding: var(--ui-playlist-header-padding, 16px 20px);
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -89,7 +89,7 @@ export class UiPlaylist extends LitElement {
     }
 
     .empty-state {
-      padding: 32px;
+      padding: var(--ui-playlist-empty-padding, 32px);
       text-align: center;
       color: var(--md-sys-color-on-surface-variant);
       font-size: 0.9rem;
