@@ -19,6 +19,7 @@ import {customElement, state} from 'lit/decorators.js';
 import '@ghchinoy/lit-audio-ui/providers/ui-speech-provider.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-voice-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-voice-pill.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-mic-selector.js';
 import '@ghchinoy/lit-audio-ui/atoms/ui-speech-record-button.js';
 import '@ghchinoy/lit-audio-ui/atoms/ui-speech-cancel-button.js';
 
@@ -31,6 +32,7 @@ export class DemoSpeechInput extends LitElement {
     | 'success'
     | 'error' = 'idle';
   @state() private _transcript = 'Listening...';
+  @state() private _selectedDeviceId?: string;
 
   private _transcriptInterval: any;
   private _fakeTranscript = [
@@ -138,13 +140,14 @@ export class DemoSpeechInput extends LitElement {
     const isRecording = this._state === 'recording';
 
     return html`
-      <ui-speech-provider simulation>
+      <ui-speech-provider simulation .deviceId="${this._selectedDeviceId}">
         <div class="container">
           <div class="section">
-            <h3>Standard Buttons (Molecules)</h3>
+            <h3>Standard Buttons & Hardware Selection</h3>
             <div class="grid">
               <ui-voice-button label="Record"></ui-voice-button>
               <ui-voice-pill label="Start Talking"></ui-voice-pill>
+              <ui-mic-selector @device-change="${this._handleDeviceChange}"></ui-mic-selector>
             </div>
           </div>
 
@@ -229,5 +232,10 @@ export class DemoSpeechInput extends LitElement {
         }, 1500);
       }, 2000);
     }
+  }
+
+  private _handleDeviceChange(e: CustomEvent) {
+    this._selectedDeviceId = e.detail.deviceId;
+    console.log('Hardware mic selected:', this._selectedDeviceId);
   }
 }

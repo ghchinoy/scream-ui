@@ -72,6 +72,8 @@ Once imported, custom elements are registered and used like standard HTML tags:
 ### 🧩 Providers (State)
 *   **`<ui-audio-provider>`**: Headless state machine for playback, playlists, and transcripts.
 *   **`<ui-speech-provider>`**: Headless lifecycle manager for voice recording.
+    *   **Hardware Selection:** Accepts an optional `deviceId` string property to bypass the system default microphone and request specific hardware (perfect for integrating with `<ui-mic-selector>`).
+    *   **Manual Mode:** Accepts a `manual` boolean property. When true, it stops imperatively calling `getUserMedia` and instead emits intent events (`@speech-request-start`) allowing your application to orchestrate WebAudio nodes for duplex streaming.
 
 ## ♿ Accessibility
 
