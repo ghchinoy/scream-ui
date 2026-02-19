@@ -1,0 +1,1 @@
+import './components/a2ui-renderer.js';
