@@ -48,37 +48,61 @@ Once imported, custom elements are registered and used like standard HTML tags:
 ## Available Components
 
 ### 🧪 Atoms (Primitives)
-*   **`<ui-audio-play-button>`**: Context-aware play/pause toggle.
+*   **`<ui-audio-play-button>`**: Context-aware play/pause toggle with dynamic ARIA labels.
 *   **`<ui-audio-next-button>` / `<ui-audio-prev-button>`**: Playlist navigation buttons.
 *   **`<ui-audio-progress-slider>`**: Reactive scrubber for playback.
-*   **`<ui-audio-time-display>`**: Flexible time visualizer (elapsed, remaining, combined).
+*   **`<ui-audio-volume-slider>`**: Mute toggle and volume control.
+*   **`<ui-audio-player-error>`**: Visual indicator for resource loading or playback failures.
 *   **`<ui-speech-record-button>`**: Atomic trigger for recording context.
+*   **`<ui-speech-cancel-button>`**: Discards current recording state.
+*   **`<ui-timed-text>`**: Transcript renderer with word-level highlighting.
 *   **`<ui-shimmering-text>`**: Pure CSS text loading effect.
 
 ### 🧬 Molecules (Functional Units)
 *   **`<ui-live-waveform>`**: Real-time visualizer for an active `AudioContext`.
+*   **`<ui-scrolling-waveform>`**: Infinite, smooth-scrolling audio visualization.
 *   **`<ui-spectrum-visualizer>`**: Traditional frequency-bar spectrum.
-*   **`<ui-orb>`**: 3D WebGL (Three.js) agent visualizer.
-*   **`<ui-3d-flip>`**: Layout utility for 3D card-flipping interactions.
+*   **`<ui-orb>`**: 3D WebGL (Three.js) agent visualizer with distinct states.
+*   **`<ui-voice-pill>`**: Compact, unified voice interaction widget.
+*   **`<ui-conversation-bar>`**: Complex bar for mic selection, visualization, and text input.
 *   **`<ui-playlist>`**: Reactive list component for queue management.
 *   **`<ui-mic-selector>`**: Hardware enumeration and permission handler.
 *   **`<ui-voice-picker>`**: Searchable persona selector with audio previews.
 
 ### 🧩 Providers (State)
-*   **`<ui-audio-provider>`**: Headless state machine for playback and playlists.
-*   **`<ui-speech-provider>`**: Headless lifecycle manager for voice recording (Auto, Simulation, or Manual mode).
+*   **`<ui-audio-provider>`**: Headless state machine for playback, playlists, and transcripts.
+*   **`<ui-speech-provider>`**: Headless lifecycle manager for voice recording.
 
-## Theming (Material Design 3)
+## ♿ Accessibility
 
-Customize colors and typography via standard CSS variables:
+This library is designed to be accessible out-of-the-box:
+*   **Dynamic ARIA Labels:** Stateful buttons (e.g., Play/Pause, Mute/Unmute) automatically update their `aria-label` to reflect the current state for screen readers.
+*   **Keyboard Navigation:** All interactive elements support standard keyboard focus and activation.
+*   **High Contrast:** Visualizers and text elements use Material 3 design tokens, ensuring high visibility in both light and dark modes.
+
+## 🎨 Theming & Spacing
+
+Customize colors, typography, and layout density via standard CSS variables:
 
 ```css
 :root {
+  /* Colors (Material Design 3) */
   --md-sys-color-primary: #0066cc;
-  --ui-speech-record-color: #ff4444; /* Custom branding */
-  --ui-speech-preview-font-size: 18px;
+  
+  /* Component Specific */
+  --ui-speech-record-color: #ff4444;
+  --ui-audio-error-color: #ba1a1a;
+
+  /* Density & Spacing */
+  --ui-audio-player-padding: 8px 16px; /* Create a compact player */
+  --ui-audio-player-gap: 8px;
+  --ui-message-bubble-padding: 12px 16px;
 }
 ```
+
+## 🔌 Framework Integration
+
+While built with Lit, these are standard Web Components. For seamless integration with React (hooks), Vue, or Svelte, see our **[Framework Integration Guide](./FRAMEWORKS.md)**.
 
 ## Acknowledgements
 
