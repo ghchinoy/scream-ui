@@ -26,6 +26,7 @@ export class DemoOrbGallery extends LitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
     }
     .gallery-grid {
       display: grid;
