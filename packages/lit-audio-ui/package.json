@@ -14,11 +14,11 @@
       "types": "./dist/index.d.ts"
     },
     "./standalone": "./dist/standalone/scream-audio-ui.standalone.js",
-    "./atoms/*": "./dist/components/atoms/*.js",
-    "./molecules/*": "./dist/components/molecules/*.js",
-    "./organisms/*": "./dist/components/organisms/*.js",
-    "./providers/*": "./dist/components/providers/*.js",
-    "./utils/*": "./dist/utils/*.js"
+    "./atoms/*": "./dist/components/atoms/*",
+    "./molecules/*": "./dist/components/molecules/*",
+    "./organisms/*": "./dist/components/organisms/*",
+    "./providers/*": "./dist/components/providers/*",
+    "./utils/*": "./dist/utils/*"
   },
   "customElements": "custom-elements.json",
   "files": [
