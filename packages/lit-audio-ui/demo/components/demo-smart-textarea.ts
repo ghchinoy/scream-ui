@@ -61,6 +61,7 @@ export class DemoSmartTextarea extends LitElement {
       align-items: center;
       justify-content: space-between;
       pointer-events: none;
+      gap: 12px;
     }
     .toolbar > * {
       pointer-events: auto;
@@ -68,7 +69,13 @@ export class DemoSmartTextarea extends LitElement {
     .left-tools {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--ui-smart-textarea-gap, 8px);
+      flex: 1;
+      min-width: 0; /* Critical for ellipsis to work in children */
+    }
+    ui-speech-preview {
+      flex: 1;
+      min-width: 0;
     }
   `;
 
