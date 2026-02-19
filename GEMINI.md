@@ -121,3 +121,10 @@ If you need to build highly flexible layouts (like the `ui-audio-player`), follo
 2.  **Create a Headless Provider:** Build a `<ui-audio-provider>` component that manages the internal logic (e.g. the `<audio>` tag and its event listeners). It should have `:host { display: contents; }` and use the `@provide({ context: myContextToken })` decorator on its state object. **Crucially, the provider must completely overwrite the state object reference (`this.state = {...this.state, newValues}`) to trigger reactive updates in consumers.**
 3.  **Create Atomic Consumers:** Build small, single-purpose components (e.g., `<ui-audio-play-button>`, `<ui-audio-progress-slider>`). They use the `@consume({ context: myContextToken, subscribe: true })` decorator to receive the state and render UI.
 This allows developers to write custom HTML layouts while sharing a single underlying state machine!
+
+### 5. Live Streaming & Manual Provider Orchestration
+When building applications that require real-time, duplex audio streaming (e.g., Gemini Live, ElevenLabs WebSockets), do not rely on the browser's standard `<audio>` tag or the automatic lifecycles of the UI providers.
+*   **Use `manual` Mode:** Headless providers (like `<ui-speech-provider>`) should be set to `manual` mode. This stops them from imperatively calling `getUserMedia` or managing the `AudioContext`.
+*   **Event-Driven Intent:** In manual mode, the provider strictly handles visual state syncing (button spinners, orb animations) and emits *intent* events (`@speech-request-start`).
+*   **Application-Level Audio Routing:** The application layer must catch these intent events, handle the Web Audio API boilerplate (capturing the mic, converting `Float32` to `Int16` PCM, and managing the WebSocket connection), and then inject the resulting `AnalyserNode` and volume metrics back into the UI components.
+*   **ScriptProcessor vs. AudioWorklet:** While `ScriptProcessorNode` is easier for simple demos, production agents must use `AudioWorklet` to process PCM chunks off the main UI thread to prevent audio stuttering during heavy DOM updates.
