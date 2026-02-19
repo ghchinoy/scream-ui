@@ -1,0 +1,10 @@
+{
+  "extends": "../../packages/lit-audio-ui/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "composite": false
+  },
+  "include": ["src", "vite.config.ts"]
+}

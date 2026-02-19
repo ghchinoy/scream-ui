@@ -1,0 +1,24 @@
+{
+  "name": "@scream-ui/live-connection",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"vite\"",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "server": "node server.js"
+  },
+  "dependencies": {
+    "@ghchinoy/lit-audio-ui": "*",
+    "@lit/context": "^1.1.6",
+    "@material/web": "^2.0.0",
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "~5.6.3",
+    "vite": "^8.0.0-beta.13",
+    "ws": "^8.18.0"
+  }
+}
