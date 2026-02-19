@@ -220,6 +220,14 @@
           "name": "*",
           "declaration": {
             "name": "*",
+            "module": "src/components/molecules/ui-conversation-bar.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
             "module": "src/components/molecules/scream-voice-button.js"
           }
         },
@@ -1671,7 +1679,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A composite component representing a single chat message item.",
+          "description": "A composite component representing a single chat message item.\nSupports avatars and alignment for inbound/outbound messages.",
           "name": "UiChatItem",
           "members": [
             {
@@ -1692,9 +1700,23 @@
             },
             {
               "kind": "field",
+              "name": "avatarSrc",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "avatarName",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; margin-bottom: var(--ui-chat-item-margin-bottom, 8px); width: 100%; } .item-wrapper { display: flex; flex-direction: column; width: 100%; } .item-wrapper.outbound { align-items: flex-end; } .item-wrapper.inbound { align-items: flex-start; } `"
+              "default": "css` :host { display: block; margin-bottom: var(--ui-chat-item-margin-bottom, 8px); width: 100%; } .item-wrapper { display: flex; width: 100%; gap: var(--ui-chat-item-gap, 8px); align-items: flex-end; } .item-wrapper.outbound { flex-direction: row-reverse; } .item-wrapper.inbound { flex-direction: row; } .avatar { width: var(--ui-chat-item-avatar-size, 32px); height: var(--ui-chat-item-avatar-size, 32px); border-radius: 50%; background: var(--md-sys-color-surface-container-highest); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 12px; font-weight: 500; color: var(--md-sys-color-on-surface-variant); border: 1px solid var(--md-sys-color-outline-variant); } .avatar img { width: 100%; height: 100%; object-fit: cover; } `"
             },
             {
               "kind": "method",
@@ -1738,9 +1760,18 @@
             },
             {
               "kind": "field",
+              "name": "_isAtBottom",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true"
+            },
+            {
+              "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; height: 100%; width: 100%; overflow: hidden; } .scroll-container { height: 100%; width: 100%; overflow-y: auto; display: flex; flex-direction: column; padding: var(--ui-chat-list-padding, 1rem); box-sizing: border-box; scroll-behavior: smooth; } /* Scrollbar Styling */ .scroll-container::-webkit-scrollbar { width: 6px; } .scroll-container::-webkit-scrollbar-track { background: transparent; } .scroll-container::-webkit-scrollbar-thumb { background: var(--md-sys-color-outline-variant); border-radius: 10px; } `"
+              "default": "css` :host { display: block; height: 100%; width: 100%; overflow: hidden; position: relative; } .scroll-container { height: 100%; width: 100%; overflow-y: auto; display: flex; flex-direction: column; padding: var(--ui-chat-list-padding, 1rem); box-sizing: border-box; scroll-behavior: smooth; } /* Scrollbar Styling */ .scroll-container::-webkit-scrollbar { width: 6px; } .scroll-container::-webkit-scrollbar-track { background: transparent; } .scroll-container::-webkit-scrollbar-thumb { background: var(--md-sys-color-outline-variant); border-radius: 10px; } .scroll-button { position: absolute; bottom: var(--ui-chat-list-scroll-btn-bottom, 16px); left: 50%; transform: translateX(-50%); background: var(--md-sys-color-surface-container-highest); border-radius: 50%; box-shadow: var(--md-sys-elevation-level2); z-index: 10; opacity: 0; visibility: hidden; transition: all 0.3s ease; } .scroll-button.visible { opacity: 1; visibility: visible; } `"
             },
             {
               "kind": "method",
@@ -1763,6 +1794,11 @@
             },
             {
               "kind": "method",
+              "name": "_handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "render"
             }
           ],
@@ -1781,6 +1817,132 @@
           "declaration": {
             "name": "UiChatList",
             "module": "src/components/molecules/ui-chat-list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/molecules/ui-conversation-bar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "MOLECULE: Conversation Bar\nA specialized interaction bar for AI conversations. \nCombines mic selection, live visualization, and text input.",
+          "name": "UiConversationBar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentId",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "(Optional) ID of the AI agent."
+            },
+            {
+              "kind": "field",
+              "name": "simulation",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Enable mock transcription for demos."
+            },
+            {
+              "kind": "field",
+              "name": "_keyboardOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_textInput",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_isMuted",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; font-family: inherit; } .container { background: var(--md-sys-color-surface-container, #f3f3f3); border-radius: var(--ui-conversation-bar-radius, 24px); border: 1px solid var(--md-sys-color-outline-variant); box-shadow: var(--md-sys-elevation-level1); overflow: hidden; display: flex; flex-direction: column-reverse; transition: all 0.3s ease; } .toolbar { display: flex; align-items: center; justify-content: space-between; padding: var(--ui-conversation-bar-padding, 8px 16px); gap: 12px; } .visualizer-section { display: flex; align-items: center; gap: 12px; flex: 1; height: 40px; background: var(--md-sys-color-surface-container-high); border-radius: 12px; padding: 0 12px; overflow: hidden; } .waveform-wrapper { flex: 1; height: 24px; } .controls { display: flex; align-items: center; gap: 4px; } .input-area { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--md-sys-color-surface-container); } .input-area.open { max-height: 200px; } .input-container { padding: 16px; display: flex; gap: 8px; align-items: flex-end; } md-outlined-text-field { flex: 1; --md-outlined-text-field-container-shape: 16px; } .keyboard-toggle.active { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); } md-divider { margin: 0; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleKeyDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_sendMessage",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleCallToggle",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "message-sent",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Dispatched when a text message is sent. detail: { message }"
+            },
+            {
+              "name": "call-toggle",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "description": "Dispatched when the conversation state changes.",
+              "name": "state-change"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-conversation-bar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiConversationBar",
+          "declaration": {
+            "name": "UiConversationBar",
+            "module": "src/components/molecules/ui-conversation-bar.ts"
           }
         }
       ]
@@ -3781,6 +3943,51 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/providers/ui-audio-provider.ts",
       "declarations": [
         {
@@ -4255,51 +4462,6 @@
           "declaration": {
             "name": "UiSpeechProvider",
             "module": "src/components/providers/ui-speech-provider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]

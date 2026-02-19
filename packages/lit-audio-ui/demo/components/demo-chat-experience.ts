@@ -17,6 +17,10 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
+import '../../src/components/molecules/ui-chat-list.js';
+import '../../src/components/molecules/ui-chat-item.js';
+import '../../src/components/molecules/ui-conversation-bar.js';
+import '../../src/components/molecules/ui-typing-indicator.js';
 
 interface Message {
   id: string;
@@ -36,76 +40,35 @@ export class DemoChatExperience extends LitElement {
       timestamp: '10:42 AM',
     },
   ];
-  @state() private _inputValue = '';
 
   static styles = css`
     :host {
       display: block;
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
     .chat-container {
       background: var(--md-sys-color-surface);
       border: 1px solid var(--md-sys-color-outline-variant);
-      border-radius: 20px;
-      height: 500px;
+      border-radius: 24px;
+      height: 600px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--md-sys-elevation-level2);
     }
 
-    .input-area {
+    ui-chat-list {
+      flex: 1;
+      --ui-chat-list-padding: 24px;
+    }
+
+    .toolbar-wrapper {
       padding: 16px;
       background: var(--md-sys-color-surface-container-low);
       border-top: 1px solid var(--md-sys-color-outline-variant);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    input {
-      flex: 1;
-      height: 44px;
-      border-radius: 22px;
-      border: 1px solid var(--md-sys-color-outline-variant);
-      padding: 0 20px;
-      font-family: inherit;
-      font-size: 14px;
-      background: var(--md-sys-color-surface);
-      color: var(--md-sys-color-on-surface);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input:focus {
-      border-color: var(--md-sys-color-primary);
-    }
-
-    .send-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-size: 20px;
     }
 
     /* Message Animation */
@@ -135,19 +98,11 @@ export class DemoChatExperience extends LitElement {
             m => html`
               <ui-chat-item
                 .direction=${m.sender === 'user' ? 'outbound' : 'inbound'}
+                .avatarName=${m.sender === 'user' ? 'Me' : 'AI'}
+                .avatarSrc=${m.sender === 'agent'
+                  ? 'https://raw.githubusercontent.com/elevenlabs/ui/main/apps/www/public/avatars/01.png'
+                  : ''}
               >
-                <div slot="avatar">
-                  ${m.sender === 'agent'
-                    ? html`<ui-orb
-                        agentState=${m.isTyping ? 'thinking' : 'talking'}
-                        style="width:32px; height:32px;"
-                      ></ui-orb>`
-                    : html`<div
-                        style="width:32px; height:32px; border-radius:50%; background:#ddd; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700;"
-                      >
-                        ME
-                      </div>`}
-                </div>
                 ${m.isTyping
                   ? html`<ui-typing-indicator></ui-typing-indicator>`
                   : m.text}
@@ -157,34 +112,23 @@ export class DemoChatExperience extends LitElement {
           )}
         </ui-chat-list>
 
-        <div class="input-area">
-          <ui-speech-record-button size="sm"></ui-speech-record-button>
-          <input
-            type="text"
-            placeholder="Ask a question..."
-            .value=${this._inputValue}
-            @input=${(e: any) => (this._inputValue = e.target.value)}
-            @keypress=${(e: KeyboardEvent) =>
-              e.key === 'Enter' && this._handleSend()}
-          />
-          <button
-            class="send-btn"
-            @click=${this._handleSend}
-            ?disabled=${!this._inputValue}
-          >
-            <span class="material-symbols-outlined">send</span>
-          </button>
+        <div class="toolbar-wrapper">
+          <ui-conversation-bar
+            simulation
+            @message-sent=${(e: CustomEvent) =>
+              this._handleSend(e.detail.message)}
+          ></ui-conversation-bar>
         </div>
       </div>
     `;
   }
 
-  private _handleSend() {
-    if (!this._inputValue) return;
+  private _handleSend(text: string) {
+    if (!text) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
-      text: this._inputValue,
+      text: text,
       sender: 'user',
       timestamp: new Date().toLocaleTimeString([], {
         hour: '2-digit',
@@ -193,7 +137,6 @@ export class DemoChatExperience extends LitElement {
     };
 
     this._messages = [...this._messages, userMsg];
-    this._inputValue = '';
 
     // Trigger agent response
     this._simulateAgentResponse();

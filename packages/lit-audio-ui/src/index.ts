@@ -45,6 +45,7 @@ export * from './components/molecules/ui-playlist.js';
 export * from './components/molecules/ui-showcase-card.js';
 export * from './components/molecules/ui-voice-button.js';
 export * from './components/molecules/ui-voice-pill.js';
+export * from './components/molecules/ui-conversation-bar.js';
 export * from './components/molecules/scream-voice-button.js';
 export * from './components/molecules/ui-typing-indicator.js';
 export * from './components/molecules/ui-chat-item.js';

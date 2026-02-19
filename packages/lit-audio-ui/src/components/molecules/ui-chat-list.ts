@@ -15,7 +15,9 @@
  */
 
 import {LitElement, html, css, type PropertyValues} from 'lit';
-import {customElement, query} from 'lit/decorators.js';
+import {customElement, query, state} from 'lit/decorators.js';
+import '@material/web/iconbutton/icon-button.js';
+import '@material/web/icon/icon.js';
 
 /**
  * MOLECULE: Chat List
@@ -28,12 +30,15 @@ import {customElement, query} from 'lit/decorators.js';
 export class UiChatList extends LitElement {
   @query('.scroll-container') private _container!: HTMLDivElement;
 
+  @state() private _isAtBottom = true;
+
   static styles = css`
     :host {
       display: block;
       height: 100%;
       width: 100%;
       overflow: hidden;
+      position: relative;
     }
 
     .scroll-container {
@@ -58,11 +63,32 @@ export class UiChatList extends LitElement {
       background: var(--md-sys-color-outline-variant);
       border-radius: 10px;
     }
+
+    .scroll-button {
+      position: absolute;
+      bottom: var(--ui-chat-list-scroll-btn-bottom, 16px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--md-sys-color-surface-container-highest);
+      border-radius: 50%;
+      box-shadow: var(--md-sys-elevation-level2);
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .scroll-button.visible {
+      opacity: 1;
+      visibility: visible;
+    }
   `;
 
   protected updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    this.scrollToBottom();
+    if (this._isAtBottom) {
+      this.scrollToBottom();
+    }
   }
 
   /**
@@ -74,11 +100,25 @@ export class UiChatList extends LitElement {
     }
   }
 
+  private _handleScroll() {
+    if (!this._container) return;
+    const {scrollTop, scrollHeight, clientHeight} = this._container;
+    const atBottom = scrollHeight - scrollTop - clientHeight < 50;
+    this._isAtBottom = atBottom;
+  }
+
   render() {
     return html`
-      <div class="scroll-container">
+      <div class="scroll-container" @scroll=${this._handleScroll}>
         <slot @slotchange=${this.scrollToBottom}></slot>
       </div>
+      <md-icon-button
+        class="scroll-button ${!this._isAtBottom ? 'visible' : ''}"
+        @click=${this.scrollToBottom}
+        aria-label="Scroll to bottom"
+      >
+        <md-icon>arrow_downward</md-icon>
+      </md-icon-button>
     `;
   }
 }
