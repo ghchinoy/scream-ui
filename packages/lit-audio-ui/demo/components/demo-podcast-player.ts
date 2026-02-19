@@ -15,33 +15,15 @@
  */
 
 import {LitElement, html, css} from 'lit';
-import {customElement, query} from 'lit/decorators.js';
-import '../../src/components/atoms/ui-timed-text.js';
+import {customElement, query, state} from 'lit/decorators.js';
+import '../../src/components/molecules/ui-scrolling-waveform.js';
 
 @customElement('demo-podcast-player')
 export class DemoPodcastPlayer extends LitElement {
   @query('#orb') private _orb!: any;
 
-  private _mockTranscript = [
-    { text: "Welcome", start: 0, end: 0.5 },
-    { text: "to", start: 0.5, end: 0.7 },
-    { text: "this", start: 0.7, end: 1.0 },
-    { text: "episode", start: 1.0, end: 1.5 },
-    { text: "on", start: 1.5, end: 1.7 },
-    { text: "Web", start: 1.7, end: 2.0 },
-    { text: "Components.", start: 2.0, end: 2.5 },
-    { text: "We", start: 2.5, end: 2.8 },
-    { text: "are", start: 2.8, end: 3.0 },
-    { text: "building", start: 3.0, end: 3.5 },
-    { text: "accessible", start: 3.5, end: 4.2 },
-    { text: "and", start: 4.2, end: 4.4 },
-    { text: "high", start: 4.4, end: 4.7 },
-    { text: "performance", start: 4.7, end: 5.5 },
-    { text: "UI", start: 5.5, end: 5.8 },
-    { text: "library", start: 5.8, end: 6.3 },
-    { text: "for", start: 6.3, end: 6.5 },
-    { text: "everyone.", start: 6.5, end: 7.2 }
-  ];
+  @state() private _isPlaying = false;
+  @state() private _analyser?: AnalyserNode;
 
   static styles = css`
     :host {
@@ -98,11 +80,13 @@ export class DemoPodcastPlayer extends LitElement {
       align-items: center;
       gap: 12px;
     }
-    .transcript-view {
+    .waveform-view {
       background: var(--md-sys-color-surface-container-high);
       padding: 12px;
       border-radius: 12px;
-      font-size: 0.9rem;
+      height: 48px;
+      display: flex;
+      align-items: center;
     }
   `;
 
@@ -110,27 +94,34 @@ export class DemoPodcastPlayer extends LitElement {
     return html`
       <ui-audio-provider
         src="https://storage.googleapis.com/scream-ui-samples/speech_sample-Orus-20260213-082038.wav"
-        .transcript=${this._mockTranscript}
         @state-change="${this._handleState}"
       >
         <div class="custom-podcast-card">
           <div class="custom-podcast-header">
             <div class="custom-podcast-art">
-              <ui-orb id="orb" agentState="idle"></ui-orb>
+              <ui-orb 
+                id="orb" 
+                agentState="idle"
+                .colors="${['#4285F4', '#1967D2']}"
+              ></ui-orb>
             </div>
             <div class="custom-podcast-info">
               <h4 class="custom-podcast-title">
                 Episode 4: The WebComponent Revolution
               </h4>
-              <h5 class="custom-podcast-author">By Orus The Storyteller</h5>
+              <p class="custom-podcast-author">By Orus The Storyteller</p>
             </div>
             <ui-audio-play-button></ui-audio-play-button>
           </div>
           
-          <div class="transcript-view">
-            <ui-timed-text>
-              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.6; display: block; margin-bottom: 4px;">Transcript</span>
-            </ui-timed-text>
+          <div class="waveform-view">
+            <ui-scrolling-waveform
+              .active=${this._isPlaying}
+              .analyserNode=${this._analyser}
+              height="32"
+              barWidth="2"
+              barGap="1"
+            ></ui-scrolling-waveform>
           </div>
 
           <div class="custom-podcast-scrubber">
@@ -150,8 +141,11 @@ export class DemoPodcastPlayer extends LitElement {
   }
 
   private _handleState(e: CustomEvent) {
+    this._isPlaying = e.detail.isPlaying;
+    this._analyser = e.detail.analyserNode;
+    
     if (this._orb) {
-      this._orb.agentState = e.detail.isPlaying ? 'talking' : 'idle';
+      this._orb.agentState = this._isPlaying ? 'talking' : 'idle';
     }
   }
 }
