@@ -235,7 +235,9 @@ export class DemoLiveConnection extends LitElement {
       float32Array[i] = int16Array[i] / 0x7fff;
     }
 
-    const audioBuffer = this._audioCtx.createBuffer(1, float32Array.length, 16000);
+    // Gemini TTS audio is typically 24kHz, so we use that explicitly
+    // If it's played at 16kHz, it sounds incredibly slow/deep.
+    const audioBuffer = this._audioCtx.createBuffer(1, float32Array.length, 24000);
     audioBuffer.getChannelData(0).set(float32Array);
     
     this._playbackQueue.push(audioBuffer);
