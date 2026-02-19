@@ -227,6 +227,7 @@ export class UiAudioProvider extends LitElement {
         currentIndex: index,
         src: track.src,
         currentTime: 0,
+        transcript: track.transcript,
       });
     }
   }

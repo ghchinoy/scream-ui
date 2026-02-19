@@ -1,6 +1,15 @@
 import {createContext} from '@lit/context';
 
 /**
+ * Represents a single word in a timed transcript.
+ */
+export interface TranscriptWord {
+  text: string;
+  start: number;
+  end: number;
+}
+
+/**
  * Represents a single track in a playlist.
  */
 export interface PlaylistTrack {
@@ -9,6 +18,7 @@ export interface PlaylistTrack {
   title?: string;
   artist?: string;
   artwork?: string;
+  transcript?: TranscriptWord[];
   [key: string]: any;
 }
 
@@ -24,6 +34,7 @@ export interface AudioPlayerState {
   volume: number;
   muted: boolean;
   error?: string;
+  transcript?: TranscriptWord[];
 
   // Playlist Support
   items: PlaylistTrack[];

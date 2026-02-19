@@ -23,6 +23,7 @@ export * from './components/atoms/ui-audio-prev-button.js';
 export * from './components/atoms/ui-audio-progress-slider.js';
 export * from './components/atoms/ui-audio-time-display.js';
 export * from './components/atoms/ui-audio-player-error.js';
+export * from './components/atoms/ui-timed-text.js';
 export * from './components/atoms/ui-audio-volume-slider.js';
 export * from './components/atoms/ui-speech-record-button.js';
 export * from './components/atoms/ui-speech-cancel-button.js';
@@ -64,7 +65,11 @@ export * from './utils/audio-context.js';
 export * from './utils/speech-context.js';
 
 // --- TYPES ---
-export type {AudioPlayerState, PlaylistTrack} from './utils/audio-context.js';
+export type {
+  AudioPlayerState,
+  PlaylistTrack,
+  TranscriptWord,
+} from './utils/audio-context.js';
 export type {SpeechState, SpeechContext} from './utils/speech-context.js';
 export type {AudioDevice} from './components/molecules/ui-mic-selector.js';
 export type {
