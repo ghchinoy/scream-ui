@@ -51,6 +51,7 @@ export class UiSpeechProvider extends LitElement {
   @property({type: Boolean}) manual = false;
   @property({type: String}) transcript = '';
   @property({type: String}) partialTranscript = '';
+  @property({type: String}) deviceId?: string;
 
   private _stream?: MediaStream;
   private _audioCtx?: AudioContext;
@@ -106,7 +107,13 @@ export class UiSpeechProvider extends LitElement {
         // Use procedural audio for demo
         this._analyser = createMockAnalyser() as AnalyserNode;
       } else {
-        this._stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        const constraints: MediaStreamConstraints = {audio: true};
+        if (this.deviceId) {
+          (constraints.audio as MediaTrackConstraints) = {
+            deviceId: {exact: this.deviceId},
+          };
+        }
+        this._stream = await navigator.mediaDevices.getUserMedia(constraints);
 
         // Set up audio analysis for visualizers
         if (!this._audioCtx) {
