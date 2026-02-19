@@ -71,14 +71,15 @@ export class UiTimedText extends LitElement {
     const transcript = this.playerState?.transcript || [];
     const currentTime = this.playerState?.currentTime || 0;
 
-    if (transcript.length === 0) {
-      return html`<slot></slot>`;
-    }
-
     return html`
-      <div class="transcript" part="container">
-        ${transcript.map(word => this._renderWord(word, currentTime))}
-      </div>
+      <slot></slot>
+      ${transcript.length > 0
+        ? html`
+            <div class="transcript" part="container">
+              ${transcript.map(word => this._renderWord(word, currentTime))}
+            </div>
+          `
+        : ''}
     `;
   }
 

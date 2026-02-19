@@ -69,11 +69,7 @@ export class DemoPodcastPlayer extends LitElement {
       height: 80px;
       border-radius: 8px;
       flex-shrink: 0;
-      background: linear-gradient(
-        135deg,
-        var(--md-sys-color-primary),
-        var(--md-sys-color-secondary-container)
-      );
+      background: var(--md-sys-color-surface-container-highest);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -132,7 +128,9 @@ export class DemoPodcastPlayer extends LitElement {
           </div>
           
           <div class="transcript-view">
-            <ui-timed-text>Loading transcript...</ui-timed-text>
+            <ui-timed-text>
+              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.6; display: block; margin-bottom: 4px;">Transcript</span>
+            </ui-timed-text>
           </div>
 
           <div class="custom-podcast-scrubber">
