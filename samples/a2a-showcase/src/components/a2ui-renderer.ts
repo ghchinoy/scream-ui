@@ -136,6 +136,7 @@ export class DemoAgentCard extends LitElement {
       font-size: 0.75rem;
       overflow-x: auto;
       flex: 1;
+      text-align: left;
     }
     .back-title {
       font-family: monospace;
