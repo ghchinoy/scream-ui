@@ -100,7 +100,72 @@ export class A2uiRenderer extends LitElement {
       width: 100%;
       max-width: 800px;
     }
+
+    .debug-panel {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--md-sys-color-surface-container-high, #333);
+      color: var(--md-sys-color-on-surface, #eee);
+      border-radius: 12px;
+      width: 350px;
+      max-height: 400px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 100;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      transition: transform 0.3s ease;
+      transform: translateX(calc(100% - 40px));
+    }
+    
+    .debug-panel.open {
+      transform: translateX(0);
+    }
+
+    .debug-header {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--md-sys-color-surface-container-highest);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      user-select: none;
+    }
+
+    .debug-content {
+      padding: 12px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .debug-msg {
+      padding: 6px;
+      border-radius: 4px;
+      background: var(--md-sys-color-surface-container);
+      word-break: break-all;
+    }
+    .debug-msg.client {
+      border-left: 3px solid var(--md-sys-color-primary, #0066cc);
+    }
+    .debug-msg.server {
+      border-left: 3px solid var(--md-sys-color-tertiary, #cc0066);
+    }
   `;
+
+  @state() private _debugOpen = false;
+  @state() private _debugLogs: {source: 'client' | 'server', payload: any}[] = [];
+  @query('.debug-content') private _debugScroll!: HTMLElement;
 
   connectedCallback() {
     super.connectedCallback();
@@ -130,11 +195,21 @@ export class A2uiRenderer extends LitElement {
     this._ws.onmessage = (event) => {
       try {
         const payload: A2APayload = JSON.parse(event.data);
+        this._logDebug('server', payload);
         this._handleA2APayload(payload);
       } catch (e) {
         console.error('Failed to parse A2A payload', e);
       }
     };
+  }
+
+  private _logDebug(source: 'client' | 'server', payload: any) {
+    this._debugLogs = [...this._debugLogs, {source, payload}];
+    this.updateComplete.then(() => {
+       if (this._debugScroll) {
+          this._debugScroll.scrollTop = this._debugScroll.scrollHeight;
+       }
+    });
   }
 
   private _handleA2APayload(payload: A2APayload) {
@@ -175,7 +250,9 @@ export class A2uiRenderer extends LitElement {
     this._scrollToBottom();
 
     // Send to the agent
-    this._ws!.send(JSON.stringify({text}));
+    const payload = {text};
+    this._logDebug('client', payload);
+    this._ws!.send(JSON.stringify(payload));
   }
 
   render() {
@@ -187,6 +264,28 @@ export class A2uiRenderer extends LitElement {
         </div>
         <span class="badge ${this._wsState}">${this._wsState}</span>
       </header>
+
+      <!-- DEBUG PANEL -->
+      <div class="debug-panel ${this._debugOpen ? 'open' : ''}">
+        <div class="debug-header" @click=${() => (this._debugOpen = !this._debugOpen)}>
+          <span><span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle; margin-right:4px;">bug_report</span>A2A Inspector</span>
+          <span class="material-symbols-outlined" style="font-size:18px;">
+            ${this._debugOpen ? 'chevron_right' : 'chevron_left'}
+          </span>
+        </div>
+        ${this._debugOpen ? html`
+          <div class="debug-content">
+            ${this._debugLogs.map(log => html`
+              <div class="debug-msg ${log.source}">
+                <strong style="color: ${log.source === 'client' ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-tertiary)'}">
+                  ${log.source === 'client' ? '▶ Client' : '◀ Agent'}:
+                </strong><br/>
+                <pre style="margin:4px 0 0 0; white-space:pre-wrap;">${JSON.stringify(log.payload, null, 2)}</pre>
+              </div>
+            `)}
+          </div>
+        ` : ''}
+      </div>
 
       <div class="scroll-container">
         ${this._messages.map(msg => html`

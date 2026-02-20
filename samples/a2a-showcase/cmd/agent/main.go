@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"strings"
 	"time"
@@ -75,10 +76,30 @@ func processIntent(conn *websocket.Conn, text string) {
 	time.Sleep(800 * time.Millisecond)
 
 	if strings.Contains(text, "song") || strings.Contains(text, "music") {
+		type song struct {
+			id    string
+			title string
+			src   string
+		}
+
+		songs := []song{
+			{"neon-1", "Neon Pulse", "https://storage.googleapis.com/scream-ui-samples/neon_pulse.mp3"},
+			{"deep-2", "Deep Learning", "https://storage.googleapis.com/scream-ui-samples/deep_learning.mp3"},
+			{"digital-3", "Digital Horizon", "https://storage.googleapis.com/scream-ui-samples/digital_horizon.mp3"},
+			{"ether-4", "Ether Drift", "https://storage.googleapis.com/scream-ui-samples/ether_drift.mp3"},
+			{"gradient-5", "Gradient Descent", "https://storage.googleapis.com/scream-ui-samples/gradient_descent.mp3"},
+			{"latent-6", "Latent Space", "https://storage.googleapis.com/scream-ui-samples/latent_space.mp3"},
+			{"neural-7", "Neural Flux", "https://storage.googleapis.com/scream-ui-samples/neural_flux.mp3"},
+			{"starlight-8", "Starlight Silicon", "https://storage.googleapis.com/scream-ui-samples/starlight_silicon.mp3"},
+			{"synaptic-9", "Synaptic Void", "https://storage.googleapis.com/scream-ui-samples/synaptic_void.mp3"},
+		}
+
+		selectedSong := songs[rand.Intn(len(songs))]
+
 		// 1. Send the text response
 		sendA2A(conn, A2APayload{
 			Type: "text",
-			Text: "I'd love to play some music for you. Here is 'Neon Pulse' by the AI band:",
+			Text: fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
 		})
 		time.Sleep(300 * time.Millisecond)
 		// 2. Yield the A2UI Component Payload
@@ -87,8 +108,8 @@ func processIntent(conn *websocket.Conn, text string) {
 			Component: "ui-audio-player",
 			Props: map[string]any{
 				"item": map[string]string{
-					"id":  "neon-1",
-					"src": "https://storage.googleapis.com/scream-ui-samples/neon_pulse.mp3",
+					"id":  selectedSong.id,
+					"src": selectedSong.src,
 				},
 			},
 		})
