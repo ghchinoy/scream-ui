@@ -127,6 +127,18 @@ func processIntent(conn *websocket.Conn, text string) {
 			Props:     map[string]any{}, // No props needed, it boots itself
 		})
 
+	} else if strings.Contains(text, "how does this work") || strings.Contains(text, "architecture") || strings.Contains(text, "what is a2a") || strings.Contains(text, "a2ui") {
+		sendA2A(conn, A2APayload{
+			Type: "text",
+			Text: "This showcase uses Simulated Federation. The frontend sends me (the Agent) text. I then reply with an 'A2UI Payload' which the frontend uses to dynamically mount the components. Here is a diagram:",
+		})
+		time.Sleep(300 * time.Millisecond)
+		sendA2A(conn, A2APayload{
+			Type:      "a2ui_render",
+			Component: "demo-architecture-card",
+			Props:     map[string]any{},
+		})
+
 	} else if strings.Contains(text, "podcast") || strings.Contains(text, "playlist") {
 		sendA2A(conn, A2APayload{
 			Type: "text",

@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, state, query} from 'lit/decorators.js';
+import '@material/web/icon/icon.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
@@ -12,6 +13,49 @@ interface A2APayload {
   text?: string;
   component?: string;
   props?: Record<string, any>;
+}
+
+@customElement('demo-architecture-card')
+export class DemoArchitectureCard extends LitElement {
+  static styles = css`
+    :host {
+      display: block;
+      background: var(--md-sys-color-surface-container, #f3f3f3);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      max-width: 600px;
+    }
+    h3 {
+      margin-top: 0;
+      color: var(--md-sys-color-primary);
+    }
+    p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 16px;
+      background: white;
+    }
+  `;
+  render() {
+    return html`
+      <h3>Simulated Federation Architecture</h3>
+      <p>
+        This showcase demonstrates how to orchestrate UI components dynamically using an Agent-to-Agent (A2A) protocol. 
+        Instead of a monolithic app, the <b>Host</b> (serving the UI) and the <b>Agent</b> (the LLM brain) are separate services connected via WebSockets.
+      </p>
+      <p>
+        When you type a request, the Agent evaluates the intent and returns an <i>A2UI Payload</i> (a JSON object specifying a WebComponent tag). The Host renderer then dynamically instantiates that Lit component!
+      </p>
+      <img src="/docs/architecture.png" alt="A2A Architecture Diagram" />
+    `;
+  }
 }
 
 @customElement('a2ui-renderer')
@@ -268,10 +312,10 @@ export class A2uiRenderer extends LitElement {
       <!-- DEBUG PANEL -->
       <div class="debug-panel ${this._debugOpen ? 'open' : ''}">
         <div class="debug-header" @click=${() => (this._debugOpen = !this._debugOpen)}>
-          <span><span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle; margin-right:4px;">bug_report</span>A2A Inspector</span>
-          <span class="material-symbols-outlined" style="font-size:18px;">
+          <span style="display:flex; align-items:center; gap: 4px;"><md-icon style="font-size:16px;">bug_report</md-icon>A2A Inspector</span>
+          <md-icon style="font-size:18px;">
             ${this._debugOpen ? 'chevron_right' : 'chevron_left'}
-          </span>
+          </md-icon>
         </div>
         ${this._debugOpen ? html`
           <div class="debug-content">
