@@ -153,11 +153,28 @@ export class DemoAgentCard extends LitElement {
       "type": "Agent",
       "id": "urn:uuid:a2a-showcase-agent",
       "name": this.name,
+      "description": "An interactive agent capable of rendering @ghchinoy/lit-audio-ui components.",
       "status": this.status.toLowerCase(),
-      "capabilities": this.capabilities,
-      "endpoints": {
-        "ws": "ws://localhost:8081/ws"
-      }
+      "capabilities": {
+        "streaming": true,
+        "pushNotifications": false,
+        "extensions": [
+          {
+            "uri": "https://a2ui.org/specification/v0_8",
+            "required": true,
+            "description": "Supports A2UI v0.8 for dynamic UI orchestration",
+            "params": {
+              "catalogUrl": "https://raw.githubusercontent.com/ghchinoy/scream-ui/main/docs/a2ui_v0.8_catalog.json"
+            }
+          }
+        ]
+      },
+      "additionalInterfaces": [
+        {
+          "transport": "websocket",
+          "url": "ws://localhost:8081/ws"
+        }
+      ]
     };
 
     return html`
