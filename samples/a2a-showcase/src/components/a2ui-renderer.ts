@@ -305,7 +305,8 @@ export class A2uiRenderer extends LitElement {
       z-index: 100;
       border: 1px solid var(--md-sys-color-outline-variant);
       transition: transform 0.3s ease;
-      transform: translateX(calc(100% - 40px));
+      transform: translateX(calc(100% - 44px)); /* Adjust translation to hide perfectly */
+      overflow: hidden; /* Hide anything trying to peek out */
     }
     
     .debug-panel.open {
@@ -323,9 +324,9 @@ export class A2uiRenderer extends LitElement {
       justify-content: space-between;
       align-items: center;
       background: var(--md-sys-color-surface-container-highest);
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
       user-select: none;
+      min-height: 24px;
     }
 
     .debug-content {
