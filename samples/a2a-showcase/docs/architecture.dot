@@ -1,0 +1,55 @@
+digraph A2A_Architecture {
+    rankdir=LR;
+    node [shape=box, style=filled, fontname="Helvetica, Arial, sans-serif"];
+    edge [fontname="Helvetica, Arial, sans-serif", fontsize=10];
+    
+    subgraph cluster_frontend {
+        label = "Frontend (Browser)";
+        style = dashed;
+        color = "#1b5e20";
+        fontcolor = "#1b5e20";
+        
+        Renderer [label="<a2ui-renderer>
+(Lit WebComponent)", fillcolor="#e8f5e9", color="#4caf50"];
+        Components [label="@ghchinoy/lit-audio-ui
+(Atoms & Molecules)", fillcolor="#e8f5e9", color="#4caf50"];
+        
+        Renderer -> Components [label="Dynamically mounts"];
+    }
+    
+    subgraph cluster_host {
+        label = "Host Application (cmd/host)
+(Port 8080)";
+        style = dashed;
+        color = "#01579b";
+        fontcolor = "#01579b";
+        
+        HostServer [label="Reverse Proxy / Session Manager
+(Go Server)", fillcolor="#e1f5fe", color="#03a9f4"];
+    }
+    
+    subgraph cluster_agent {
+        label = "Autonomous Agent (cmd/agent)
+(Port 8081)";
+        style = dashed;
+        color = "#b71c1c";
+        fontcolor = "#b71c1c";
+        
+        AgentRouter [label="A2A Router
+(WebSocket)", fillcolor="#ffebee", color="#f44336"];
+        GenAI [label="google.golang.org/genai
+(Gemini SDK)", fillcolor="#ffebee", color="#f44336"];
+        
+        AgentRouter -> GenAI [label="Process Intent"];
+        GenAI -> AgentRouter [label="Tool Call
+(e.g., play_music)"];
+    }
+    
+    Renderer -> HostServer [label="1. User Input
+(wss://host/ws)"];
+    HostServer -> AgentRouter [label="2. Proxied Intent
+(wss://agent/ws)"];
+    AgentRouter -> HostServer [label="3. A2APayload
+{component: 'ui-audio-player'}"];
+    HostServer -> Renderer [label="4. Serialized A2UI"];
+}
