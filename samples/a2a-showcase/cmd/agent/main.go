@@ -66,113 +66,109 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 
 			selectedSong := songs[rand.Intn(len(songs))]
 
-			// Yield Text Part
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart(
-				fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
-			)), nil)
-			time.Sleep(300 * time.Millisecond)
-
-			// Yield A2UI v0.8 Data Part
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
-				MediaType: "application/json+a2ui",
-				Content: a2a.Data{
-					"surfaceUpdate": map[string]any{
-						"surfaceId": "surface-" + selectedSong.id,
-						"components": []map[string]any{
-							{
-								"id":   "player-1",
-								"type": "UiAudioPlayer", // Mapped to <ui-audio-player>
-								"props": map[string]any{
-									"item": map[string]string{
-										"id":  selectedSong.id,
-										"src": selectedSong.src,
+			yield(a2a.NewMessage(a2a.MessageRoleAgent,
+				a2a.NewTextPart(fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title)),
+				&a2a.Part{
+					MediaType: "application/json+a2ui",
+					Content: a2a.Data{
+						"surfaceUpdate": map[string]any{
+							"surfaceId": "surface-" + selectedSong.id,
+							"components": []map[string]any{
+								{
+									"id":   "player-1",
+									"type": "UiAudioPlayer", // Mapped to <ui-audio-player>
+									"props": map[string]any{
+										"item": map[string]string{
+											"id":  selectedSong.id,
+											"src": selectedSong.src,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			}), nil)
+			), nil)
 
 		} else if strings.Contains(userText, "live") || strings.Contains(userText, "talk") || strings.Contains(userText, "orb") {
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("Switching to Live Duplex Audio mode. Initializing the Orb component now...")), nil)
-			time.Sleep(300 * time.Millisecond)
-
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
-				MediaType: "application/json+a2ui",
-				Content: a2a.Data{
-					"surfaceUpdate": map[string]any{
-						"surfaceId": "surface-live",
-						"components": []map[string]any{
-							{
-								"id":    "live-1",
-								"type":  "DemoLiveConnection",
-								"props": map[string]any{},
+			yield(a2a.NewMessage(a2a.MessageRoleAgent,
+				a2a.NewTextPart("Switching to Live Duplex Audio mode. Initializing the Orb component now..."),
+				&a2a.Part{
+					MediaType: "application/json+a2ui",
+					Content: a2a.Data{
+						"surfaceUpdate": map[string]any{
+							"surfaceId": "surface-live",
+							"components": []map[string]any{
+								{
+									"id":    "live-1",
+									"type":  "DemoLiveConnection",
+									"props": map[string]any{},
+								},
 							},
 						},
 					},
 				},
-			}), nil)
+			), nil)
 
 		} else if strings.Contains(userText, "how does this work") || strings.Contains(userText, "architecture") || strings.Contains(userText, "what is a2a") || strings.Contains(userText, "a2ui") {
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("This showcase uses the official A2A JSON-RPC protocol over HTTP Server-Sent Events (SSE). Instead of raw WebSockets, the Host sends standard REST POST requests to my /invoke endpoint. I then yield standard A2UI v0.8 surfaceUpdate JSON objects inside a2a.DataParts. Here is a diagram:")), nil)
-			time.Sleep(300 * time.Millisecond)
-
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
-				MediaType: "application/json+a2ui",
-				Content: a2a.Data{
-					"surfaceUpdate": map[string]any{
-						"surfaceId": "surface-arch",
-						"components": []map[string]any{
-							{
-								"id":    "arch-1",
-								"type":  "DemoArchitectureCard",
-								"props": map[string]any{},
+			yield(a2a.NewMessage(a2a.MessageRoleAgent,
+				a2a.NewTextPart("This showcase uses the official A2A JSON-RPC protocol over HTTP Server-Sent Events (SSE). Instead of raw WebSockets, the Host sends standard REST POST requests to my /invoke endpoint. I then yield standard A2UI v0.8 surfaceUpdate JSON objects inside a2a.DataParts. Here is a diagram:"),
+				&a2a.Part{
+					MediaType: "application/json+a2ui",
+					Content: a2a.Data{
+						"surfaceUpdate": map[string]any{
+							"surfaceId": "surface-arch",
+							"components": []map[string]any{
+								{
+									"id":    "arch-1",
+									"type":  "DemoArchitectureCard",
+									"props": map[string]any{},
+								},
 							},
 						},
 					},
 				},
-			}), nil)
+			), nil)
 
 		} else if strings.Contains(userText, "who are you") || strings.Contains(userText, "agent info") || strings.Contains(userText, "capabilities") {
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I am the A2A Showcase Agent running the official a2a-go SDK! Here is my capability profile:")), nil)
-			time.Sleep(300 * time.Millisecond)
-
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
-				MediaType: "application/json+a2ui",
-				Content: a2a.Data{
-					"surfaceUpdate": map[string]any{
-						"surfaceId": "surface-agent",
-						"components": []map[string]any{
-							{
-								"id":    "agent-1",
-								"type":  "DemoAgentCard",
-								"props": map[string]any{},
+			yield(a2a.NewMessage(a2a.MessageRoleAgent,
+				a2a.NewTextPart("I am the A2A Showcase Agent running the official a2a-go SDK! Here is my capability profile:"),
+				&a2a.Part{
+					MediaType: "application/json+a2ui",
+					Content: a2a.Data{
+						"surfaceUpdate": map[string]any{
+							"surfaceId": "surface-agent",
+							"components": []map[string]any{
+								{
+									"id":    "agent-1",
+									"type":  "DemoAgentCard",
+									"props": map[string]any{},
+								},
 							},
 						},
 					},
 				},
-			}), nil)
+			), nil)
 
 		} else if strings.Contains(userText, "podcast") || strings.Contains(userText, "playlist") {
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I found a great podcast episode on WebComponents. Here it is:")), nil)
-			time.Sleep(300 * time.Millisecond)
-
-			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
-				MediaType: "application/json+a2ui",
-				Content: a2a.Data{
-					"surfaceUpdate": map[string]any{
-						"surfaceId": "surface-podcast",
-						"components": []map[string]any{
-							{
-								"id":    "podcast-1",
-								"type":  "DemoPodcastPlayer",
-								"props": map[string]any{},
+			yield(a2a.NewMessage(a2a.MessageRoleAgent,
+				a2a.NewTextPart("I found a great podcast episode on WebComponents. Here it is:"),
+				&a2a.Part{
+					MediaType: "application/json+a2ui",
+					Content: a2a.Data{
+						"surfaceUpdate": map[string]any{
+							"surfaceId": "surface-podcast",
+							"components": []map[string]any{
+								{
+									"id":    "podcast-1",
+									"type":  "DemoPodcastPlayer",
+									"props": map[string]any{},
+								},
 							},
 						},
 					},
 				},
-			}), nil)
+			), nil)
 		} else {
 			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I'm not sure how to render that. Try asking for 'music', a 'podcast', or to 'talk live'.")), nil)
 		}
