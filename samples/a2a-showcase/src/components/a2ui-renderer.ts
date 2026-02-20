@@ -67,8 +67,6 @@ export class DemoAgentCard extends LitElement {
   @property({type: String}) status = 'Online';
   @property({type: Array}) capabilities = ['Music playback', 'Podcasts', 'Live Duplex Audio', 'Architecture Docs'];
 
-  @state() private _flipped = false;
-
   static styles = css`
     :host {
       display: block;
@@ -162,7 +160,7 @@ export class DemoAgentCard extends LitElement {
     };
 
     return html`
-      <ui-3d-flip ?flipped=${this._flipped}>
+      <ui-3d-flip>
         
         <!-- FRONT: UI CARD -->
         <div slot="front" class="card-face">
@@ -174,27 +172,27 @@ export class DemoAgentCard extends LitElement {
               <h3>${this.name}</h3>
               <div class="status">● ${this.status}</div>
             </div>
-            <div class="header-actions">
-              <md-icon-button @click=${() => (this._flipped = true)} title="View A2A JSON Manifest">
-                <md-icon>data_object</md-icon>
-              </md-icon-button>
-            </div>
           </div>
           <div class="caps">
             ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
           </div>
         </div>
 
+        <md-icon-button slot="flip-icon" title="View A2A JSON Manifest" style="--md-icon-button-icon-color: var(--md-sys-color-on-surface);">
+          <md-icon>data_object</md-icon>
+        </md-icon-button>
+
         <!-- BACK: JSON MANIFEST -->
         <div slot="back" class="card-face back-face">
           <div style="display:flex; align-items:center;">
             <p class="back-title">agent-manifest.json</p>
-            <md-icon-button style="--md-icon-button-icon-color: #ccc;" @click=${() => (this._flipped = false)} title="Back to UI">
-              <md-icon>close</md-icon>
-            </md-icon-button>
           </div>
           <pre class="json-pre">${JSON.stringify(manifestJson, null, 2)}</pre>
         </div>
+
+        <md-icon-button slot="flip-icon-back" title="Back to UI" style="--md-icon-button-icon-color: #ccc;">
+          <md-icon>close</md-icon>
+        </md-icon-button>
 
       </ui-3d-flip>
     `;
