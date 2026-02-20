@@ -4,7 +4,7 @@ import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';
-import '../../live-connection/src/components/demo-live-connection.js';
+import '../../../live-connection/src/components/demo-live-connection.js';
 
 interface A2APayload {
   type: 'text' | 'a2ui_render';
