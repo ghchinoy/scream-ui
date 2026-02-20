@@ -408,12 +408,12 @@ export class A2uiRenderer extends LitElement {
 
     for (const part of msg.parts) {
       // Render text parts normally
-      if (part.content?.text) {
-        this._messages = [...this._messages, {role: 'agent', content: part.content.text}];
+      if (part.text) {
+        this._messages = [...this._messages, {role: 'agent', content: part.text}];
       } 
-      // Render A2UI Data parts (a2a v1 spec uses mediaType and content object mapping)
-      else if (part.mediaType === 'application/json+a2ui' && part.content) {
-        const payload = part.content as any;
+      // Render A2UI Data parts (a2a v1 spec uses mediaType and data mapping)
+      else if (part.mediaType === 'application/json+a2ui' && part.data) {
+        const payload = part.data;
         if (payload.surfaceUpdate && payload.surfaceUpdate.components) {
           
           // A2UI v0.8 Core Logic: Parse the flat list of components
