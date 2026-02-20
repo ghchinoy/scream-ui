@@ -1,7 +1,9 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, state, query, property} from 'lit/decorators.js';
 import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-3d-flip.js';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';
@@ -64,22 +66,43 @@ export class DemoAgentCard extends LitElement {
   @property({type: String}) status = 'Online';
   @property({type: Array}) capabilities = ['Music playback', 'Podcasts', 'Live Duplex Audio', 'Architecture Docs'];
 
+  @state() private _flipped = false;
+
   static styles = css`
     :host {
       display: block;
+      max-width: 400px;
+      font-family: inherit;
+    }
+    
+    .card-face {
       background: var(--md-sys-color-surface-container, #f3f3f3);
       border-radius: 16px;
       padding: 24px;
       border: 1px solid var(--md-sys-color-outline-variant);
-      max-width: 400px;
-      font-family: inherit;
+      box-sizing: border-box;
+      width: 400px;
+      min-height: 200px;
     }
+
+    .back-face {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #333;
+    }
+
     .header {
       display: flex;
       align-items: center;
       gap: 16px;
       margin-bottom: 16px;
     }
+    .header-actions {
+      margin-left: auto;
+    }
+
     .avatar {
       width: 48px;
       height: 48px;
@@ -101,19 +124,73 @@ export class DemoAgentCard extends LitElement {
       font-size: 0.75rem;
       color: var(--md-sys-color-on-surface-variant);
     }
+
+    .json-pre {
+      margin: 0;
+      padding: 12px;
+      background: #2d2d2d;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      overflow-x: auto;
+      flex: 1;
+    }
+    .back-title {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #9cdcfe;
+      margin: 0 0 12px 0;
+      flex: 1;
+    }
   `;
+
   render() {
+    const manifestJson = {
+      "@context": "https://a2aproject.org/context",
+      "type": "Agent",
+      "id": "urn:uuid:a2a-showcase-agent",
+      "name": this.name,
+      "status": this.status.toLowerCase(),
+      "capabilities": this.capabilities,
+      "endpoints": {
+        "ws": "ws://localhost:8081/ws"
+      }
+    };
+
     return html`
-      <div class="header">
-        <div class="avatar"><md-icon>smart_toy</md-icon></div>
-        <div>
-          <h3>${this.name}</h3>
-          <div class="status">● ${this.status}</div>
+      <ui-3d-flip ?flipped=${this._flipped}>
+        
+        <!-- FRONT: UI CARD -->
+        <div slot="front" class="card-face">
+          <div class="header">
+            <div class="avatar"><md-icon>smart_toy</md-icon></div>
+            <div>
+              <h3>${this.name}</h3>
+              <div class="status">● ${this.status}</div>
+            </div>
+            <div class="header-actions">
+              <md-icon-button @click=${() => (this._flipped = true)} title="View A2A JSON Manifest">
+                <md-icon>data_object</md-icon>
+              </md-icon-button>
+            </div>
+          </div>
+          <div class="caps">
+            ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
+          </div>
         </div>
-      </div>
-      <div class="caps">
-        ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
-      </div>
+
+        <!-- BACK: JSON MANIFEST -->
+        <div slot="back" class="card-face back-face">
+          <div style="display:flex; align-items:center;">
+            <p class="back-title">agent-manifest.json</p>
+            <md-icon-button style="--md-icon-button-icon-color: #ccc;" @click=${() => (this._flipped = false)} title="Back to UI">
+              <md-icon>close</md-icon>
+            </md-icon-button>
+          </div>
+          <pre class="json-pre">${JSON.stringify(manifestJson, null, 2)}</pre>
+        </div>
+
+      </ui-3d-flip>
     `;
   }
 }
