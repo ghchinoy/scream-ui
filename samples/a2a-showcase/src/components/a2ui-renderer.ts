@@ -107,12 +107,9 @@ export class DemoAgentCard extends LitElement {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: var(--md-sys-color-primary, #0066cc);
-      color: var(--md-sys-color-on-primary, white);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
     }
     h3 { margin: 0; color: var(--md-sys-color-on-surface); }
     .status { font-size: 0.85rem; color: var(--md-sys-color-primary); font-weight: 600; }
@@ -163,7 +160,9 @@ export class DemoAgentCard extends LitElement {
         <!-- FRONT: UI CARD -->
         <div slot="front" class="card-face">
           <div class="header">
-            <div class="avatar"><md-icon>smart_toy</md-icon></div>
+            <div class="avatar">
+              <ui-orb agentState="listening" style="width: 48px; height: 48px;"></ui-orb>
+            </div>
             <div>
               <h3>${this.name}</h3>
               <div class="status">● ${this.status}</div>
