@@ -38,6 +38,7 @@ export class A2uiRenderer extends LitElement {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      color: var(--md-sys-color-on-surface, #1d1b20);
     }
 
     .badge {
