@@ -403,8 +403,8 @@ export class A2uiRenderer extends LitElement {
 
   private _handleA2AEvent(rpcResponse: any) {
     // 3. A2A Execution: Parse standard a2a.Event messages
-    // Note: Streaming responses drop the top-level "result" wrapper in some cases, so check both.
-    const msg = rpcResponse.result?.message || rpcResponse.message;
+    // The official a2a-go v1 SDK wraps SSE events inside the standard JSON-RPC result object.
+    const msg = rpcResponse.result?.message;
     if (!msg || !msg.parts) return;
 
     for (const part of msg.parts) {
