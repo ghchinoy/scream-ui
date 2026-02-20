@@ -63,6 +63,7 @@ let UiConversationBar = class UiConversationBar extends LitElement {
       justify-content: space-between;
       padding: var(--ui-conversation-bar-padding, 8px 16px);
       gap: 12px;
+      color: var(--md-sys-color-on-surface, #1d1b20);
     }
 
     .visualizer-section {
@@ -71,21 +72,32 @@ let UiConversationBar = class UiConversationBar extends LitElement {
       gap: 12px;
       flex: 1;
       height: 40px;
-      background: var(--md-sys-color-surface-container-high);
+      background: var(--md-sys-color-surface-container-high, #e2e2e2);
       border-radius: 12px;
       padding: 0 12px;
       overflow: hidden;
+      color: var(--md-sys-color-on-surface, #1d1b20);
+    }
+    
+    ui-mic-selector {
+      --md-sys-color-on-surface: var(--md-sys-color-on-surface-variant, #49454f);
     }
 
     .waveform-wrapper {
       flex: 1;
       height: 24px;
+      color: var(--md-sys-color-primary, #0066cc);
     }
 
     .controls {
       display: flex;
       align-items: center;
       gap: 4px;
+      color: var(--md-sys-color-on-surface-variant, #49454f);
+    }
+    
+    md-icon-button {
+      --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant, #49454f);
     }
 
     .input-area {

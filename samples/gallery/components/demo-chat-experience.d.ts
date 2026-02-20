@@ -18,6 +18,7 @@ import '@ghchinoy/lit-audio-ui/molecules/ui-chat-list.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-chat-item.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-typing-indicator.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
 export declare class DemoChatExperience extends LitElement {
     private _messages;
     static styles: import("lit").CSSResult;

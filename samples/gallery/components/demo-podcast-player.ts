@@ -137,6 +137,7 @@ export class DemoPodcastPlayer extends LitElement {
   }
 
   async firstUpdated() {
+    // @ts-ignore - Ignore missing declaration file for dynamic import
     await import('@ghchinoy/lit-audio-ui/molecules/ui-orb.js');
   }
 

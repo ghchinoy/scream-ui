@@ -4,6 +4,7 @@ import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-3d-flip.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';
@@ -74,6 +75,12 @@ export class DemoAgentCard extends LitElement {
       max-width: 400px;
       font-family: inherit;
     }
+
+    ui-3d-flip {
+      width: 400px;
+      height: 250px; /* Force height so absolutely-positioned slots don't collapse */
+      display: block;
+    }
     
     .card-face {
       background: var(--md-sys-color-surface-container, #f3f3f3);
@@ -81,8 +88,8 @@ export class DemoAgentCard extends LitElement {
       padding: 24px;
       border: 1px solid var(--md-sys-color-outline-variant);
       box-sizing: border-box;
-      width: 400px;
-      min-height: 200px;
+      width: 100%;
+      height: 100%;
     }
 
     .back-face {

@@ -26,6 +26,7 @@ import '@ghchinoy/lit-audio-ui/molecules/ui-chat-list.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-chat-item.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-typing-indicator.js';
+import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
 let DemoChatExperience = class DemoChatExperience extends LitElement {
     constructor() {
         super(...arguments);
@@ -92,10 +93,10 @@ let DemoChatExperience = class DemoChatExperience extends LitElement {
               <ui-chat-item
                 .direction=${m.sender === 'user' ? 'outbound' : 'inbound'}
                 .avatarName=${m.sender === 'user' ? 'Me' : 'AI'}
-                .avatarSrc=${m.sender === 'agent'
-            ? 'https://raw.githubusercontent.com/elevenlabs/ui/main/apps/www/public/avatars/01.png'
-            : ''}
               >
+                ${m.sender === 'agent'
+            ? html `<div slot="avatar" style="width:36px; height:36px; border-radius:50%; background:var(--md-sys-color-surface-container-high); display:flex; align-items:center; justify-content:center; overflow:hidden;"><ui-orb agentState="idle"></ui-orb></div>`
+            : ''}
                 ${m.isTyping
             ? html `<ui-typing-indicator></ui-typing-indicator>`
             : m.text}
