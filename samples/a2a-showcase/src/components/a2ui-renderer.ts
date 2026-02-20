@@ -457,6 +457,7 @@ export class A2uiRenderer extends LitElement {
       method: "SendStreamingMessage",
       params: {
         message: {
+          messageId: "msg-" + Date.now().toString(),
           role: "user",
           parts: [{ text }]
         }
