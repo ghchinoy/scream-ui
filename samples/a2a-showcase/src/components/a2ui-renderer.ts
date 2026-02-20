@@ -167,7 +167,7 @@ export class A2uiRenderer extends LitElement {
   }
 
   private _handleUserSubmit(e: CustomEvent) {
-    const text = e.detail;
+    const text = e.detail.message;
     if (!text || this._wsState !== 'connected') return;
 
     this._messages = [...this._messages, {role: 'user', content: text}];
@@ -198,7 +198,7 @@ export class A2uiRenderer extends LitElement {
       <div class="footer">
         <!-- Re-using our library's UI component for the chat bar! -->
         <ui-conversation-bar
-          @text-submit="${this._handleUserSubmit}"
+          @message-sent="${this._handleUserSubmit}"
           placeholder="Try 'play me a song', 'show podcast', or 'talk live'..."
         ></ui-conversation-bar>
       </div>
