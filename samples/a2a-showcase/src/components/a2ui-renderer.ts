@@ -1,5 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import {customElement, state, query} from 'lit/decorators.js';
+import {customElement, state, query, property} from 'lit/decorators.js';
 import '@material/web/icon/icon.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 // Pre-load components that the Agent might request
@@ -58,6 +58,66 @@ export class DemoArchitectureCard extends LitElement {
   }
 }
 
+@customElement('demo-agent-card')
+export class DemoAgentCard extends LitElement {
+  @property({type: String}) name = 'A2A Showcase Agent';
+  @property({type: String}) status = 'Online';
+  @property({type: Array}) capabilities = ['Music playback', 'Podcasts', 'Live Duplex Audio', 'Architecture Docs'];
+
+  static styles = css`
+    :host {
+      display: block;
+      background: var(--md-sys-color-surface-container, #f3f3f3);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      max-width: 400px;
+      font-family: inherit;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--md-sys-color-primary, #0066cc);
+      color: var(--md-sys-color-on-primary, white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    h3 { margin: 0; color: var(--md-sys-color-on-surface); }
+    .status { font-size: 0.85rem; color: var(--md-sys-color-primary); font-weight: 600; }
+    .caps { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cap-badge {
+      background: var(--md-sys-color-surface-container-high, #e2e2e2);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+  `;
+  render() {
+    return html`
+      <div class="header">
+        <div class="avatar"><md-icon>smart_toy</md-icon></div>
+        <div>
+          <h3>${this.name}</h3>
+          <div class="status">● ${this.status}</div>
+        </div>
+      </div>
+      <div class="caps">
+        ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
+      </div>
+    `;
+  }
+}
+
 @customElement('a2ui-renderer')
 export class A2uiRenderer extends LitElement {
   @state() private _messages: {role: 'user' | 'agent'; content: string | HTMLElement}[] = [];
@@ -81,17 +141,25 @@ export class A2uiRenderer extends LitElement {
       padding: 1rem 2rem;
       border-bottom: 1px solid var(--md-sys-color-outline-variant, #cac4d0);
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
+      gap: 1.5rem;
       color: var(--md-sys-color-on-surface, #1d1b20);
     }
 
     .badge {
       font-size: 0.75rem;
-      padding: 4px 8px;
+      padding: 4px 12px;
       border-radius: 999px;
       font-weight: 600;
       text-transform: uppercase;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .badge:hover {
+      opacity: 0.8;
     }
     .badge.connected { background: #e8f5e9; color: #1b5e20; }
     .badge.disconnected { background: #ffebee; color: #ba1a1a; }
@@ -299,6 +367,19 @@ export class A2uiRenderer extends LitElement {
     this._ws!.send(JSON.stringify(payload));
   }
 
+  private _requestAgentInfo() {
+    if (this._wsState !== 'connected') return;
+    const text = "who are you";
+    
+    // Visually push the user query
+    this._messages = [...this._messages, {role: 'user', content: text}];
+    this._scrollToBottom();
+
+    const payload = {text};
+    this._logDebug('client', payload);
+    this._ws!.send(JSON.stringify(payload));
+  }
+
   render() {
     return html`
       <header>
@@ -306,7 +387,9 @@ export class A2uiRenderer extends LitElement {
           <h1 style="margin: 0; font-size: 1.25rem;">Federated A2A Showcase</h1>
           <p style="margin: 0; font-size: 0.85rem; opacity: 0.7;">Host &lt;-&gt; Agent Protocol Demo</p>
         </div>
-        <span class="badge ${this._wsState}">${this._wsState}</span>
+        <button class="badge ${this._wsState}" @click=${this._requestAgentInfo} title="View Agent Profile">
+          ${this._wsState}
+        </button>
       </header>
 
       <!-- DEBUG PANEL -->

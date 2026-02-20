@@ -139,6 +139,18 @@ func processIntent(conn *websocket.Conn, text string) {
 			Props:     map[string]any{},
 		})
 
+	} else if strings.Contains(text, "who are you") || strings.Contains(text, "agent info") || strings.Contains(text, "capabilities") {
+		sendA2A(conn, A2APayload{
+			Type: "text",
+			Text: "I am the A2A Showcase Agent running on port 8081! Here is my capability profile:",
+		})
+		time.Sleep(300 * time.Millisecond)
+		sendA2A(conn, A2APayload{
+			Type:      "a2ui_render",
+			Component: "demo-agent-card",
+			Props:     map[string]any{},
+		})
+
 	} else if strings.Contains(text, "podcast") || strings.Contains(text, "playlist") {
 		sendA2A(conn, A2APayload{
 			Type: "text",
