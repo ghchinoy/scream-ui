@@ -5,6 +5,8 @@ import '@material/web/iconbutton/icon-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-3d-flip.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
+import './a2a-inspector.ts';
+import type {A2ADebugLog} from './a2a-inspector.ts';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';
@@ -76,7 +78,7 @@ export class DemoAgentCard extends LitElement {
 
     ui-3d-flip {
       width: 400px;
-      height: 250px; /* Force height so absolutely-positioned slots don't collapse */
+      height: 250px;
       display: block;
     }
     
@@ -128,7 +130,14 @@ export class DemoAgentCard extends LitElement {
     }
     h3 { margin: 0; color: var(--md-sys-color-on-surface); }
     .status { font-size: 0.85rem; color: var(--md-sys-color-primary); font-weight: 600; }
-    .caps { display: flex; flex-wrap: wrap; gap: 8px; }
+    
+    .caps-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .caps { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
     .cap-badge {
       background: var(--md-sys-color-surface-container-high, #e2e2e2);
       padding: 4px 8px;
@@ -200,10 +209,12 @@ export class DemoAgentCard extends LitElement {
               <h3>${this.name}</h3>
               <div class="status">● ${this.status}</div>
             </div>
-            <img class="a2ui-logo" alt="A2UI Protocol" />
           </div>
-          <div class="caps">
-            ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
+          <div class="caps-container">
+            <div class="caps">
+              ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
+            </div>
+            <img class="a2ui-logo" alt="A2UI Protocol" />
           </div>
         </div>
 
@@ -235,6 +246,7 @@ export class A2uiRenderer extends LitElement {
   
   private _ws: WebSocket | null = null;
   @query('.scroll-container') private _scrollContainer!: HTMLElement;
+  @state() private _debugLogs: A2ADebugLog[] = [];
 
   static styles = css`
     :host {
@@ -347,73 +359,7 @@ export class A2uiRenderer extends LitElement {
       width: 100%;
       max-width: 800px;
     }
-
-    .debug-panel {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--md-sys-color-surface-container-high, #333);
-      color: var(--md-sys-color-on-surface, #eee);
-      border-radius: 12px;
-      width: 350px;
-      max-height: 400px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 100;
-      border: 1px solid var(--md-sys-color-outline-variant);
-      transition: transform 0.3s ease;
-      transform: translateX(calc(100% - 150px)); /* Let enough of the header show */
-      overflow: hidden; /* Hide anything trying to peek out */
-    }
-    
-    .debug-panel.open {
-      transform: translateX(0);
-    }
-
-    .debug-header {
-      padding: 8px 12px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--md-sys-color-surface-container-highest);
-      border-bottom: 1px solid var(--md-sys-color-outline-variant);
-      user-select: none;
-      min-height: 24px;
-    }
-
-    .debug-content {
-      padding: 12px;
-      overflow-y: auto;
-      font-family: monospace;
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .debug-msg {
-      padding: 6px;
-      border-radius: 4px;
-      background: var(--md-sys-color-surface-container);
-      word-break: break-all;
-    }
-    .debug-msg.client {
-      border-left: 3px solid var(--md-sys-color-primary, #0066cc);
-    }
-    .debug-msg.server {
-      border-left: 3px solid var(--md-sys-color-tertiary, #cc0066);
-    }
   `;
-
-  @state() private _debugOpen = false;
-  @state() private _debugLogs: {source: 'client' | 'server', payload: any}[] = [];
-  @query('.debug-content') private _debugScroll!: HTMLElement;
 
   connectedCallback() {
     super.connectedCallback();
@@ -427,7 +373,6 @@ export class A2uiRenderer extends LitElement {
 
   private _connect() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // We connect to the HOST, which proxies us to the AGENT
     this._ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
 
     this._ws.onopen = () => {
@@ -453,11 +398,6 @@ export class A2uiRenderer extends LitElement {
 
   private _logDebug(source: 'client' | 'server', payload: any) {
     this._debugLogs = [...this._debugLogs, {source, payload}];
-    this.updateComplete.then(() => {
-       if (this._debugScroll) {
-          this._debugScroll.scrollTop = this._debugScroll.scrollHeight;
-       }
-    });
   }
 
   private _handleA2APayload(payload: A2APayload) {
@@ -465,18 +405,12 @@ export class A2uiRenderer extends LitElement {
       this._messages = [...this._messages, {role: 'agent', content: payload.text}];
     } 
     else if (payload.type === 'a2ui_render' && payload.component) {
-      // 🚀 The Magic: Dynamically instantiating Lit WebComponents based on Agent intent!
-      console.log(`🤖 Agent requested to render: <${payload.component}>`, payload.props);
       const el = document.createElement(payload.component);
-      
-      // Inject the props
       if (payload.props) {
         for (const [key, value] of Object.entries(payload.props)) {
-          // If the prop is an object/array, we have to set it as a property, not an attribute.
           (el as any)[key] = value;
         }
       }
-      
       this._messages = [...this._messages, {role: 'agent', content: el}];
     }
 
@@ -497,7 +431,6 @@ export class A2uiRenderer extends LitElement {
     this._messages = [...this._messages, {role: 'user', content: text}];
     this._scrollToBottom();
 
-    // Send to the agent
     const payload = {text};
     this._logDebug('client', payload);
     this._ws!.send(JSON.stringify(payload));
@@ -507,7 +440,6 @@ export class A2uiRenderer extends LitElement {
     if (this._wsState !== 'connected') return;
     const text = "who are you";
     
-    // Visually push the user query
     this._messages = [...this._messages, {role: 'user', content: text}];
     this._scrollToBottom();
 
@@ -528,27 +460,7 @@ export class A2uiRenderer extends LitElement {
         </button>
       </header>
 
-      <!-- DEBUG PANEL -->
-      <div class="debug-panel ${this._debugOpen ? 'open' : ''}">
-        <div class="debug-header" @click=${() => (this._debugOpen = !this._debugOpen)}>
-          <span style="display:flex; align-items:center; gap: 4px;"><md-icon style="font-size:16px;">bug_report</md-icon>A2A Inspector</span>
-          <md-icon style="font-size:18px;">
-            ${this._debugOpen ? 'chevron_right' : 'chevron_left'}
-          </md-icon>
-        </div>
-        ${this._debugOpen ? html`
-          <div class="debug-content">
-            ${this._debugLogs.map(log => html`
-              <div class="debug-msg ${log.source}">
-                <strong style="color: ${log.source === 'client' ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-tertiary)'}">
-                  ${log.source === 'client' ? '▶ Client' : '◀ Agent'}:
-                </strong><br/>
-                <pre style="margin:4px 0 0 0; white-space:pre-wrap;">${JSON.stringify(log.payload, null, 2)}</pre>
-              </div>
-            `)}
-          </div>
-        ` : ''}
-      </div>
+      <a2a-inspector .logs=${this._debugLogs}></a2a-inspector>
 
       <div class="scroll-container">
         ${this._messages.map(msg => html`
@@ -566,7 +478,6 @@ export class A2uiRenderer extends LitElement {
       </div>
 
       <div class="footer">
-        <!-- Re-using our library's UI component for the chat bar! -->
         <ui-conversation-bar
           @message-sent="${this._handleUserSubmit}"
           placeholder="Try 'play me a song', 'show podcast', or 'talk live'..."
