@@ -46,6 +46,11 @@ Object.assign(el, payload.props);
 this.renderRoot.appendChild(el);
 ```
 
+### 4. Agent Discovery & A2UI Catalogs
+In the A2A ecosystem, a Host must discover an Agent and learn what UI components it supports before it connects to the WebSocket. This is done via an **Agent Card**. 
+
+The Agent Card provides a JSON manifest detailing the Agent's identity, endpoints, and capabilities. Importantly, the Agent declares its support for the A2UI extension and points to the `catalogUrl` (e.g., `a2ui_v0.8_catalog.json`) that maps the Agent's abstract UI concepts to the specific Lit components (`@ghchinoy/lit-audio-ui`) the Host needs to load. You can view the live Agent Card by clicking the **"Connected"** badge in the showcase UI and flipping the card over.
+
 ### Why "Simulated" Federation?
 In a true federated environment, `cmd/agent` would live on a completely different server, built by a different team, and registered into a global A2A directory. 
 

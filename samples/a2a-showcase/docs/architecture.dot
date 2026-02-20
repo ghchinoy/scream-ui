@@ -29,24 +29,21 @@ digraph A2A_Architecture {
     }
     
     subgraph cluster_agent {
-        label = "Autonomous Agent (cmd/agent)
-(Port 8081)";
+        label = "Autonomous Agent (cmd/agent)\n(Port 8081)";
         style = dashed;
         color = "#b71c1c";
         fontcolor = "#b71c1c";
         
-        AgentRouter [label="A2A Router
-(WebSocket)", fillcolor="#ffebee", color="#f44336"];
-        GenAI [label="google.golang.org/genai
-(Gemini SDK)", fillcolor="#ffebee", color="#f44336"];
+        AgentCard [label="/.well-known/agent-card.json\n(Capabilities & CatalogURL)", fillcolor="#fff3e0", color="#0288d1", shape=note];
+        AgentRouter [label="A2A Router\n(WebSocket)", fillcolor="#ffebee", color="#f44336"];
+        GenAI [label="google.golang.org/genai\n(Gemini SDK)", fillcolor="#ffebee", color="#f44336"];
         
         AgentRouter -> GenAI [label="Process Intent"];
-        GenAI -> AgentRouter [label="Tool Call
-(e.g., play_music)"];
+        GenAI -> AgentRouter [label="Tool Call\n(e.g., play_music)"];
     }
     
-    Renderer -> HostServer [label="1. User Input
-(wss://host/ws)"];
+    HostServer -> AgentCard [label="0. Discovery (HTTP GET)", style=dotted];
+    Renderer -> HostServer [label="1. User Input\n(wss://host/ws)"];
     HostServer -> AgentRouter [label="2. Proxied Intent
 (wss://agent/ws)"];
     AgentRouter -> HostServer [label="3. A2APayload
