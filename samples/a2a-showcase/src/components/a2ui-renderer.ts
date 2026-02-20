@@ -5,8 +5,8 @@ import '@material/web/iconbutton/icon-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-3d-flip.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
-import './a2a-inspector.ts';
-import type {A2ADebugLog} from './a2a-inspector.ts';
+import './a2a-inspector.js';
+import type {A2ADebugLog} from './a2a-inspector.js';
 // Pre-load components that the Agent might request
 import '@ghchinoy/lit-audio-ui/organisms/ui-audio-player.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';

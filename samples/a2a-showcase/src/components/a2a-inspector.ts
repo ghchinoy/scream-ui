@@ -61,13 +61,8 @@ export class A2aInspector extends LitElement {
 
     .a2a-logo {
       height: 16px;
-      content: url('/assets/a2a-logo-black.svg');
+      content: url('/assets/a2a-logo-white.svg');
       opacity: 0.9;
-    }
-    @media (prefers-color-scheme: dark) {
-      .a2a-logo {
-        content: url('/assets/a2a-logo-white.svg');
-      }
     }
 
     .header-left {
