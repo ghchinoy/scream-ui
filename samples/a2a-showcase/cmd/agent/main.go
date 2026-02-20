@@ -109,18 +109,13 @@ func processIntent(conn *websocket.Conn, text string) {
 	} else if strings.Contains(text, "podcast") || strings.Contains(text, "playlist") {
 		sendA2A(conn, A2APayload{
 			Type: "text",
-			Text: "Here is your queued podcast playlist.",
+			Text: "I found a great podcast episode on WebComponents. Here it is:",
 		})
 		time.Sleep(300 * time.Millisecond)
 		sendA2A(conn, A2APayload{
 			Type:      "a2ui_render",
-			Component: "ui-playlist",
-			Props: map[string]any{
-				"items": []map[string]string{
-					{"id": "1", "title": "Latent Space", "duration": "45:00"},
-					{"id": "2", "title": "Gradient Descent", "duration": "32:15"},
-				},
-			},
+			Component: "demo-podcast-player",
+			Props:     map[string]any{},
 		})
 	} else {
 		sendA2A(conn, A2APayload{
