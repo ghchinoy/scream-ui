@@ -454,7 +454,7 @@ export class A2uiRenderer extends LitElement {
     // 2. A2A Invocation: Build standard JSON-RPC request
     const requestPayload = {
       jsonrpc: "2.0",
-      method: "a2a.Invoke",
+      method: "SendStreamingMessage",
       params: {
         message: {
           role: "user",
