@@ -104,8 +104,18 @@ export class DemoAgentCard extends LitElement {
       gap: 16px;
       margin-bottom: 16px;
     }
-    .header-actions {
+    
+    .a2ui-logo {
+      height: 24px;
       margin-left: auto;
+      opacity: 0.8;
+      content: url('/assets/A2UI_dark.svg');
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .a2ui-logo {
+        content: url('/assets/A2UI_light.svg');
+      }
     }
 
     .avatar {
@@ -190,6 +200,7 @@ export class DemoAgentCard extends LitElement {
               <h3>${this.name}</h3>
               <div class="status">● ${this.status}</div>
             </div>
+            <img class="a2ui-logo" alt="A2UI Protocol" />
           </div>
           <div class="caps">
             ${this.capabilities.map(cap => html`<span class="cap-badge">${cap}</span>`)}
