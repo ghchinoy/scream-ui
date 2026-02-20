@@ -73,6 +73,11 @@ export class DemoAgentCard extends LitElement {
       width: 400px;
       height: 250px;
       display: block;
+      /* Allow resizing the 3d wrapper */
+      resize: both;
+      overflow: hidden;
+      min-width: 300px;
+      min-height: 200px;
     }
     
     .card-face {
@@ -83,6 +88,7 @@ export class DemoAgentCard extends LitElement {
       box-sizing: border-box;
       width: 100%;
       height: 100%;
+      overflow: hidden; /* Ensure contents stay in bounds when resized */
     }
 
     .back-face {
@@ -146,7 +152,7 @@ export class DemoAgentCard extends LitElement {
       border-radius: 8px;
       font-family: monospace;
       font-size: 0.75rem;
-      overflow-x: auto;
+      overflow: auto; /* changed from overflow-x to overflow to allow scrolling both ways */
       flex: 1;
       text-align: left;
     }
@@ -166,10 +172,17 @@ export class DemoAgentCard extends LitElement {
       "id": "urn:uuid:a2a-showcase-agent",
       "name": this.name,
       "description": "An interactive agent capable of rendering @ghchinoy/lit-audio-ui components.",
-      "status": this.status.toLowerCase(),
+      "supportedInterfaces": [
+        {
+          "url": "http://127.0.0.1:8081/invoke",
+          "protocolBinding": "JSONRPC",
+          "protocolVersion": "1.0"
+        }
+      ],
+      "defaultInputModes": ["text"],
+      "defaultOutputModes": ["text"],
       "capabilities": {
         "streaming": true,
-        "pushNotifications": false,
         "extensions": [
           {
             "uri": "https://a2ui.org/specification/v0_8",
@@ -180,13 +193,7 @@ export class DemoAgentCard extends LitElement {
             }
           }
         ]
-      },
-      "additionalInterfaces": [
-        {
-          "transport": "websocket",
-          "url": "ws://localhost:8081/ws"
-        }
-      ]
+      }
     };
 
     return html`
