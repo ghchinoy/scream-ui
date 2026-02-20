@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -9,168 +9,213 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/websocket"
+	"github.com/a2aproject/a2a-go/a2a"
+	"github.com/a2aproject/a2a-go/a2asrv"
+	"github.com/a2aproject/a2a-go/a2asrv/eventqueue"
 )
 
-// A2APayload represents the "Simulated" Agent-to-Agent / Agent-to-UI contract
-type A2APayload struct {
-	Type      string         `json:"type"`                // "text" or "a2ui_render"
-	Text      string         `json:"text,omitempty"`      // The spoken/text response
-	Component string         `json:"component,omitempty"` // The Lit element tag (e.g. "ui-audio-player")
-	Props     map[string]any `json:"props,omitempty"`     // The properties to assign to the DOM element
+// agentExecutor implements the a2asrv.AgentExecutor interface required by the a2a-go SDK.
+// It receives standard A2A requests (via JSON-RPC over HTTP) and yields a2a.Event responses.
+type agentExecutor struct{}
+
+var _ a2asrv.AgentExecutor = (*agentExecutor)(nil)
+
+func (*agentExecutor) Cancel(ctx context.Context, execCtx *a2asrv.ExecutorContext) iter.Seq2[a2a.Event, error] {
+	return func(yield func(a2a.Event, error) bool) {
+		log.Println("Agent request cancelled")
+	}
 }
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true // Allow all for demo
-	},
+func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorContext) iter.Seq2[a2a.Event, error] {
+	return func(yield func(a2a.Event, error) bool) {
+		// 1. Extract the text intent from the incoming A2A Message parts
+		var userText string
+		if execCtx.Message != nil {
+			for _, part := range execCtx.Message.Parts {
+				if part.Text != "" {
+					userText += part.Text + " "
+				}
+			}
+		}
+
+		userText = strings.ToLower(strings.TrimSpace(userText))
+		log.Printf("🤖 Agent Heard: %s\n", userText)
+
+		// Simulate LLM latency
+		time.Sleep(800 * time.Millisecond)
+
+		// 2. Intent Routing & A2UI Output Generation
+		if strings.Contains(userText, "song") || strings.Contains(userText, "music") {
+			type song struct {
+				id    string
+				title string
+				src   string
+			}
+
+			songs := []song{
+				{"neon-1", "Neon Pulse", "https://storage.googleapis.com/scream-ui-samples/neon_pulse.mp3"},
+				{"deep-2", "Deep Learning", "https://storage.googleapis.com/scream-ui-samples/deep_learning.mp3"},
+				{"digital-3", "Digital Horizon", "https://storage.googleapis.com/scream-ui-samples/digital_horizon.mp3"},
+				{"ether-4", "Ether Drift", "https://storage.googleapis.com/scream-ui-samples/ether_drift.mp3"},
+				{"gradient-5", "Gradient Descent", "https://storage.googleapis.com/scream-ui-samples/gradient_descent.mp3"},
+				{"latent-6", "Latent Space", "https://storage.googleapis.com/scream-ui-samples/latent_space.mp3"},
+				{"neural-7", "Neural Flux", "https://storage.googleapis.com/scream-ui-samples/neural_flux.mp3"},
+				{"starlight-8", "Starlight Silicon", "https://storage.googleapis.com/scream-ui-samples/starlight_silicon.mp3"},
+				{"synaptic-9", "Synaptic Void", "https://storage.googleapis.com/scream-ui-samples/synaptic_void.mp3"},
+			}
+
+			selectedSong := songs[rand.Intn(len(songs))]
+
+			// Yield Text Part
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{
+				Text: fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
+			}), nil)
+			time.Sleep(300 * time.Millisecond)
+
+			// Yield A2UI v0.8 Data Part
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
+				Metadata: map[string]any{
+					"mimeType": "application/json+a2ui",
+				},
+				Data: map[string]any{
+					"surfaceUpdate": map[string]any{
+						"surfaceId": "surface-" + selectedSong.id,
+						"components": []map[string]any{
+							{
+								"id":   "player-1",
+								"type": "UiAudioPlayer", // Mapped to <ui-audio-player>
+								"props": map[string]any{
+									"item": map[string]string{
+										"id":  selectedSong.id,
+										"src": selectedSong.src,
+									},
+								},
+							},
+						},
+					},
+				},
+			}), nil)
+
+		} else if strings.Contains(userText, "live") || strings.Contains(userText, "talk") || strings.Contains(userText, "orb") {
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "Switching to Live Duplex Audio mode. Initializing the Orb component now..."}), nil)
+			time.Sleep(300 * time.Millisecond)
+
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
+				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
+				Data: map[string]any{
+					"surfaceUpdate": map[string]any{
+						"surfaceId": "surface-live",
+						"components": []map[string]any{
+							{
+								"id":    "live-1",
+								"type":  "DemoLiveConnection",
+								"props": map[string]any{},
+							},
+						},
+					},
+				},
+			}), nil)
+
+		} else if strings.Contains(userText, "how does this work") || strings.Contains(userText, "architecture") || strings.Contains(userText, "what is a2a") || strings.Contains(userText, "a2ui") {
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "This showcase uses the official A2A JSON-RPC protocol over HTTP Server-Sent Events (SSE). Instead of raw WebSockets, the Host sends standard REST POST requests to my /invoke endpoint. I then yield standard A2UI v0.8 surfaceUpdate JSON objects inside a2a.DataParts. Here is a diagram:"}), nil)
+			time.Sleep(300 * time.Millisecond)
+
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
+				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
+				Data: map[string]any{
+					"surfaceUpdate": map[string]any{
+						"surfaceId": "surface-arch",
+						"components": []map[string]any{
+							{
+								"id":    "arch-1",
+								"type":  "DemoArchitectureCard",
+								"props": map[string]any{},
+							},
+						},
+					},
+				},
+			}), nil)
+
+		} else if strings.Contains(userText, "who are you") || strings.Contains(userText, "agent info") || strings.Contains(userText, "capabilities") {
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I am the A2A Showcase Agent running the official a2a-go SDK! Here is my capability profile:"}), nil)
+			time.Sleep(300 * time.Millisecond)
+
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
+				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
+				Data: map[string]any{
+					"surfaceUpdate": map[string]any{
+						"surfaceId": "surface-agent",
+						"components": []map[string]any{
+							{
+								"id":    "agent-1",
+								"type":  "DemoAgentCard",
+								"props": map[string]any{},
+							},
+						},
+					},
+				},
+			}), nil)
+
+		} else if strings.Contains(userText, "podcast") || strings.Contains(userText, "playlist") {
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I found a great podcast episode on WebComponents. Here it is:"}), nil)
+			time.Sleep(300 * time.Millisecond)
+
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
+				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
+				Data: map[string]any{
+					"surfaceUpdate": map[string]any{
+						"surfaceId": "surface-podcast",
+						"components": []map[string]any{
+							{
+								"id":    "podcast-1",
+								"type":  "DemoPodcastPlayer",
+								"props": map[string]any{},
+							},
+						},
+					},
+				},
+			}), nil)
+		} else {
+			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I'm not sure how to render that. Try asking for 'music', a 'podcast', or to 'talk live'."}), nil)
+		}
+	}
 }
 
 func main() {
-	fmt.Println("🤖 Agent Server (LLM Brain) starting on :8081")
+	fmt.Println("🤖 Agent Server (Official A2A JSON-RPC) starting on :8081")
 
-	http.HandleFunc("/ws", handleAgentWebSocket)
-	log.Fatal(http.ListenAndServe(":8081", nil))
-}
-
-func handleAgentWebSocket(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("Upgrade error:", err)
-		return
-	}
-	defer conn.Close()
-
-	log.Println("🤖 Agent: New A2A connection established.")
-
-	// Send an initial greeting
-	sendA2A(conn, A2APayload{
-		Type: "text",
-		Text: "Hello! I am your A2A-capable AI agent. Ask me to play a song, show you a podcast, or talk to me live.",
-	})
-
-	for {
-		_, msgBytes, err := conn.ReadMessage()
-		if err != nil {
-			log.Println("🤖 Agent: Connection closed")
-			break
-		}
-
-		// Parse the incoming user request (assuming standard JSON for now)
-		var userMsg struct {
-			Text string `json:"text"`
-		}
-		if err := json.Unmarshal(msgBytes, &userMsg); err != nil {
-			continue
-		}
-
-		log.Printf("🤖 Agent Heard: %s\n", userMsg.Text)
-		processIntent(conn, strings.ToLower(userMsg.Text))
-	}
-}
-
-// processIntent is a simulated "LLM Tool Calling" router.
-// In a production app, this would be `google.golang.org/genai` returning a ToolCall.
-func processIntent(conn *websocket.Conn, text string) {
-	// Simulate LLM processing latency
-	time.Sleep(800 * time.Millisecond)
-
-	if strings.Contains(text, "song") || strings.Contains(text, "music") {
-		type song struct {
-			id    string
-			title string
-			src   string
-		}
-
-		songs := []song{
-			{"neon-1", "Neon Pulse", "https://storage.googleapis.com/scream-ui-samples/neon_pulse.mp3"},
-			{"deep-2", "Deep Learning", "https://storage.googleapis.com/scream-ui-samples/deep_learning.mp3"},
-			{"digital-3", "Digital Horizon", "https://storage.googleapis.com/scream-ui-samples/digital_horizon.mp3"},
-			{"ether-4", "Ether Drift", "https://storage.googleapis.com/scream-ui-samples/ether_drift.mp3"},
-			{"gradient-5", "Gradient Descent", "https://storage.googleapis.com/scream-ui-samples/gradient_descent.mp3"},
-			{"latent-6", "Latent Space", "https://storage.googleapis.com/scream-ui-samples/latent_space.mp3"},
-			{"neural-7", "Neural Flux", "https://storage.googleapis.com/scream-ui-samples/neural_flux.mp3"},
-			{"starlight-8", "Starlight Silicon", "https://storage.googleapis.com/scream-ui-samples/starlight_silicon.mp3"},
-			{"synaptic-9", "Synaptic Void", "https://storage.googleapis.com/scream-ui-samples/synaptic_void.mp3"},
-		}
-
-		selectedSong := songs[rand.Intn(len(songs))]
-
-		// 1. Send the text response
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
-		})
-		time.Sleep(300 * time.Millisecond)
-		// 2. Yield the A2UI Component Payload
-		sendA2A(conn, A2APayload{
-			Type:      "a2ui_render",
-			Component: "ui-audio-player",
-			Props: map[string]any{
-				"item": map[string]string{
-					"id":  selectedSong.id,
-					"src": selectedSong.src,
+	// 1. Define the official AgentCard
+	agentCard := &a2a.AgentCard{
+		Name:               "A2A Showcase Agent",
+		Description:        "An interactive agent capable of rendering @ghchinoy/lit-audio-ui components.",
+		URL:                "http://localhost:8081/invoke", // The JSON-RPC endpoint
+		PreferredTransport: a2a.TransportProtocolJSONRPC,
+		DefaultInputModes:  []string{"text"},
+		DefaultOutputModes: []string{"text"},
+		Capabilities: a2a.AgentCapabilities{
+			Streaming: true,
+			Extensions: []a2a.AgentExtension{
+				{
+					URI:         "https://a2ui.org/specification/v0_8",
+					Required:    true,
+					Description: "Supports A2UI v0.8 for dynamic UI orchestration",
+					Params: map[string]any{
+						"catalogUrl": "https://raw.githubusercontent.com/ghchinoy/scream-ui/main/docs/a2ui_v0.8_catalog.json",
+					},
 				},
 			},
-		})
-
-	} else if strings.Contains(text, "live") || strings.Contains(text, "talk") || strings.Contains(text, "orb") {
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: "Switching to Live Duplex Audio mode. Initializing the Orb component now...",
-		})
-		time.Sleep(300 * time.Millisecond)
-		// Render the live-connection demo we built earlier!
-		sendA2A(conn, A2APayload{
-			Type:      "a2ui_render",
-			Component: "demo-live-connection",
-			Props:     map[string]any{}, // No props needed, it boots itself
-		})
-
-	} else if strings.Contains(text, "how does this work") || strings.Contains(text, "architecture") || strings.Contains(text, "what is a2a") || strings.Contains(text, "a2ui") {
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: "This showcase uses Simulated Federation. The frontend sends me (the Agent) text. I then reply with an 'A2UI Payload' which the frontend uses to dynamically mount the components. Here is a diagram:",
-		})
-		time.Sleep(300 * time.Millisecond)
-		sendA2A(conn, A2APayload{
-			Type:      "a2ui_render",
-			Component: "demo-architecture-card",
-			Props:     map[string]any{},
-		})
-
-	} else if strings.Contains(text, "who are you") || strings.Contains(text, "agent info") || strings.Contains(text, "capabilities") {
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: "I am the A2A Showcase Agent running on port 8081! Here is my capability profile:",
-		})
-		time.Sleep(300 * time.Millisecond)
-		sendA2A(conn, A2APayload{
-			Type:      "a2ui_render",
-			Component: "demo-agent-card",
-			Props:     map[string]any{},
-		})
-
-	} else if strings.Contains(text, "podcast") || strings.Contains(text, "playlist") {
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: "I found a great podcast episode on WebComponents. Here it is:",
-		})
-		time.Sleep(300 * time.Millisecond)
-		sendA2A(conn, A2APayload{
-			Type:      "a2ui_render",
-			Component: "demo-podcast-player",
-			Props:     map[string]any{},
-		})
-	} else {
-		sendA2A(conn, A2APayload{
-			Type: "text",
-			Text: "I'm not sure how to render that. Try asking for 'music', a 'podcast', or to 'talk live'.",
-		})
+		},
 	}
-}
 
-func sendA2A(conn *websocket.Conn, payload A2APayload) {
-	bytes, _ := json.Marshal(payload)
-	conn.WriteMessage(websocket.TextMessage, bytes)
+	// 2. Wire up the SDK
+	requestHandler := a2asrv.NewHandler(&agentExecutor{})
+
+	mux := http.NewServeMux()
+	mux.Handle("/invoke", a2asrv.NewJSONRPCHandler(requestHandler))
+	mux.Handle(a2asrv.WellKnownAgentCardPath, a2asrv.NewStaticAgentCardHandler(agentCard))
+
+	log.Printf("Listening for A2A HTTP requests on 127.0.0.1:8081")
+	if err := http.ListenAndServe(":8081", mux); err != nil {
+		log.Printf("Server stopped: %v", err)
+	}
 }

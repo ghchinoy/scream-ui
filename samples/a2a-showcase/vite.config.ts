@@ -4,13 +4,12 @@ export default defineConfig({
   server: {
     port: 5174,
     proxy: {
-      '/ws': {
-        target: 'ws://localhost:8080', // Host proxy
-        ws: true,
-      },
-      '/api': {
+      '/invoke': {
         target: 'http://localhost:8080',
       },
+      '/.well-known': {
+        target: 'http://localhost:8080',
+      }
     },
   },
   build: {

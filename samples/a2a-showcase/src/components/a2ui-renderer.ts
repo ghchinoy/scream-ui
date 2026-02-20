@@ -13,13 +13,6 @@ import '@ghchinoy/lit-audio-ui/molecules/ui-playlist.js';
 import '../../../live-connection/src/components/demo-live-connection.js';
 import '../../../gallery/components/demo-podcast-player.js';
 
-interface A2APayload {
-  type: 'text' | 'a2ui_render';
-  text?: string;
-  component?: string;
-  props?: Record<string, any>;
-}
-
 @customElement('demo-architecture-card')
 export class DemoArchitectureCard extends LitElement {
   static styles = css`
@@ -372,48 +365,76 @@ export class A2uiRenderer extends LitElement {
   }
 
   private _connect() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    this._ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+    this._fetchAgentCard();
+  }
 
-    this._ws.onopen = () => {
+  private async _fetchAgentCard() {
+    try {
+      // 1. A2A Discovery: Download the Agent Card
+      const response = await fetch('/.well-known/agent-card.json');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      const card = await response.json();
+      console.log('✅ A2A Discovery: Downloaded Agent Card', card);
+      
+      // Update UI state
       this._wsState = 'connected';
-      console.log('Connected to Host proxy -> Agent LLM');
-    };
-
-    this._ws.onclose = () => {
+    } catch (e) {
+      console.error('❌ A2A Discovery Failed:', e);
       this._wsState = 'disconnected';
-      setTimeout(() => this._connect(), 3000);
-    };
-
-    this._ws.onmessage = (event) => {
-      try {
-        const payload: A2APayload = JSON.parse(event.data);
-        this._logDebug('server', payload);
-        this._handleA2APayload(payload);
-      } catch (e) {
-        console.error('Failed to parse A2A payload', e);
-      }
-    };
+      setTimeout(() => this._fetchAgentCard(), 5000);
+    }
   }
 
   private _logDebug(source: 'client' | 'server', payload: any) {
     this._debugLogs = [...this._debugLogs, {source, payload}];
   }
 
-  private _handleA2APayload(payload: A2APayload) {
-    if (payload.type === 'text' && payload.text) {
-      this._messages = [...this._messages, {role: 'agent', content: payload.text}];
-    } 
-    else if (payload.type === 'a2ui_render' && payload.component) {
-      const el = document.createElement(payload.component);
-      if (payload.props) {
-        for (const [key, value] of Object.entries(payload.props)) {
-          (el as any)[key] = value;
+  // A2UI v0.8 Flat Component Parsing Engine
+  private catalogMap: Record<string, string> = {
+    'UiOrb': 'ui-orb',
+    'UiAudioPlayer': 'ui-audio-player',
+    'DemoPodcastPlayer': 'demo-podcast-player',
+    'UiPlaylist': 'ui-playlist',
+    'DemoAgentCard': 'demo-agent-card',
+    'DemoArchitectureCard': 'demo-architecture-card',
+    'DemoLiveConnection': 'demo-live-connection'
+  };
+
+  private _handleA2AEvent(rpcResponse: any) {
+    // 3. A2A Execution: Parse standard a2a.Event messages
+    const msg = rpcResponse.result?.message;
+    if (!msg || !msg.parts) return;
+
+    for (const part of msg.parts) {
+      // Render text parts normally
+      if (part.text) {
+        this._messages = [...this._messages, {role: 'agent', content: part.text}];
+      } 
+      // Render A2UI Data parts
+      else if (part.data && part.metadata?.mimeType === 'application/json+a2ui') {
+        const payload = part.data;
+        if (payload.surfaceUpdate && payload.surfaceUpdate.components) {
+          
+          // A2UI v0.8 Core Logic: Parse the flat list of components
+          for (const comp of payload.surfaceUpdate.components) {
+             const tagName = this.catalogMap[comp.type];
+             if (tagName) {
+                console.log(`🤖 Agent requested to render A2UI component: <${tagName}>`, comp.props);
+                const el = document.createElement(tagName);
+                if (comp.props) {
+                  for (const [key, value] of Object.entries(comp.props)) {
+                    (el as any)[key] = value;
+                  }
+                }
+                this._messages = [...this._messages, {role: 'agent', content: el}];
+             } else {
+                console.warn(`A2UI Warning: Received unknown component type '${comp.type}' in surfaceUpdate.`);
+             }
+          }
         }
       }
-      this._messages = [...this._messages, {role: 'agent', content: el}];
     }
-
     this._scrollToBottom();
   }
 
@@ -424,28 +445,78 @@ export class A2uiRenderer extends LitElement {
     }
   }
 
-  private _handleUserSubmit(e: CustomEvent) {
-    const text = e.detail.message;
+  private async _sendA2AInvoke(text: string) {
     if (!text || this._wsState !== 'connected') return;
 
     this._messages = [...this._messages, {role: 'user', content: text}];
     this._scrollToBottom();
 
-    const payload = {text};
-    this._logDebug('client', payload);
-    this._ws!.send(JSON.stringify(payload));
+    // 2. A2A Invocation: Build standard JSON-RPC request
+    const requestPayload = {
+      jsonrpc: "2.0",
+      method: "a2a.Invoke",
+      params: {
+        message: {
+          role: "user",
+          parts: [{ text }]
+        }
+      },
+      id: Date.now()
+    };
+
+    this._logDebug('client', requestPayload);
+
+    try {
+      const response = await fetch('/invoke', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload)
+      });
+
+      if (!response.body) return;
+
+      // Handle the streaming SSE response
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+
+      while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, {stream: true});
+        const lines = buffer.split('\n');
+        
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.slice(6).trim();
+            if (!dataStr) continue;
+
+            try {
+              const rpcResponse = JSON.parse(dataStr);
+              this._logDebug('server', rpcResponse);
+              this._handleA2AEvent(rpcResponse);
+            } catch (e) {
+              console.error('Failed to parse SSE JSON', e, dataStr);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error('A2A Invoke failed', e);
+    }
+  }
+
+  private _handleUserSubmit(e: CustomEvent) {
+    this._sendA2AInvoke(e.detail.message);
   }
 
   private _requestAgentInfo() {
     if (this._wsState !== 'connected') return;
-    const text = "who are you";
-    
-    this._messages = [...this._messages, {role: 'user', content: text}];
-    this._scrollToBottom();
-
-    const payload = {text};
-    this._logDebug('client', payload);
-    this._ws!.send(JSON.stringify(payload));
+    this._sendA2AInvoke("who are you");
   }
 
   render() {
