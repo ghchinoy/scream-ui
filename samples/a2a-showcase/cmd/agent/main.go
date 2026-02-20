@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"iter"
 	"log"
 	"math/rand"
 	"net/http"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/a2aproject/a2a-go/a2a"
 	"github.com/a2aproject/a2a-go/a2asrv"
-	"github.com/a2aproject/a2a-go/a2asrv/eventqueue"
 )
 
 // agentExecutor implements the a2asrv.AgentExecutor interface required by the a2a-go SDK.
@@ -32,8 +32,8 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 		var userText string
 		if execCtx.Message != nil {
 			for _, part := range execCtx.Message.Parts {
-				if part.Text != "" {
-					userText += part.Text + " "
+				if text, ok := part.Content.(a2a.Text); ok {
+					userText += string(text) + " "
 				}
 			}
 		}
@@ -67,17 +67,15 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 			selectedSong := songs[rand.Intn(len(songs))]
 
 			// Yield Text Part
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{
-				Text: fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
-			}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart(
+				fmt.Sprintf("I'd love to play some music for you. Here is '%s' by the AI band:", selectedSong.title),
+			)), nil)
 			time.Sleep(300 * time.Millisecond)
 
 			// Yield A2UI v0.8 Data Part
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
-				Metadata: map[string]any{
-					"mimeType": "application/json+a2ui",
-				},
-				Data: map[string]any{
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
+				MediaType: "application/json+a2ui",
+				Content: a2a.Data{
 					"surfaceUpdate": map[string]any{
 						"surfaceId": "surface-" + selectedSong.id,
 						"components": []map[string]any{
@@ -97,12 +95,12 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 			}), nil)
 
 		} else if strings.Contains(userText, "live") || strings.Contains(userText, "talk") || strings.Contains(userText, "orb") {
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "Switching to Live Duplex Audio mode. Initializing the Orb component now..."}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("Switching to Live Duplex Audio mode. Initializing the Orb component now...")), nil)
 			time.Sleep(300 * time.Millisecond)
 
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
-				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
-				Data: map[string]any{
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
+				MediaType: "application/json+a2ui",
+				Content: a2a.Data{
 					"surfaceUpdate": map[string]any{
 						"surfaceId": "surface-live",
 						"components": []map[string]any{
@@ -117,12 +115,12 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 			}), nil)
 
 		} else if strings.Contains(userText, "how does this work") || strings.Contains(userText, "architecture") || strings.Contains(userText, "what is a2a") || strings.Contains(userText, "a2ui") {
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "This showcase uses the official A2A JSON-RPC protocol over HTTP Server-Sent Events (SSE). Instead of raw WebSockets, the Host sends standard REST POST requests to my /invoke endpoint. I then yield standard A2UI v0.8 surfaceUpdate JSON objects inside a2a.DataParts. Here is a diagram:"}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("This showcase uses the official A2A JSON-RPC protocol over HTTP Server-Sent Events (SSE). Instead of raw WebSockets, the Host sends standard REST POST requests to my /invoke endpoint. I then yield standard A2UI v0.8 surfaceUpdate JSON objects inside a2a.DataParts. Here is a diagram:")), nil)
 			time.Sleep(300 * time.Millisecond)
 
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
-				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
-				Data: map[string]any{
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
+				MediaType: "application/json+a2ui",
+				Content: a2a.Data{
 					"surfaceUpdate": map[string]any{
 						"surfaceId": "surface-arch",
 						"components": []map[string]any{
@@ -137,12 +135,12 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 			}), nil)
 
 		} else if strings.Contains(userText, "who are you") || strings.Contains(userText, "agent info") || strings.Contains(userText, "capabilities") {
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I am the A2A Showcase Agent running the official a2a-go SDK! Here is my capability profile:"}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I am the A2A Showcase Agent running the official a2a-go SDK! Here is my capability profile:")), nil)
 			time.Sleep(300 * time.Millisecond)
 
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
-				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
-				Data: map[string]any{
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
+				MediaType: "application/json+a2ui",
+				Content: a2a.Data{
 					"surfaceUpdate": map[string]any{
 						"surfaceId": "surface-agent",
 						"components": []map[string]any{
@@ -157,12 +155,12 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 			}), nil)
 
 		} else if strings.Contains(userText, "podcast") || strings.Contains(userText, "playlist") {
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I found a great podcast episode on WebComponents. Here it is:"}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I found a great podcast episode on WebComponents. Here it is:")), nil)
 			time.Sleep(300 * time.Millisecond)
 
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.DataPart{
-				Metadata: map[string]any{"mimeType": "application/json+a2ui"},
-				Data: map[string]any{
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, &a2a.Part{
+				MediaType: "application/json+a2ui",
+				Content: a2a.Data{
 					"surfaceUpdate": map[string]any{
 						"surfaceId": "surface-podcast",
 						"components": []map[string]any{
@@ -176,7 +174,7 @@ func (*agentExecutor) Execute(ctx context.Context, execCtx *a2asrv.ExecutorConte
 				},
 			}), nil)
 		} else {
-			yield(a2a.NewMessage(execCtx, a2a.MessageRoleAgent, a2a.TextPart{Text: "I'm not sure how to render that. Try asking for 'music', a 'podcast', or to 'talk live'."}), nil)
+			yield(a2a.NewMessage(a2a.MessageRoleAgent, a2a.NewTextPart("I'm not sure how to render that. Try asking for 'music', a 'podcast', or to 'talk live'.")), nil)
 		}
 	}
 }
@@ -186,10 +184,11 @@ func main() {
 
 	// 1. Define the official AgentCard
 	agentCard := &a2a.AgentCard{
-		Name:               "A2A Showcase Agent",
-		Description:        "An interactive agent capable of rendering @ghchinoy/lit-audio-ui components.",
-		URL:                "http://localhost:8081/invoke", // The JSON-RPC endpoint
-		PreferredTransport: a2a.TransportProtocolJSONRPC,
+		Name:        "A2A Showcase Agent",
+		Description: "An interactive agent capable of rendering @ghchinoy/lit-audio-ui components.",
+		SupportedInterfaces: []*a2a.AgentInterface{
+			a2a.NewAgentInterface("http://127.0.0.1:8081/invoke", a2a.TransportProtocolJSONRPC),
+		},
 		DefaultInputModes:  []string{"text"},
 		DefaultOutputModes: []string{"text"},
 		Capabilities: a2a.AgentCapabilities{
