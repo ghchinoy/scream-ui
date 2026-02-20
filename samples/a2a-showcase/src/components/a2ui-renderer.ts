@@ -434,6 +434,8 @@ export class A2uiRenderer extends LitElement {
              }
           }
         }
+      } else {
+        console.warn('Unhandled A2A Part Structure:', part);
       }
     }
     this._scrollToBottom();
