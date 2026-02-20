@@ -1,0 +1,92 @@
+{
+  "catalogId": "org.scream-ui.lit-audio-ui:v0.8",
+  "components": {
+    "UiOrb": {
+      "type": "object",
+      "description": "A 3D WebGL (Three.js) AI Agent visualizer with distinct states.",
+      "additionalProperties": false,
+      "properties": {
+        "agentState": {
+          "type": "string",
+          "enum": ["idle", "listening", "thinking", "talking", "processing", "error"],
+          "description": "The current operational state of the agent which drives the animation."
+        },
+        "inputVolume": {
+          "type": "number",
+          "description": "The volume of the user's voice (RMS 0.0 to 1.0) driving the orb's spikes."
+        },
+        "outputVolume": {
+          "type": "number",
+          "description": "The volume of the agent's voice (RMS 0.0 to 1.0) driving the orb's pulsing."
+        },
+        "colors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "A tuple of two CSS color strings (e.g. ['#ff0000', '#0000ff']) used for the orb gradient."
+        },
+        "seed": {
+          "type": "number",
+          "description": "A random seed for procedural noise generation."
+        }
+      }
+    },
+    "UiAudioPlayer": {
+      "type": "object",
+      "description": "A compound audio player pill featuring play/pause controls, scrubbing, and time displays.",
+      "additionalProperties": false,
+      "properties": {
+        "item": {
+          "type": "object",
+          "description": "The audio track configuration.",
+          "properties": {
+            "id": { "type": "string" },
+            "src": { "type": "string", "description": "The URL of the audio file to play." }
+          },
+          "required": ["src"]
+        }
+      }
+    },
+    "DemoPodcastPlayer": {
+      "type": "object",
+      "description": "A rich, full-card podcast player combining the UiOrb, scrolling waveforms, and audio controls.",
+      "additionalProperties": false,
+      "properties": {}
+    },
+    "UiPlaylist": {
+      "type": "object",
+      "description": "A queue list for audio tracks. Requires an ancestor UiAudioProvider to function fully.",
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "string",
+          "description": "The title of the playlist (e.g., 'Queue')."
+        },
+        "emptyText": {
+          "type": "string",
+          "description": "The text to display when there are no items."
+        }
+      }
+    },
+    "DemoAgentCard": {
+      "type": "object",
+      "description": "A 3D flipping card that shows an Agent's capabilities and its underlying A2A JSON manifest.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The display name of the Agent."
+        },
+        "status": {
+          "type": "string",
+          "description": "The online/offline status string."
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "A list of strings defining what the agent can do."
+        }
+      }
+    }
+  },
+  "styles": {}
+}
