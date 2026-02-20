@@ -304,7 +304,7 @@ export class A2uiRenderer extends LitElement {
       z-index: 100;
       border: 1px solid var(--md-sys-color-outline-variant);
       transition: transform 0.3s ease;
-      transform: translateX(calc(100% - 44px)); /* Adjust translation to hide perfectly */
+      transform: translateX(calc(100% - 150px)); /* Let enough of the header show */
       overflow: hidden; /* Hide anything trying to peek out */
     }
     
