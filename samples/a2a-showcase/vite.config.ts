@@ -5,10 +5,10 @@ export default defineConfig({
     port: 5174,
     proxy: {
       '/invoke': {
-        target: 'http://localhost:8080',
+        target: 'http://127.0.0.1:8080',
       },
       '/.well-known': {
-        target: 'http://localhost:8080',
+        target: 'http://127.0.0.1:8080',
       }
     },
   },

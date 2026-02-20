@@ -15,7 +15,7 @@ func main() {
 	fmt.Println("🚀 Host App Server (Reverse Proxy) starting on :8080")
 
 	// Target the Agent running locally
-	agentURL, err := url.Parse("http://localhost:8081")
+	agentURL, err := url.Parse("http://127.0.0.1:8081")
 	if err != nil {
 		log.Fatal(err)
 	}
