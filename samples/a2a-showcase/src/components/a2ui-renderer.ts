@@ -249,22 +249,47 @@ export class A2uiRenderer extends LitElement {
       gap: 1.5rem;
     }
 
-    .message {
+    .message-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
       max-width: 80%;
+    }
+
+    .message-row.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-row.agent {
+      align-self: flex-start;
+    }
+
+    .agent-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--md-sys-color-surface-container-high, #e2e2e2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .message {
       padding: 1rem 1.5rem;
       border-radius: 24px;
       line-height: 1.5;
     }
 
     .message.user {
-      align-self: flex-end;
       background: var(--md-sys-color-primary, #0066cc);
       color: var(--md-sys-color-on-primary, white);
       border-bottom-right-radius: 4px;
     }
 
     .message.agent {
-      align-self: flex-start;
       background: var(--md-sys-color-surface-container-high, #e2e2e2);
       color: var(--md-sys-color-on-surface, #1d1b20);
       border-bottom-left-radius: 4px;
@@ -493,8 +518,15 @@ export class A2uiRenderer extends LitElement {
 
       <div class="scroll-container">
         ${this._messages.map(msg => html`
-          <div class="message ${msg.role} ${typeof msg.content === 'string' ? '' : 'agent-component'}">
-            ${msg.content}
+          <div class="message-row ${msg.role}">
+            ${msg.role === 'agent' ? html`
+              <div class="agent-avatar">
+                <ui-orb agentState="idle" style="width: 32px; height: 32px;"></ui-orb>
+              </div>
+            ` : ''}
+            <div class="message ${msg.role} ${typeof msg.content === 'string' ? '' : 'agent-component'}">
+              ${msg.content}
+            </div>
           </div>
         `)}
       </div>
