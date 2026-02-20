@@ -413,7 +413,8 @@ export class A2uiRenderer extends LitElement {
         this._messages = [...this._messages, {role: 'agent', content: part.text}];
       } 
       // Render A2UI Data parts (a2a v1 spec uses mediaType and data mapping)
-      else if (part.mediaType === 'application/json+a2ui' && part.data) {
+      // Note: We check for part.data directly since the SDK might drop mediaType depending on the Go struct used.
+      else if ((part.mediaType === 'application/json+a2ui' || !part.mediaType) && part.data) {
         const payload = part.data;
         if (payload.surfaceUpdate && payload.surfaceUpdate.components) {
           
