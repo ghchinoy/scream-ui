@@ -83,3 +83,7 @@ Do not forget to inject the Material Symbols font into the host document's `<hea
 - **Transparent Progress Overlays:** The `<ui-audio-progress-slider>` exposes its internal Material slider via `part="slider"`. This allows you to create "Producer Bar" layouts by setting `--md-slider-inactive-track-color: transparent` and layering it directly over a `<ui-waveform>`.
 - **Waveform Alignment:** Use `align="bottom"` on static or scrolling waveforms to draw bars upwards from the bottom of the container, rather than the default vertically-centered mirrored style.
 
+
+### 11. Interactive UX (v0.4.19+)
+- **Hover Timestamps:** To give users precision seeking capabilities, add `hoverTimestamp="true"` to `<ui-audio-progress-slider>`. This will automatically render a floating `MM:SS` tooltip above the cursor based on the context's total duration.
+
