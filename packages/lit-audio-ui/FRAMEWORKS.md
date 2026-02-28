@@ -123,3 +123,16 @@ Svelte works natively with Web Components. No special configuration is required.
   {/if}
 </ui-audio-provider>
 ```
+
+## Strict TypeScript Environments (GTS)
+When using the library in projects with strict TypeScript rules (like `gts`), you can import explicit element types to avoid `Unexpected any` errors when calling component methods directly.
+
+```ts
+import type { AudioProviderElement, SpeechProviderElement } from '@ghchinoy/lit-audio-ui';
+
+// Example: Accessing the provider directly
+const provider = document.querySelector('ui-audio-provider') as AudioProviderElement;
+provider.play();
+console.log(provider.state.currentTime);
+```
+

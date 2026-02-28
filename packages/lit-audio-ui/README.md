@@ -34,6 +34,14 @@ import '@ghchinoy/lit-audio-ui/atoms/ui-audio-play-button.js';
 import '@ghchinoy/lit-audio-ui/molecules/ui-live-waveform.js';
 ```
 
+### 4. Required Fonts & Icons
+This library utilizes [Material Symbols](https://fonts.google.com/icons) for iconography. Ensure you include the font in your document `<head>`:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+```
+
+
 ### 3. Use in HTML
 Once imported, custom elements are registered and used like standard HTML tags:
 

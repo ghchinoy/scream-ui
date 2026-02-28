@@ -55,3 +55,21 @@ For development without microphone access, enable the `simulation` property on `
 - **CORS:** Ensure `crossorigin="anonymous"` is set on audio/video tags.
 - **Layout:** Use `positioning="popover"` for `md-menu` inside 3D containers.
 - **Performance:** In plain HTML projects, prefer the single-file `.es.js` bundle to minimize network waterfall.
+
+### 7. Explicit Typings for Strict Mode (GTS)
+When integrating into strict TypeScript environments, explicitly type your providers to avoid `Unexpected any` errors.
+```ts
+import type { AudioProviderElement, SpeechProviderElement } from '@ghchinoy/lit-audio-ui';
+
+const audioEl = document.querySelector('ui-audio-provider') as AudioProviderElement;
+if (audioEl.state.isPlaying) {
+  audioEl.pause();
+}
+```
+
+### 8. Required Fonts & Icons
+Do not forget to inject the Material Symbols font into the host document's `<head>`, otherwise icons (play, pause, volume) will render as fallback text:
+```html
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+```
+
