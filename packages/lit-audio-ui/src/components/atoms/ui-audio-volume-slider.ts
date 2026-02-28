@@ -48,17 +48,38 @@ export class UiAudioVolumeSlider extends LitElement {
       visibility: visible;
     }
     :host([variant="popover"]) .slider-wrapper {
-      transform: rotate(-90deg);
-      width: 100px;
-      height: 48px;
+      width: 4px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
-    :host([variant="popover"]) md-slider {
-      width: 100%;
-      min-width: 100px;
-      padding: 0;
+    /* Native range input styling for vertical support */
+    :host([variant="popover"]) input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+      width: 100px;
+      height: 4px;
+      transform: rotate(-90deg);
+      margin: 0;
+      position: absolute;
+    }
+    :host([variant="popover"]) input[type="range"]::-webkit-slider-runnable-track {
+      background: var(--md-sys-color-primary, #0066cc);
+      height: 4px;
+      border-radius: 2px;
+    }
+    :host([variant="popover"]) input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -6px; /* center thumb on track */
+      background-color: var(--md-sys-color-primary, #0066cc);
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
     }
 
     :host {
@@ -94,19 +115,6 @@ export class UiAudioVolumeSlider extends LitElement {
 
     const muteAriaLabel = muted ? 'Unmute audio' : 'Mute audio';
 
-    const sliderHtml = html`
-      <md-slider
-        part="slider"
-        aria-label="Volume"
-        min="0"
-        max="1"
-        value="${muted ? 0 : volume}"
-        step="0.01"
-        ?disabled="${!this.playerState?.src}"
-        @input="${this._handleInput}"
-      ></md-slider>
-    `;
-
     if (this.variant === 'popover') {
       return html`
         <div 
@@ -123,7 +131,15 @@ export class UiAudioVolumeSlider extends LitElement {
           </md-icon-button>
           <div class="slider-container ${this._isOpen ? 'open' : ''}">
             <div class="slider-wrapper">
-              ${sliderHtml}
+              <input 
+                type="range" 
+                min="0" 
+                max="1" 
+                step="0.01" 
+                .value="${muted ? '0' : volume.toString()}"
+                ?disabled="${!this.playerState?.src}"
+                @input="${this._handleInput}"
+              />
             </div>
           </div>
         </div>
@@ -138,7 +154,16 @@ export class UiAudioVolumeSlider extends LitElement {
       >
         <md-icon>${icon}</md-icon>
       </md-icon-button>
-      ${sliderHtml}
+      <md-slider
+        part="slider"
+        aria-label="Volume"
+        min="0"
+        max="1"
+        value="${muted ? 0 : volume}"
+        step="0.01"
+        ?disabled="${!this.playerState?.src}"
+        @input="${this._handleInput}"
+      ></md-slider>
     `;
   }
 
