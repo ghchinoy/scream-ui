@@ -121,3 +121,4 @@ samples/**/*.js.map
 samples/**/*.d.ts
 !samples/**/vite.config.js
 
+.beads/dolt-server.*
