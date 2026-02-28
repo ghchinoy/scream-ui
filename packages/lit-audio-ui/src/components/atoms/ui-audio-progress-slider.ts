@@ -88,18 +88,21 @@ export class UiAudioProgressSlider extends LitElement {
       : this.playerState?.currentTime || 0;
 
     return html`
-      ${this.hoverTimestamp && this.playerState?.src ? html`
-        <div 
-          class="hover-tooltip ${this._showHover ? 'show' : ''}" 
-          style="left: ${this._hoverX}px;"
-        >
-          ${formatAudioTime(this._hoverTime)}
-        </div>
-      ` : ''}
-      <md-slider
+      <div 
+        style="position: relative; width: 100%; display: flex; align-items: center;"
         @mousemove="${this._handleMouseMove}"
         @mouseenter="${() => this._showHover = true}"
         @mouseleave="${() => this._showHover = false}"
+      >
+        ${this.hoverTimestamp && this.playerState?.src ? html`
+          <div 
+            class="hover-tooltip ${this._showHover ? 'show' : ''}" 
+            style="left: ${this._hoverX}px;"
+          >
+            ${formatAudioTime(this._hoverTime)}
+          </div>
+        ` : ''}
+        <md-slider
         part="slider"
         aria-label="Playback progress"
         min="0"
@@ -109,7 +112,8 @@ export class UiAudioProgressSlider extends LitElement {
         ?disabled="${disabled}"
         @input="${this._handleInput}"
         @change="${this._handleChange}"
-      ></md-slider>
+        ></md-slider>
+      </div>
     `;
   }
 
@@ -118,7 +122,7 @@ export class UiAudioProgressSlider extends LitElement {
     
     // Get bounding box of the md-slider track to calculate percentage.
     // Since md-slider internal track is basically 100% width, we can use its bounding rect.
-    const rect = this._sliderEl.getBoundingClientRect();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     
     // Constrain X coordinate inside the slider box
     let localX = e.clientX - rect.left;
