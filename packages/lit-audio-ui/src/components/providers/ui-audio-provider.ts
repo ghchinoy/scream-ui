@@ -265,7 +265,11 @@ export class UiAudioProvider extends LitElement {
     }
   }
 
-  private _handleError() {
+  private _handleError(e?: Event) {
+    if (e && e.target) {
+      const error = (e.target as HTMLAudioElement).error;
+      console.error('HTML5 Audio Error:', error?.code, error?.message);
+    }
     this._updateState({
       error: 'Error loading audio',
       isPlaying: false,
