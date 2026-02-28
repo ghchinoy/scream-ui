@@ -113,3 +113,4 @@
 {"actor":"G. H. Chinoy","comment":null,"created_at":"2026-02-28T06:53:36Z","event_type":"created","id":113,"issue_id":"sui-bxa","new_value":"","old_value":""}
 {"actor":"G. H. Chinoy","comment":null,"created_at":"2026-02-28T06:53:40Z","event_type":"created","id":114,"issue_id":"sui-604","new_value":"","old_value":""}
 {"actor":"G. H. Chinoy","comment":null,"created_at":"2026-02-28T06:53:46Z","event_type":"created","id":115,"issue_id":"sui-cii","new_value":"","old_value":""}
+{"actor":"G. H. Chinoy","comment":null,"created_at":"2026-02-28T07:34:07Z","event_type":"closed","id":116,"issue_id":"sui-g7e","new_value":"Exported interfaces and added declare global blocks for UiAudioProvider and UiSpeechProvider.","old_value":""}
