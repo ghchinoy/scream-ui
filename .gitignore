@@ -106,3 +106,7 @@ append_gemini.js
 packages/lit-audio-ui/scripts/testing/
 dist-demo
 
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
