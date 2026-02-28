@@ -15,7 +15,7 @@ export class UiAudioVolumeSlider extends LitElement {
   @property({attribute: false})
   public playerState?: AudioPlayerState;
 
-  @property({type: String}) variant: 'inline' | 'popover' = 'inline';
+  @property({type: String, reflect: true}) variant: 'inline' | 'popover' = 'inline';
   @property({type: Boolean, state: true}) private _isOpen = false;
 
   static styles = css`
