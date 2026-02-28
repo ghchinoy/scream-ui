@@ -246,7 +246,7 @@ export class DemoMediaDashboard extends LitElement {
             <div
               style="padding: 16px; border-top: 1px solid var(--md-sys-color-outline-variant);"
             >
-              <ui-audio-volume-slider></ui-audio-volume-slider>
+              <ui-audio-volume-slider variant="popover"></ui-audio-volume-slider>
             </div>
           </div>
 

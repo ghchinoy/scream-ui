@@ -15,7 +15,42 @@ export class UiAudioVolumeSlider extends LitElement {
   @property({attribute: false})
   public playerState?: AudioPlayerState;
 
+  @property({type: String}) variant: 'inline' | 'popover' = 'inline';
+  @property({type: Boolean, state: true}) private _isOpen = false;
+
   static styles = css`
+    :host([variant="popover"]) {
+      display: inline-block;
+      width: auto;
+      position: relative;
+    }
+    :host([variant="popover"]) .slider-container {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--md-sys-color-surface-container-high, #e2e2e2);
+      padding: 16px 8px;
+      border-radius: 100px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    :host([variant="popover"]) .slider-container.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    :host([variant="popover"]) md-slider {
+      height: 100px;
+      width: 48px;
+    }
+
     :host {
       display: flex;
       align-items: center;
@@ -49,14 +84,7 @@ export class UiAudioVolumeSlider extends LitElement {
 
     const muteAriaLabel = muted ? 'Unmute audio' : 'Mute audio';
 
-    return html`
-      <md-icon-button
-        @click="${this._toggleMute}"
-        part="button"
-        aria-label="${muteAriaLabel}"
-      >
-        <md-icon>${icon}</md-icon>
-      </md-icon-button>
+    const sliderHtml = html`
       <md-slider
         part="slider"
         aria-label="Volume"
@@ -67,6 +95,38 @@ export class UiAudioVolumeSlider extends LitElement {
         ?disabled="${!this.playerState?.src}"
         @input="${this._handleInput}"
       ></md-slider>
+    `;
+
+    if (this.variant === 'popover') {
+      return html`
+        <div 
+          @mouseenter="${() => this._isOpen = true}" 
+          @mouseleave="${() => this._isOpen = false}"
+          style="position: relative; display: inline-block;"
+        >
+          <md-icon-button
+            @click="${this._toggleMute}"
+            part="button"
+            aria-label="${muteAriaLabel}"
+          >
+            <md-icon>${icon}</md-icon>
+          </md-icon-button>
+          <div class="slider-container ${this._isOpen ? 'open' : ''}">
+            ${sliderHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    return html`
+      <md-icon-button
+        @click="${this._toggleMute}"
+        part="button"
+        aria-label="${muteAriaLabel}"
+      >
+        <md-icon>${icon}</md-icon>
+      </md-icon-button>
+      ${sliderHtml}
     `;
   }
 
