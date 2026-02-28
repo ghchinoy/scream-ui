@@ -58,7 +58,7 @@ export class DemoLyriaPlayer extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 24px;
-      max-width: 600px;
+      max-width: 700px;
       box-sizing: border-box;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       margin: 0 auto;
