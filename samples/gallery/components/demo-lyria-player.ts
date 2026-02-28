@@ -160,8 +160,8 @@ export class DemoLyriaPlayer extends LitElement {
                     format="elapsed"
                     style="font-size: 12px; opacity: 0.8;"
                   ></ui-audio-time-display>
-                  <div style="flex: 1; min-width: 0;">
-                    <ui-audio-progress-slider></ui-audio-progress-slider>
+                  <div style="flex: 1; min-width: 0; width: 100%;">
+                    <ui-audio-progress-slider style="width: 100%; display: block;"></ui-audio-progress-slider>
                   </div>
                   <ui-audio-time-display
                     format="remaining"

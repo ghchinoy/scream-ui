@@ -26,6 +26,8 @@ export class UiAudioProgressSlider extends LitElement {
 
     md-slider {
       width: 100%;
+      min-width: 0;
+      flex: 1;
       /* Give the slider track better contrast against backgrounds */
       --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e);
     }
