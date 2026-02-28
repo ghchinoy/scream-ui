@@ -121,6 +121,9 @@ let UiConversationBar = class UiConversationBar extends LitElement {
     md-outlined-text-field {
       flex: 1;
       --md-outlined-text-field-container-shape: 16px;
+      font-family: inherit;
+      --md-outlined-text-field-input-text-font: inherit;
+      --md-outlined-text-field-label-text-font: inherit;
     }
 
     .keyboard-toggle.active {
