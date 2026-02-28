@@ -1,3 +1,4 @@
+import './components/demo-producer-bar.js';
 /**
  * Copyright 2026 Google LLC
  *
