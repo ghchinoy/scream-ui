@@ -170,3 +170,27 @@ export function applyCanvasEdgeFade(
   ctx.fillRect(0, 0, width, height);
   ctx.globalCompositeOperation = 'source-over';
 }
+
+
+/**
+ * Formats a duration in seconds into a standard MM:SS or HH:MM:SS string.
+ * @param seconds The time in seconds
+ * @param compact If true, omits leading zeros for minutes if under an hour.
+ */
+export function formatAudioTime(seconds: number): string {
+  if (!seconds || isNaN(seconds)) {
+    return '0:00';
+  }
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  let result = '';
+
+  if (hrs > 0) {
+    result += '' + hrs + ':' + (mins < 10 ? '0' : '');
+  }
+
+  result += '' + mins + ':' + (secs < 10 ? '0' : '');
+  result += '' + secs;
+  return result;
+}

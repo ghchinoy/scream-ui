@@ -83,7 +83,7 @@ export class DemoProducerBar extends LitElement {
             barColor="var(--md-sys-color-primary, #0066cc)" 
             fadeEdges="false"
           ></ui-waveform>
-          <ui-audio-progress-slider class="producer-slider"></ui-audio-progress-slider>
+          <ui-audio-progress-slider class="producer-slider" hoverTimestamp="true"></ui-audio-progress-slider>
         </div>
       </ui-audio-provider>
     `;

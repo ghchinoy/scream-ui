@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement, property, state, query} from 'lit/decorators.js';
+import {formatAudioTime} from '../../utils/audio-utils.js';
 import {consume} from '@lit/context';
 import {
   audioPlayerContext,
@@ -16,12 +17,55 @@ export class UiAudioProgressSlider extends LitElement {
   private _isDragging = false;
   private _dragValue = 0;
 
+  @property({type: Boolean}) hoverTimestamp = false;
+  @state() private _hoverX = 0;
+  @state() private _showHover = false;
+  @state() private _hoverTime = 0;
+  @query('md-slider') private _sliderEl!: HTMLElement;
+
   static styles = css`
+    
+
     :host {
       display: flex;
       width: 100%;
       align-items: center;
       min-width: 0;
+      position: relative;
+    }
+
+    .hover-tooltip {
+      position: absolute;
+      top: -32px;
+      transform: translateX(-50%);
+      background: var(--md-sys-color-inverse-surface, #313033);
+      color: var(--md-sys-color-inverse-on-surface, #f4eff4);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.1s ease;
+      z-index: 10;
+    }
+    .hover-tooltip.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    /* Little downward pointing triangle */
+    .hover-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 4px 4px 0;
+      border-style: solid;
+      border-color: var(--md-sys-color-inverse-surface, #313033) transparent transparent transparent;
     }
 
     md-slider {
@@ -44,7 +88,18 @@ export class UiAudioProgressSlider extends LitElement {
       : this.playerState?.currentTime || 0;
 
     return html`
+      ${this.hoverTimestamp && this.playerState?.src ? html`
+        <div 
+          class="hover-tooltip ${this._showHover ? 'show' : ''}" 
+          style="left: ${this._hoverX}px;"
+        >
+          ${formatAudioTime(this._hoverTime)}
+        </div>
+      ` : ''}
       <md-slider
+        @mousemove="${this._handleMouseMove}"
+        @mouseenter="${() => this._showHover = true}"
+        @mouseleave="${() => this._showHover = false}"
         part="slider"
         aria-label="Playback progress"
         min="0"
@@ -56,6 +111,23 @@ export class UiAudioProgressSlider extends LitElement {
         @change="${this._handleChange}"
       ></md-slider>
     `;
+  }
+
+  private _handleMouseMove(e: MouseEvent) {
+    if (!this.hoverTimestamp || !this._sliderEl || !this.playerState?.duration) return;
+    
+    // Get bounding box of the md-slider track to calculate percentage.
+    // Since md-slider internal track is basically 100% width, we can use its bounding rect.
+    const rect = this._sliderEl.getBoundingClientRect();
+    
+    // Constrain X coordinate inside the slider box
+    let localX = e.clientX - rect.left;
+    localX = Math.max(0, Math.min(localX, rect.width));
+    
+    this._hoverX = localX;
+    
+    const percent = localX / rect.width;
+    this._hoverTime = percent * this.playerState.duration;
   }
 
   private _handleInput(e: Event) {

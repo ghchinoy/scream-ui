@@ -5,6 +5,7 @@ import {
   audioPlayerContext,
   type AudioPlayerState,
 } from '../../utils/audio-context.js';
+import {formatAudioTime} from '../../utils/audio-utils.js';
 
 /**
  * A reactive time display component that shows playback progress.
@@ -56,22 +57,7 @@ export class UiAudioTimeDisplay extends LitElement {
   }
 
   private _formatTime(seconds: number): string {
-    if (!seconds || isNaN(seconds)) {
-      return this.compact ? '0:00' : '0:00';
-    }
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
-    let result = '';
-
-    if (hrs > 0) {
-      result += '' + hrs + ':' + (mins < 10 ? '0' : '');
-    } else if (!this.compact) {
-      // Show 0:XX if not compact, but we typically want M:SS
-    }
-
-    result += '' + mins + ':' + (secs < 10 ? '0' : '');
-    result += '' + secs;
-    return result;
+    // the compact parameter is largely deprecated in our standard layout, but we keep the property for backwards compatibility
+    return formatAudioTime(seconds);
   }
 }
