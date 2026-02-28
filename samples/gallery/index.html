@@ -54,57 +54,9 @@
         <div class="demo-section" data-title="Examples">
           <h2>Examples</h2>
 
+          
           <ui-showcase-card title="Producer Bar (Composite)" description="A composite layout achieving a 'SoundCloud-style' progress bar by overlaying a transparent ui-audio-progress-slider exactly on top of a bottom-aligned ui-waveform.">
-            <style>
-              .producer-bar-wrapper {
-                position: relative;
-                width: 100%;
-                height: 64px;
-                background: var(--md-sys-color-surface-container-low, #f0f0f0);
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-              }
-              .producer-waveform {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none; /* Let clicks pass through to slider */
-                opacity: 0.6; /* Unplayed color */
-              }
-              .producer-slider {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-              }
-              /* CSS ::part magic to hide the MWC slider tracks and let the waveform show through! */
-              .producer-slider::part(slider) {
-                --md-slider-active-track-color: rgba(0, 102, 255, 0.4); /* Overlay played color */
-                --md-slider-inactive-track-color: transparent;
-                --md-slider-active-track-height: 64px;
-                --md-slider-inactive-track-height: 64px;
-                --md-slider-handle-shape: 0px; /* Square thumb */
-                --md-slider-handle-width: 4px;
-                --md-slider-handle-height: 64px;
-              }
-            </style>
-            
-            <ui-audio-provider src="https://storage.googleapis.com/scream-ui-samples/neon_pulse.mp3">
-              <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px;">
-                <ui-audio-play-button></ui-audio-play-button>
-                <ui-audio-time-display format="elapsed"></ui-audio-time-display>
-              </div>
-              
-              <div class="producer-bar-wrapper">
-                <ui-waveform class="producer-waveform" id="producer-waveform-demo" height="64" align="bottom" barColor="var(--md-sys-color-primary, #0066cc)" fadeEdges="false"></ui-waveform>
-                <ui-audio-progress-slider class="producer-slider"></ui-audio-progress-slider>
-              </div>
-            </ui-audio-provider>
+            <demo-producer-bar id="producer-waveform-demo"></demo-producer-bar>
             
             <div slot="code">&lt;div class="producer-bar-wrapper"&gt;
   &lt;!-- Bottom-aligned static waveform as background --&gt;
@@ -123,6 +75,7 @@
   }
 &lt;/style&gt;</div>
           </ui-showcase-card>
+
 
 
 
