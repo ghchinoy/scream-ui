@@ -23,6 +23,7 @@ export class UiScrollingWaveform extends LitElement {
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
   @property({type: Number}) height: number = 128;
+  @property({type: String}) align: 'center' | 'bottom' | 'top' = 'center';
   @property({type: Array}) data?: number[]; // Optional data source array
   @property({type: Array}) peaks?: number[];
   @property({attribute: false}) analyserNode?: AnalyserNode;

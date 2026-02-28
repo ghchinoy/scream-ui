@@ -27,6 +27,7 @@ export class UiWaveform extends LitElement {
   @property({type: Number}) barGap: number = 2;
   @property({type: Number}) barRadius: number = 2;
   @property({type: String}) barColor?: string;
+  @property({type: String}) align: 'center' | 'bottom' | 'top' = 'center';
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
   @property({type: Number}) height: number = 128;
@@ -72,7 +73,7 @@ export class UiWaveform extends LitElement {
 
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    if (changedProperties.has('data') || changedProperties.has('peaks') || changedProperties.has('barColor')) {
+    if (changedProperties.has('data') || changedProperties.has('peaks') || changedProperties.has('barColor') || changedProperties.has('align')) {
       this._renderWaveform();
     }
   }
