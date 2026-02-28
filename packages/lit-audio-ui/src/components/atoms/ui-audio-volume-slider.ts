@@ -33,6 +33,7 @@ export class UiAudioVolumeSlider extends LitElement {
       padding: 16px 8px;
       border-radius: 100px;
       height: 120px;
+      width: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -46,9 +47,18 @@ export class UiAudioVolumeSlider extends LitElement {
       opacity: 1;
       visibility: visible;
     }
+    :host([variant="popover"]) .slider-wrapper {
+      transform: rotate(-90deg);
+      width: 100px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     :host([variant="popover"]) md-slider {
-      height: 100px;
-      width: 48px;
+      width: 100%;
+      min-width: 100px;
+      padding: 0;
     }
 
     :host {
@@ -112,7 +122,9 @@ export class UiAudioVolumeSlider extends LitElement {
             <md-icon>${icon}</md-icon>
           </md-icon-button>
           <div class="slider-container ${this._isOpen ? 'open' : ''}">
-            ${sliderHtml}
+            <div class="slider-wrapper">
+              ${sliderHtml}
+            </div>
           </div>
         </div>
       `;
