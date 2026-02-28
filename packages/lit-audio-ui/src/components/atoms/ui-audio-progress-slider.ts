@@ -50,7 +50,7 @@ export class UiAudioProgressSlider extends LitElement {
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.1s ease;
-      z-index: 10;
+      z-index: 100;
     }
     .hover-tooltip.show {
       opacity: 1;

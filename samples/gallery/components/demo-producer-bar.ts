@@ -29,7 +29,7 @@ export class DemoProducerBar extends LitElement {
       height: 64px;
       background: var(--md-sys-color-surface-container-low, #f0f0f0);
       border-radius: 8px;
-      overflow: hidden;
+      /* overflow: hidden removed to allow hover tooltip to escape */
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
     .producer-waveform {
@@ -40,6 +40,8 @@ export class DemoProducerBar extends LitElement {
       height: 100%;
       pointer-events: none;
       opacity: 0.6;
+      border-radius: 8px;
+      overflow: hidden;
     }
     .producer-slider {
       position: absolute;
