@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   function generateStaticData() {
     const mockData = Array.from({length: 200}, () => Math.random() * 0.8 + 0.1);
     if (staticWaveform) {
-      staticWaveform.data = mockData;
+      staticWaveform.peaks = mockData;
     }
   }
 
   function forceStaticWaveformRedraw() {
-    if (staticWaveform && staticWaveform.data) {
-      staticWaveform.data = [...staticWaveform.data];
+    if (staticWaveform && staticWaveform.peaks) {
+      staticWaveform.peaks = [...staticWaveform.peaks];
     }
   }
 

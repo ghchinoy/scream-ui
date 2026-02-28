@@ -24,6 +24,7 @@ export class UiScrollingWaveform extends LitElement {
   @property({type: Number}) fadeWidth: number = 24;
   @property({type: Number}) height: number = 128;
   @property({type: Array}) data?: number[]; // Optional data source array
+  @property({type: Array}) peaks?: number[];
   @property({attribute: false}) analyserNode?: AnalyserNode;
   @property({type: Boolean}) active: boolean = true;
 
@@ -187,9 +188,10 @@ export class UiScrollingWaveform extends LitElement {
         let newHeight: number;
 
         // If an explicit data array is passed in, loop through it
-        if (this.data && this.data.length > 0) {
-          newHeight = this.data[this._dataIndex % this.data.length] || 0.1;
-          this._dataIndex = (this._dataIndex + 1) % this.data.length;
+        const dataSource = this.peaks && this.peaks.length > 0 ? this.peaks : this.data;
+        if (dataSource && dataSource.length > 0) {
+          newHeight = dataSource[this._dataIndex % dataSource.length] || 0.1;
+          this._dataIndex = (this._dataIndex + 1) % dataSource.length;
         } else if (this.analyserNode) {
           // Live analyser node
           if (

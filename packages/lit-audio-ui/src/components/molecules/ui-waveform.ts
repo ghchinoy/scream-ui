@@ -21,6 +21,7 @@ import {applyCanvasEdgeFade} from '../../utils/audio-utils.js';
 @customElement('ui-waveform')
 export class UiWaveform extends LitElement {
   @property({type: Array}) data: number[] = [];
+  @property({type: Array}) peaks?: number[];
   @property({type: Number}) barWidth: number = 4;
   @property({type: Number}) barHeight: number = 4;
   @property({type: Number}) barGap: number = 2;
@@ -71,7 +72,7 @@ export class UiWaveform extends LitElement {
 
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    if (changedProperties.has('data') || changedProperties.has('barColor')) {
+    if (changedProperties.has('data') || changedProperties.has('peaks') || changedProperties.has('barColor')) {
       this._renderWaveform();
     }
   }
@@ -123,8 +124,9 @@ export class UiWaveform extends LitElement {
     const centerY = rect.height / 2;
 
     for (let i = 0; i < barCount; i++) {
-      const dataIndex = Math.floor((i / barCount) * this.data.length);
-      const value = this.data[dataIndex] || 0;
+      const dataSource = this.peaks && this.peaks.length > 0 ? this.peaks : this.data;
+      const dataIndex = dataSource.length > 0 ? Math.floor((i / barCount) * dataSource.length) : 0;
+      const value = dataSource[dataIndex] || 0;
       // Value should be 0.0 to 1.0. Scale it to the height of the canvas.
       const dynamicHeight = Math.max(this.barHeight, value * rect.height * 0.8);
       const x = i * (this.barWidth + this.barGap);
