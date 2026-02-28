@@ -82,7 +82,7 @@ export class UiAudioProvider extends LitElement {
     if (changed.has('src')) {
       this._updateState({
         src: this.src,
-        isPlaying: false,
+        // Maintain isPlaying state so updated() knows whether to autoplay the new track
         currentTime: 0,
         error: undefined,
       });
@@ -241,8 +241,8 @@ export class UiAudioProvider extends LitElement {
   private _handleEnded() {
     if (this.autoAdvance && this.items.length > 0) {
       // If we're at the last track, loop back to start
+      // isPlaying remains true, so updated() will automatically call play() after load()
       this.next();
-      this.play();
     } else {
       this._updateState({isPlaying: false, currentTime: 0});
       this._audioEl.currentTime = 0;

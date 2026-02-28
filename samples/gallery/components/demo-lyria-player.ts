@@ -107,6 +107,8 @@ export class DemoLyriaPlayer extends LitElement {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
   `;
 
@@ -153,12 +155,12 @@ export class DemoLyriaPlayer extends LitElement {
                 </div>
 
                 <!-- Progress / Scrubber -->
-                <div style="flex: 1; display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+                <div style="flex: 1; display: flex; align-items: center; gap: 12px; padding: 0 16px; min-width: 0;">
                   <ui-audio-time-display
                     format="elapsed"
                     style="font-size: 12px; opacity: 0.8;"
                   ></ui-audio-time-display>
-                  <div style="flex: 1;">
+                  <div style="flex: 1; min-width: 0;">
                     <ui-audio-progress-slider></ui-audio-progress-slider>
                   </div>
                   <ui-audio-time-display
