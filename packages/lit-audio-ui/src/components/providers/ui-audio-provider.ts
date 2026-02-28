@@ -286,3 +286,22 @@ export class UiAudioProvider extends LitElement {
     this._animationFrameId = requestAnimationFrame(track);
   }
 }
+
+
+export interface AudioProviderElement extends HTMLElement {
+  src: string;
+  items: PlaylistTrack[];
+  autoAdvance: boolean;
+  state: AudioPlayerState;
+  play(): void;
+  pause(): void;
+  next(): void;
+  previous(): void;
+  select(index: number): void;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ui-audio-provider': UiAudioProvider;
+  }
+}

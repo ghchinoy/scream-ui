@@ -256,3 +256,22 @@ export class UiSpeechProvider extends LitElement {
     return html`<slot></slot>`;
   }
 }
+
+
+export interface SpeechProviderElement extends HTMLElement {
+  state: SpeechState;
+  simulation: boolean;
+  manual: boolean;
+  transcript: string;
+  partialTranscript: string;
+  deviceId?: string;
+  start(): Promise<void> | void;
+  stop(): void;
+  cancel(): void;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ui-speech-provider': UiSpeechProvider;
+  }
+}
