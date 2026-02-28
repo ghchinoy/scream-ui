@@ -21,7 +21,7 @@ export class UiAudioProgressSlider extends LitElement {
       display: flex;
       width: 100%;
       align-items: center;
-      min-width: 100px;
+      min-width: 0;
     }
 
     md-slider {

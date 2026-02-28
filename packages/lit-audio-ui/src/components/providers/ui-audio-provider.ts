@@ -109,7 +109,11 @@ export class UiAudioProvider extends LitElement {
       this._audioEl.load();
       // If it was playing, keep playing
       if (this.state.isPlaying) {
-        this.play();
+        // Defer play to allow the browser's media pipeline to settle from the load() call,
+        // preventing "The play() request was interrupted by a new load request" AbortErrors.
+        setTimeout(() => {
+          this.play();
+        }, 50);
       }
     }
   }
