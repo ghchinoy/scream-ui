@@ -110,3 +110,14 @@ dist-demo
 # Dolt database files (added by bd init)
 .dolt/
 *.db
+
+# Prevent TS compilation from writing to src
+packages/lit-audio-ui/src/**/*.js
+packages/lit-audio-ui/src/**/*.js.map
+packages/lit-audio-ui/src/**/*.d.ts
+
+samples/**/*.js
+samples/**/*.js.map
+samples/**/*.d.ts
+!samples/**/vite.config.js
+
