@@ -38,3 +38,19 @@ export declare class UiAudioProvider extends LitElement {
     private _handleError;
     private _startTrackingTime;
 }
+export interface AudioProviderElement extends HTMLElement {
+    src: string;
+    items: PlaylistTrack[];
+    autoAdvance: boolean;
+    state: AudioPlayerState;
+    play(): void;
+    pause(): void;
+    next(): void;
+    previous(): void;
+    select(index: number): void;
+}
+declare global {
+    interface HTMLElementTagNameMap {
+        'ui-audio-provider': UiAudioProvider;
+    }
+}

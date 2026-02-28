@@ -46,3 +46,19 @@ export declare class UiSpeechProvider extends LitElement {
     private _updateContext;
     render(): import("lit-html").TemplateResult<1>;
 }
+export interface SpeechProviderElement extends HTMLElement {
+    state: SpeechState;
+    simulation: boolean;
+    manual: boolean;
+    transcript: string;
+    partialTranscript: string;
+    deviceId?: string;
+    start(): Promise<void> | void;
+    stop(): void;
+    cancel(): void;
+}
+declare global {
+    interface HTMLElementTagNameMap {
+        'ui-speech-provider': UiSpeechProvider;
+    }
+}

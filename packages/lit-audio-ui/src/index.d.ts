@@ -58,3 +58,5 @@ export type { AudioDevice } from './components/molecules/ui-mic-selector.js';
 export type { VoiceItem, VoiceLabel, } from './components/molecules/ui-voice-picker.js';
 export type { AgentState } from './components/molecules/ui-orb.js';
 export type { VoiceButtonState } from './components/molecules/ui-voice-button.js';
+export type { AudioProviderElement } from './components/providers/ui-audio-provider.js';
+export type { SpeechProviderElement } from './components/providers/ui-speech-provider.js';
