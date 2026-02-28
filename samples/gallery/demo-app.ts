@@ -42,11 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 2. Setup Static Waveform
   const staticWaveform = (await findEl('demo-static-waveform')) as any;
   const regenerateStaticBtn = await findEl('btn-regenerate-static');
+  const producerWaveform = await findEl('producer-waveform-demo') as any;
 
   function generateStaticData() {
     const mockData = Array.from({length: 200}, () => Math.random() * 0.8 + 0.1);
     if (staticWaveform) {
       staticWaveform.peaks = mockData;
+    }
+    if (producerWaveform) {
+      producerWaveform.peaks = mockData;
     }
   }
 
