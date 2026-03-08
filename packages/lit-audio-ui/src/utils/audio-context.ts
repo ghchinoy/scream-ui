@@ -50,6 +50,7 @@ export interface AudioPlayerState {
   pause: () => void;
   togglePlay: () => void;
   seek: (time: number) => void;
+  reset: () => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
 

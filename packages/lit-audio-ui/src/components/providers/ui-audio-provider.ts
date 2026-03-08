@@ -43,7 +43,8 @@ export class UiAudioProvider extends LitElement {
     play: () => this.play(),
     pause: () => this.pause(),
     togglePlay: () => this._togglePlay(),
-    seek: (time: number) => this._seek(time),
+    seek: (time: number) => this.seek(time),
+    reset: () => this.reset(),
     setVolume: (volume: number) => this._setVolume(volume),
     toggleMute: () => this._toggleMute(),
     next: () => this.next(),
@@ -70,7 +71,9 @@ export class UiAudioProvider extends LitElement {
         @ended="${this._handleEnded}"
         @playing="${this._handlePlaying}"
         @pause="${this._handlePause}"
+        @loadstart="${() => this._updateState({isBuffering: true})}"
         @waiting="${() => this._updateState({isBuffering: true})}"
+        @stalled="${() => this._updateState({isBuffering: true})}"
         @canplay="${() => this._updateState({isBuffering: false})}"
         @error="${this._handleError}"
       ></audio>
@@ -192,10 +195,14 @@ export class UiAudioProvider extends LitElement {
     }
   }
 
-  private _seek(time: number) {
+  public seek(time: number) {
     if (!this._audioEl) return;
     this._audioEl.currentTime = time;
     this._updateState({currentTime: time});
+  }
+
+  public reset() {
+    this.seek(0);
   }
 
   private _setVolume(volume: number) {

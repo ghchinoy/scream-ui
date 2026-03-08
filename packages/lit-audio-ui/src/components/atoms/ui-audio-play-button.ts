@@ -70,8 +70,7 @@ export class UiAudioPlayButton extends LitElement {
     }
 
     md-circular-progress {
-      position: absolute;
-      --md-circular-progress-size: 48px;
+      --md-circular-progress-size: 24px;
     }
   `;
 
@@ -93,13 +92,10 @@ export class UiAudioPlayButton extends LitElement {
         @click="${this._handleClick}"
         ?disabled="${!this.playerState?.src}"
       >
-        <md-icon
-          >${hasError ? 'error' : isPlaying ? 'pause' : 'play_arrow'}</md-icon
-        >
+        ${isBuffering && isPlaying && !hasError
+          ? html`<md-circular-progress indeterminate></md-circular-progress>`
+          : html`<md-icon>${hasError ? 'error' : isPlaying ? 'pause' : 'play_arrow'}</md-icon>`}
       </md-filled-icon-button>
-      ${isBuffering && isPlaying && !hasError
-        ? html`<md-circular-progress indeterminate></md-circular-progress>`
-        : ''}
     `;
   }
 

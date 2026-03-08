@@ -734,51 +734,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/atoms/ui-audio-next-button.ts",
       "declarations": [
         {
@@ -845,7 +800,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: inline-flex; position: relative; align-items: center; justify-content: center; font-family: inherit; } md-filled-icon-button { --md-filled-icon-button-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-hover-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-focus-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-pressed-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-toggle-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-selected-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-selected-icon-color: var( --md-sys-color-on-primary, #ffffff ); color: var(--md-sys-color-on-primary, #ffffff); } md-filled-icon-button.error { --md-filled-icon-button-container-color: var( --ui-audio-error-color, var(--md-sys-color-error, #ba1a1a) ); --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff); } md-circular-progress { position: absolute; --md-circular-progress-size: 48px; } `"
+              "default": "css` :host { display: inline-flex; position: relative; align-items: center; justify-content: center; font-family: inherit; } md-filled-icon-button { --md-filled-icon-button-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-hover-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-focus-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-pressed-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-toggle-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-selected-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-selected-icon-color: var( --md-sys-color-on-primary, #ffffff ); color: var(--md-sys-color-on-primary, #ffffff); } md-filled-icon-button.error { --md-filled-icon-button-container-color: var( --ui-audio-error-color, var(--md-sys-color-error, #ba1a1a) ); --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff); } md-circular-progress { --md-circular-progress-size: 24px; } `"
             },
             {
               "kind": "method",
@@ -1051,7 +1006,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: flex; width: 100%; align-items: center; min-width: 0; position: relative; } .hover-tooltip { position: absolute; top: -32px; transform: translateX(-50%); background: var(--md-sys-color-inverse-surface, #313033); color: var(--md-sys-color-inverse-on-surface, #f4eff4); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; pointer-events: none; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.1s ease; z-index: 10; } .hover-tooltip.show { opacity: 1; visibility: visible; } /* Little downward pointing triangle */ .hover-tooltip::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-width: 4px 4px 0; border-style: solid; border-color: var(--md-sys-color-inverse-surface, #313033) transparent transparent transparent; } md-slider { width: 100%; min-width: 0; flex: 1; /* Give the slider track better contrast against backgrounds */ --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e); } `"
+              "default": "css` :host { display: flex; width: 100%; align-items: center; min-width: 0; position: relative; } .hover-tooltip { position: absolute; top: -32px; transform: translateX(-50%); background: var(--md-sys-color-inverse-surface, #313033); color: var(--md-sys-color-inverse-on-surface, #f4eff4); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; pointer-events: none; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.1s ease; z-index: 100; } .hover-tooltip.show { opacity: 1; visibility: visible; } /* Little downward pointing triangle */ .hover-tooltip::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-width: 4px 4px 0; border-style: solid; border-color: var(--md-sys-color-inverse-surface, #313033) transparent transparent transparent; } md-slider { width: 100%; min-width: 0; flex: 1; /* Give the slider track better contrast against backgrounds */ --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e); } `"
             },
             {
               "kind": "method",
@@ -1788,6 +1743,51 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/molecules/scream-voice-button.ts",
       "declarations": [
         {
@@ -2285,9 +2285,8 @@
               "kind": "field",
               "name": "height",
               "type": {
-                "text": "number"
-              },
-              "default": "64"
+                "text": "number | string | undefined"
+              }
             },
             {
               "kind": "field",
@@ -2403,7 +2402,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; width: 100%; } .container { position: relative; width: 100%; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
+              "default": "css` :host { display: block; width: 100%; height: 64px; /* default height, can be overridden by CSS */ } .container { position: relative; width: 100%; height: 100%; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
             },
             {
               "kind": "method",
@@ -3142,9 +3141,8 @@
               "kind": "field",
               "name": "height",
               "type": {
-                "text": "number"
-              },
-              "default": "128"
+                "text": "number | string | undefined"
+              }
             },
             {
               "kind": "field",
@@ -3260,7 +3258,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; width: 100%; } .container { position: relative; width: 100%; overflow: hidden; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
+              "default": "css` :host { display: block; width: 100%; height: 128px; /* default height, can be overridden by CSS */ } .container { position: relative; width: 100%; height: 100%; overflow: hidden; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
             },
             {
               "kind": "method",
@@ -3420,7 +3418,6 @@
               "type": {
                 "text": "number"
               },
-              "default": "100",
               "description": "Container height (default: 100)."
             },
             {
@@ -3460,7 +3457,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; width: 100%; overflow: hidden; } canvas { display: block; width: 100%; height: 100%; } `"
+              "default": "css` :host { display: block; width: 100%; height: 100px; /* default height, can be overridden by CSS */ overflow: hidden; } canvas { display: block; width: 100%; height: 100%; } `"
             },
             {
               "kind": "method",
@@ -4135,9 +4132,8 @@
               "kind": "field",
               "name": "height",
               "type": {
-                "text": "number"
-              },
-              "default": "128"
+                "text": "number | string | undefined"
+              }
             },
             {
               "kind": "field",
@@ -4167,7 +4163,7 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "css` :host { display: block; width: 100%; } .container { position: relative; width: 100%; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
+              "default": "css` :host { display: block; width: 100%; height: 128px; /* default height, can be overridden by CSS */ } .container { position: relative; width: 100%; height: 100%; } canvas { position: absolute; top: 0; left: 0; display: block; height: 100%; width: 100%; } `"
             },
             {
               "kind": "method",
@@ -4299,7 +4295,7 @@
                 "text": "AudioPlayerState"
               },
               "privacy": "public",
-              "default": "{ src: '', isPlaying: false, isBuffering: false, currentTime: 0, duration: 0, volume: 1, muted: false, items: [], currentIndex: -1, autoAdvance: true, analyserNode: undefined, play: () => this.play(), pause: () => this.pause(), togglePlay: () => this._togglePlay(), seek: (time: number) => this._seek(time), setVolume: (volume: number) => this._setVolume(volume), toggleMute: () => this._toggleMute(), next: () => this.next(), previous: () => this.previous(), select: (index: number) => this.select(index), }"
+              "default": "{ src: '', isPlaying: false, isBuffering: false, currentTime: 0, duration: 0, volume: 1, muted: false, items: [], currentIndex: -1, autoAdvance: true, analyserNode: undefined, play: () => this.play(), pause: () => this.pause(), togglePlay: () => this._togglePlay(), seek: (time: number) => this.seek(time), reset: () => this.reset(), setVolume: (volume: number) => this._setVolume(volume), toggleMute: () => this._toggleMute(), next: () => this.next(), previous: () => this.previous(), select: (index: number) => this.select(index), }"
             },
             {
               "kind": "field",
@@ -4370,8 +4366,8 @@
             },
             {
               "kind": "method",
-              "name": "_seek",
-              "privacy": "private",
+              "name": "seek",
+              "privacy": "public",
               "parameters": [
                 {
                   "name": "time",
@@ -4380,6 +4376,11 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "reset",
+              "privacy": "public"
             },
             {
               "kind": "method",

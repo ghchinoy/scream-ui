@@ -30,7 +30,7 @@ export class UiWaveform extends LitElement {
   @property({type: String}) align: 'center' | 'bottom' | 'top' = 'center';
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
-  @property({type: Number}) height: number = 128;
+  @property() height?: number | string;
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
   @query('.container') private _container!: HTMLDivElement;
@@ -41,10 +41,12 @@ export class UiWaveform extends LitElement {
     :host {
       display: block;
       width: 100%;
+      height: 128px; /* default height, can be overridden by CSS */
     }
     .container {
       position: relative;
       width: 100%;
+      height: 100%;
     }
     canvas {
       position: absolute;
@@ -57,8 +59,11 @@ export class UiWaveform extends LitElement {
   `;
 
   render() {
+    const h = this.height !== undefined 
+      ? (typeof this.height === 'number' || !isNaN(Number(this.height)) ? `${this.height}px` : this.height) 
+      : '100%';
     return html`
-      <div class="container" style="height: ${this.height}px;">
+      <div class="container" style="height: ${h};">
         <canvas></canvas>
       </div>
     `;

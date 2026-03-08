@@ -22,7 +22,7 @@ export class UiScrollingWaveform extends LitElement {
   @property({type: String}) barColor?: string;
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
-  @property({type: Number}) height: number = 128;
+  @property() height?: number | string;
   @property({type: String}) align: 'center' | 'bottom' | 'top' = 'center';
   @property({type: Array}) data?: number[]; // Optional data source array
   @property({type: Array}) peaks?: number[];
@@ -46,10 +46,12 @@ export class UiScrollingWaveform extends LitElement {
     :host {
       display: block;
       width: 100%;
+      height: 128px; /* default height, can be overridden by CSS */
     }
     .container {
       position: relative;
       width: 100%;
+      height: 100%;
       overflow: hidden;
     }
     canvas {
@@ -63,8 +65,11 @@ export class UiScrollingWaveform extends LitElement {
   `;
 
   render() {
+    const h = this.height !== undefined 
+      ? (typeof this.height === 'number' || !isNaN(Number(this.height)) ? `${this.height}px` : this.height) 
+      : '100%';
     return html`
-      <div class="container" style="height: ${this.height}px;">
+      <div class="container" style="height: ${h};">
         <canvas></canvas>
       </div>
     `;

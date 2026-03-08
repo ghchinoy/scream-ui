@@ -25,7 +25,7 @@ export class UiLiveWaveform extends LitElement {
   @property({type: String}) barColor?: string;
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
-  @property({type: Number}) height: number = 64;
+  @property() height?: number | string;
   @property({type: Number}) sensitivity: number = 1.0;
   @property({type: Number}) updateRate: number = 30; // ms
 
@@ -47,10 +47,12 @@ export class UiLiveWaveform extends LitElement {
     :host {
       display: block;
       width: 100%;
+      height: 64px; /* default height, can be overridden by CSS */
     }
     .container {
       position: relative;
       width: 100%;
+      height: 100%;
     }
     canvas {
       position: absolute;
@@ -63,8 +65,11 @@ export class UiLiveWaveform extends LitElement {
   `;
 
   override render() {
+    const h = this.height !== undefined 
+      ? (typeof this.height === 'number' || !isNaN(Number(this.height)) ? `${this.height}px` : this.height) 
+      : '100%';
     return html`
-      <div class="container" style="height: ${this.height}px;">
+      <div class="container" style="height: ${h};">
         <canvas></canvas>
       </div>
     `;

@@ -41,7 +41,7 @@ export class UiSpectrumVisualizer extends LitElement {
 
   @property({type: Number}) barWidth = 4;
   @property({type: Number}) barGap = 2;
-  @property({type: Number}) height = 100;
+  @property() height?: number | string;
   @property({type: String}) color?: string;
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
@@ -53,6 +53,7 @@ export class UiSpectrumVisualizer extends LitElement {
     :host {
       display: block;
       width: 100%;
+      height: 100px; /* default height, can be overridden by CSS */
       overflow: hidden;
     }
     canvas {
@@ -63,7 +64,10 @@ export class UiSpectrumVisualizer extends LitElement {
   `;
 
   render() {
-    return html`<canvas style="height: ${this.height}px;"></canvas>`;
+    const h = this.height !== undefined 
+      ? (typeof this.height === 'number' || !isNaN(Number(this.height)) ? `${this.height}px` : this.height) 
+      : '100%';
+    return html`<canvas style="height: ${h};"></canvas>`;
   }
 
   firstUpdated() {
