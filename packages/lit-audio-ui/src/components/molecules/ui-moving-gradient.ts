@@ -38,6 +38,7 @@ export class UiMovingGradient extends LitElement {
       width: 100%;
       height: 100%;
       position: relative;
+      background-color: #0E0E0F;
     }
     .container {
       width: 100%;
