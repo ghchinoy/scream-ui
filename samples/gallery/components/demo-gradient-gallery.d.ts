@@ -21,6 +21,10 @@ export declare class DemoGradientGallery extends LitElement {
     private _agentState;
     private _baseHeight;
     private _speed;
+    private _colors;
+    private _stops;
     static styles: import("lit").CSSResult;
+    private _updateColor;
+    private _updateStop;
     render(): import("lit-html").TemplateResult<1>;
 }

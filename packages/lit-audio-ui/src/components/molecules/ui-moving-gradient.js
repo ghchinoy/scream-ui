@@ -41,6 +41,9 @@ uniform float uOutputVolume;
 uniform float uOpacity;
 uniform float uAspect;
 uniform float uBaseHeight;
+uniform float uStop1;
+uniform float uStop2;
+uniform float uStop3;
 
 varying vec2 vUv;
 
@@ -112,12 +115,16 @@ void main() {
     
     // Mix colors based on height and X position to give the gradient a "sweep"
     float colorMix = smoothstep(0.0, yThreshold, uv.y) + (sin(uv.x * 2.0 + uTime) * 0.2);
-    // map the 0.0 -> 1.0 range of colorMix to the 3 colors
+    
+    // map the 0.0 -> 1.0 range of colorMix to the 3 colors using the stops
+    float c = clamp(colorMix, 0.0, 1.0);
     vec3 finalColor;
-    if (colorMix < 0.5) {
-      finalColor = mix(uColor1, uColor2, colorMix * 2.0);
+    if (c <= uStop2) {
+      float t = (c - uStop1) / max(0.001, uStop2 - uStop1);
+      finalColor = mix(uColor1, uColor2, clamp(t, 0.0, 1.0));
     } else {
-      finalColor = mix(uColor2, uColor3, (colorMix - 0.5) * 2.0);
+      float t = (c - uStop2) / max(0.001, uStop3 - uStop2);
+      finalColor = mix(uColor2, uColor3, clamp(t, 0.0, 1.0));
     }
     
     // Add a slight bright rim at the edge of the wave when active
@@ -134,6 +141,7 @@ void main() {
       width: 100%;
       height: 100%;
       position: relative;
+      background-color: #0E0E0F;
     }
     .container {
       width: 100%;
@@ -154,6 +162,17 @@ void main() {
     updated(changedProperties) {
         if (changedProperties.has('colors')) {
             this._updateColors();
+        }
+        if (this._mesh) {
+            if (changedProperties.has('baseHeight')) {
+                this._mesh.material.uniforms.uBaseHeight.value = this.baseHeight;
+            }
+            if (changedProperties.has('stops')) {
+                const s = this.stops || [0.0, 0.5, 0.86];
+                this._mesh.material.uniforms.uStop1.value = s[0];
+                this._mesh.material.uniforms.uStop2.value = s[1];
+                this._mesh.material.uniforms.uStop3.value = s[2];
+            }
         }
     }
     _updateColors() {
@@ -204,6 +223,7 @@ void main() {
         this._renderer.setSize(width, height);
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._container.appendChild(this._renderer.domElement);
+        const s = this.stops || [0.0, 0.5, 0.86];
         const uniforms = {
             uColor1: new THREE.Uniform(this._targetColor1),
             uColor2: new THREE.Uniform(this._targetColor2),
@@ -214,6 +234,9 @@ void main() {
             uOpacity: new THREE.Uniform(0),
             uAspect: new THREE.Uniform(width / height),
             uBaseHeight: new THREE.Uniform(this.baseHeight),
+            uStop1: new THREE.Uniform(s[0]),
+            uStop2: new THREE.Uniform(s[1]),
+            uStop3: new THREE.Uniform(s[2]),
         };
         const geometry = new THREE.PlaneGeometry(2, 2);
         const material = new THREE.ShaderMaterial({
@@ -281,15 +304,15 @@ void main() {
         this._curIn += (targetIn - this._curIn) * 0.15;
         this._curOut += (targetOut - this._curOut) * 0.15;
         // Adjust speed based on state
-        let targetSpeed = 1.0;
+        let targetSpeed = this.speed;
         if (this.agentState === 'talking')
-            targetSpeed = 2.5;
+            targetSpeed = this.speed * 2.5;
         if (this.agentState === 'thinking')
-            targetSpeed = 1.5;
+            targetSpeed = this.speed * 1.5;
         if (this.agentState === 'listening')
-            targetSpeed = 1.2;
+            targetSpeed = this.speed * 1.2;
         // Add volume modifier to speed
-        targetSpeed += (this._curIn + this._curOut) * 2.0;
+        targetSpeed += (this._curIn + this._curOut) * 2.0 * this.speed;
         this._animSpeed += (targetSpeed - this._animSpeed) * 0.1;
         u.uTime.value += delta * this._animSpeed;
         u.uInputVolume.value = this._curIn;
@@ -307,6 +330,9 @@ void main() {
 __decorate([
     property({ type: Array })
 ], UiMovingGradient.prototype, "colors", void 0);
+__decorate([
+    property({ type: Array })
+], UiMovingGradient.prototype, "stops", void 0);
 __decorate([
     property({ type: String })
 ], UiMovingGradient.prototype, "agentState", void 0);

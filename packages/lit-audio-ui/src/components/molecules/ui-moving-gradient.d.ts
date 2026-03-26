@@ -5,6 +5,7 @@ import type { AgentState } from './ui-orb.js';
  */
 export declare class UiMovingGradient extends LitElement {
     colors?: [string, string, string];
+    stops?: [number, number, number];
     agentState: AgentState;
     inputVolume: number;
     outputVolume: number;

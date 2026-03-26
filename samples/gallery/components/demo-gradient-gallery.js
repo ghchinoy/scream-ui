@@ -30,6 +30,8 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
         this._agentState = null;
         this._baseHeight = 0.05;
         this._speed = 1.0;
+        this._colors = ['#0068FF', '#0077FF', '#0073FF'];
+        this._stops = [0.0, 0.5, 0.86];
     }
     static { this.styles = css `
     :host {
@@ -38,15 +40,15 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
     }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 32px;
       justify-items: center;
     }
     .gradient-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       width: 100%;
       max-width: 400px;
     }
@@ -113,6 +115,9 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
       gap: 16px;
       margin-top: 12px;
       width: 100%;
+      background: var(--md-sys-color-surface-container);
+      padding: 16px;
+      border-radius: 16px;
     }
     
     .button-group {
@@ -127,7 +132,6 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
       align-items: center;
       gap: 12px;
       width: 100%;
-      padding: 0 16px;
       box-sizing: border-box;
     }
     
@@ -137,7 +141,7 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
       color: var(--md-sys-color-on-surface-variant);
     }
     
-    .slider-group input {
+    .slider-group input[type="range"] {
       flex: 1;
     }
     
@@ -147,6 +151,75 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
       font-family: monospace;
       text-align: right;
       color: var(--md-sys-color-on-surface);
+    }
+    
+    .stops-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .stops-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stop-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--md-sys-color-surface-container-low);
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .stop-pct {
+      width: 60px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stop-pct input {
+      width: 40px;
+      background: transparent;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 4px;
+      padding: 4px;
+      color: var(--md-sys-color-on-surface);
+      font-family: monospace;
+    }
+
+    .stop-color {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .stop-color input[type="color"] {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .stop-color input[type="text"] {
+      width: 70px;
+      background: transparent;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 4px;
+      padding: 4px;
+      color: var(--md-sys-color-on-surface);
+      font-family: monospace;
+      text-transform: uppercase;
     }
     
     button {
@@ -169,6 +242,16 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
       border-color: var(--md-sys-color-primary);
     }
   `; }
+    _updateColor(index, val) {
+        const newColors = [...this._colors];
+        newColors[index] = val;
+        this._colors = newColors;
+    }
+    _updateStop(index, val) {
+        const newStops = [...this._stops];
+        newStops[index] = val / 100.0;
+        this._stops = newStops;
+    }
     render() {
         return html `
       <div class="gallery-grid">
@@ -177,13 +260,13 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
             <div class="screen-mock">
               <ui-moving-gradient
                 .agentState=${this._agentState}
-                .colors="${['#0068FF', '#0077FF', '#0073FF']}"
+                .colors=${this._colors}
+                .stops=${this._stops}
                 .baseHeight=${this._baseHeight}
                 .speed=${this._speed}
               ></ui-moving-gradient>
             </div>
           </div>
-          <div class="gradient-label">Blue Gradient Variant</div>
           
           <div class="controls">
             <div class="button-group">
@@ -212,6 +295,44 @@ let DemoGradientGallery = class DemoGradientGallery extends LitElement {
               <input type="range" min="0" max="5" step="0.1" .value=${this._speed.toString()} @input=${(e) => this._speed = parseFloat(e.target.value)}>
               <span>${this._speed.toFixed(1)}</span>
             </div>
+
+            <div class="stops-editor">
+              <div class="stops-header">
+                <span>Stops</span>
+              </div>
+              
+              ${[0, 1, 2].map(i => html `
+                <div class="stop-row">
+                  <div class="stop-pct">
+                    <input 
+                      type="number" 
+                      min="0" max="100" 
+                      .value=${Math.round(this._stops[i] * 100).toString()}
+                      @change=${(e) => this._updateStop(i, parseInt(e.target.value) || 0)}
+                    >
+                    <span>%</span>
+                  </div>
+                  <div class="stop-color">
+                    <input 
+                      type="color" 
+                      .value=${this._colors[i]}
+                      @input=${(e) => this._updateColor(i, e.target.value)}
+                    >
+                    <input 
+                      type="text" 
+                      .value=${this._colors[i].toUpperCase()}
+                      @change=${(e) => {
+            let val = e.target.value;
+            if (!val.startsWith('#'))
+                val = '#' + val;
+            this._updateColor(i, val);
+        }}
+                    >
+                  </div>
+                </div>
+              `)}
+            </div>
+            
           </div>
         </div>
       </div>
@@ -227,6 +348,12 @@ __decorate([
 __decorate([
     state()
 ], DemoGradientGallery.prototype, "_speed", void 0);
+__decorate([
+    state()
+], DemoGradientGallery.prototype, "_colors", void 0);
+__decorate([
+    state()
+], DemoGradientGallery.prototype, "_stops", void 0);
 DemoGradientGallery = __decorate([
     customElement('demo-gradient-gallery')
 ], DemoGradientGallery);
