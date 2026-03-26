@@ -271,7 +271,7 @@ export class DemoGradientGallery extends LitElement {
   render() {
     return html`
       <div class="gallery-grid">
-        <ui-showcase-card title="Moving Gradient" description="Interactive 3D WebGL visualization" style="width: 100%; max-width: 500px;">
+        <ui-showcase-card title="ui-moving-gradient" description="Ambient full-screen gradient visualization.">
           <div class="gradient-item">
             <div class="gradient-container">
               <div class="screen-mock">
