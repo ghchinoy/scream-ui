@@ -19,6 +19,8 @@ import { LitElement } from 'lit';
  */
 export declare class DemoGradientGallery extends LitElement {
     private _agentState;
+    private _baseHeight;
+    private _speed;
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
 }

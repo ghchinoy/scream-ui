@@ -24,6 +24,8 @@ import {type AgentState} from '@ghchinoy/lit-audio-ui';
 @customElement('demo-gradient-gallery')
 export class DemoGradientGallery extends LitElement {
   @state() private _agentState: AgentState = null;
+  @state() private _baseHeight = 0.05;
+  @state() private _speed = 1.0;
   
   static styles = css`
     :host {
@@ -103,10 +105,44 @@ export class DemoGradientGallery extends LitElement {
     
     .controls {
       display: flex;
-      gap: 8px;
+      flex-direction: column;
+      gap: 16px;
       margin-top: 12px;
+      width: 100%;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
+    }
+    
+    .slider-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    
+    .slider-group label {
+      width: 90px;
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    
+    .slider-group input {
+      flex: 1;
+    }
+    
+    .slider-group span {
+      width: 40px;
+      font-size: 12px;
+      font-family: monospace;
+      text-align: right;
+      color: var(--md-sys-color-on-surface);
     }
     
     button {
@@ -139,24 +175,40 @@ export class DemoGradientGallery extends LitElement {
               <ui-moving-gradient
                 .agentState=${this._agentState}
                 .colors="${['#0068FF', '#0077FF', '#0073FF']}"
+                .baseHeight=${this._baseHeight}
+                .speed=${this._speed}
               ></ui-moving-gradient>
             </div>
           </div>
           <div class="gradient-label">Blue Gradient Variant</div>
           
           <div class="controls">
-            <button 
-              class=${this._agentState === null ? 'active' : ''}
-              @click=${() => this._agentState = null}>Idle</button>
-            <button 
-              class=${this._agentState === 'listening' ? 'active' : ''}
-              @click=${() => this._agentState = 'listening'}>User Speaking</button>
-            <button 
-              class=${this._agentState === 'thinking' ? 'active' : ''}
-              @click=${() => this._agentState = 'thinking'}>Thinking</button>
-            <button 
-              class=${this._agentState === 'talking' ? 'active' : ''}
-              @click=${() => this._agentState = 'talking'}>AI Talking</button>
+            <div class="button-group">
+              <button 
+                class=${this._agentState === null ? 'active' : ''}
+                @click=${() => this._agentState = null}>Idle</button>
+              <button 
+                class=${this._agentState === 'listening' ? 'active' : ''}
+                @click=${() => this._agentState = 'listening'}>User Speaking</button>
+              <button 
+                class=${this._agentState === 'thinking' ? 'active' : ''}
+                @click=${() => this._agentState = 'thinking'}>Thinking</button>
+              <button 
+                class=${this._agentState === 'talking' ? 'active' : ''}
+                @click=${() => this._agentState = 'talking'}>AI Talking</button>
+            </div>
+            
+            <div class="slider-group">
+              <label>Base Height:</label>
+              <input type="range" min="0" max="0.5" step="0.01" .value=${this._baseHeight.toString()} @input=${(e: Event) => this._baseHeight = parseFloat((e.target as HTMLInputElement).value)}>
+              <span>${this._baseHeight.toFixed(2)}</span>
+            </div>
+            
+            <div class="slider-group">
+              <label>Speed:</label>
+              <input type="range" min="0" max="5" step="0.1" .value=${this._speed.toString()} @input=${(e: Event) => this._speed = parseFloat((e.target as HTMLInputElement).value)}>
+              <span>${this._speed.toFixed(1)}</span>
+            </div>
           </div>
         </div>
       </div>
