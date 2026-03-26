@@ -60,9 +60,8 @@ let DemoLyriaPlayer = class DemoLyriaPlayer extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 24px;
-      max-width: 600px;
+      max-width: 700px;
       box-sizing: border-box;
-      overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       margin: 0 auto;
     }
@@ -110,6 +109,8 @@ let DemoLyriaPlayer = class DemoLyriaPlayer extends LitElement {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
   `; }
     render() {
@@ -146,32 +147,32 @@ let DemoLyriaPlayer = class DemoLyriaPlayer extends LitElement {
                 ></ui-scrolling-waveform>
               </div>
 
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <ui-audio-time-display
-                  format="elapsed"
-                  style="font-size: 12px; opacity: 0.8;"
-                ></ui-audio-time-display>
-                <div style="flex: 1;">
-                  <ui-audio-progress-slider></ui-audio-progress-slider>
-                </div>
-                <ui-audio-time-display
-                  format="remaining"
-                  style="font-size: 12px; opacity: 0.8;"
-                ></ui-audio-time-display>
-              </div>
-
               <div class="music-controls">
-                <div style="display: flex; gap: 4px; flex-shrink: 0;">
+                <!-- Track Controls -->
+                <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
                   <ui-audio-prev-button></ui-audio-prev-button>
                   <ui-audio-play-button></ui-audio-play-button>
                   <ui-audio-next-button></ui-audio-next-button>
                 </div>
-                <div
-                  style="flex: 1; display: flex; justify-content: flex-end; min-width: 120px;"
-                >
-                  <ui-audio-volume-slider
-                    style="width: 100%;"
-                  ></ui-audio-volume-slider>
+
+                <!-- Progress / Scrubber -->
+                <div style="flex: 1; display: flex; align-items: center; gap: 12px; padding: 0 16px; min-width: 0;">
+                  <ui-audio-time-display
+                    format="elapsed"
+                    style="font-size: 12px; opacity: 0.8;"
+                  ></ui-audio-time-display>
+                  <div style="flex: 1; min-width: 0; width: 100%;">
+                    <ui-audio-progress-slider style="width: 100%; display: block;"></ui-audio-progress-slider>
+                  </div>
+                  <ui-audio-time-display
+                    format="remaining"
+                    style="font-size: 12px; opacity: 0.8;"
+                  ></ui-audio-time-display>
+                </div>
+
+                <!-- Volume Popover -->
+                <div style="display: flex; justify-content: flex-end; flex-shrink: 0;">
+                  <ui-audio-volume-slider variant="popover"></ui-audio-volume-slider>
                 </div>
               </div>
             </div>

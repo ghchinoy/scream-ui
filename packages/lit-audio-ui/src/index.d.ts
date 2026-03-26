@@ -36,6 +36,7 @@ export * from './components/molecules/ui-mic-selector.js';
 export * from './components/molecules/ui-voice-picker.js';
 export * from './components/molecules/ui-speech-preview.js';
 export * from './components/molecules/ui-orb.js';
+export * from './components/molecules/ui-moving-gradient.js';
 export * from './components/molecules/ui-3d-flip.js';
 export * from './components/molecules/ui-playlist.js';
 export * from './components/molecules/ui-showcase-card.js';

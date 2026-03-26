@@ -22,5 +22,6 @@ import './components/demo-album-card.js';
 import './components/demo-media-dashboard.js';
 import './components/demo-chat-experience.js';
 import './components/demo-orb-gallery.js';
+import './components/demo-gradient-gallery.js';
 import './components/demo-speech-input.js';
 import './components/demo-smart-textarea.js';

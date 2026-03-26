@@ -154,9 +154,10 @@ let UiScrollingWaveform = class UiScrollingWaveform extends LitElement {
                 const nextX = lastBar ? lastBar.x + step : rect.width;
                 let newHeight;
                 // If an explicit data array is passed in, loop through it
-                if (this.data && this.data.length > 0) {
-                    newHeight = this.data[this._dataIndex % this.data.length] || 0.1;
-                    this._dataIndex = (this._dataIndex + 1) % this.data.length;
+                const dataSource = this.peaks && this.peaks.length > 0 ? this.peaks : this.data;
+                if (dataSource && dataSource.length > 0) {
+                    newHeight = dataSource[this._dataIndex % dataSource.length] || 0.1;
+                    this._dataIndex = (this._dataIndex + 1) % dataSource.length;
                 }
                 else if (this.analyserNode) {
                     // Live analyser node
@@ -254,6 +255,9 @@ __decorate([
 __decorate([
     property({ type: Array })
 ], UiScrollingWaveform.prototype, "data", void 0);
+__decorate([
+    property({ type: Array })
+], UiScrollingWaveform.prototype, "peaks", void 0);
 __decorate([
     property({ attribute: false })
 ], UiScrollingWaveform.prototype, "analyserNode", void 0);

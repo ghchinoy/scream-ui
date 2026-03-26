@@ -73,7 +73,7 @@ let UiAudioProvider = class UiAudioProvider extends LitElement {
         if (changed.has('src')) {
             this._updateState({
                 src: this.src,
-                isPlaying: false,
+                // Maintain isPlaying state so updated() knows whether to autoplay the new track
                 currentTime: 0,
                 error: undefined,
             });
@@ -97,7 +97,11 @@ let UiAudioProvider = class UiAudioProvider extends LitElement {
             this._audioEl.load();
             // If it was playing, keep playing
             if (this.state.isPlaying) {
-                this.play();
+                // Defer play to allow the browser's media pipeline to settle from the load() call,
+                // preventing "The play() request was interrupted by a new load request" AbortErrors.
+                setTimeout(() => {
+                    this.play();
+                }, 50);
             }
         }
     }
@@ -214,8 +218,8 @@ let UiAudioProvider = class UiAudioProvider extends LitElement {
     _handleEnded() {
         if (this.autoAdvance && this.items.length > 0) {
             // If we're at the last track, loop back to start
+            // isPlaying remains true, so updated() will automatically call play() after load()
             this.next();
-            this.play();
         }
         else {
             this._updateState({ isPlaying: false, currentTime: 0 });
