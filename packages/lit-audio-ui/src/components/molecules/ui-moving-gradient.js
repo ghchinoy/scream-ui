@@ -17,6 +17,8 @@ let UiMovingGradient = class UiMovingGradient extends LitElement {
         this.inputVolume = 0;
         this.outputVolume = 0;
         this.volumeMode = 'auto';
+        this.baseHeight = 0.05;
+        this.speed = 1.0;
         this._animationFrameId = 0;
         this._animSpeed = 1.0;
         this._curIn = 0;
@@ -33,10 +35,12 @@ void main() {
 uniform float uTime;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
+uniform vec3 uColor3;
 uniform float uInputVolume;
 uniform float uOutputVolume;
 uniform float uOpacity;
 uniform float uAspect;
+uniform float uBaseHeight;
 
 varying vec2 vUv;
 
@@ -77,8 +81,8 @@ void main() {
     float activity = max(uInputVolume, uOutputVolume);
     
     // Base glow height (how far up from the bottom it starts)
-    // Idle is very low (0.05), active pushes it up (to 0.4)
-    float baseHeight = 0.05 + (activity * 0.35);
+    // Idle is very low (uBaseHeight), active pushes it up (to uBaseHeight + 0.35)
+    float baseHeight = uBaseHeight + (activity * 0.35);
     
     // Create an undulating wave effect along the X axis
     // Combine several sine waves and noise for a natural feel
@@ -108,7 +112,13 @@ void main() {
     
     // Mix colors based on height and X position to give the gradient a "sweep"
     float colorMix = smoothstep(0.0, yThreshold, uv.y) + (sin(uv.x * 2.0 + uTime) * 0.2);
-    vec3 finalColor = mix(uColor1, uColor2, clamp(colorMix, 0.0, 1.0));
+    // map the 0.0 -> 1.0 range of colorMix to the 3 colors
+    vec3 finalColor;
+    if (colorMix < 0.5) {
+      finalColor = mix(uColor1, uColor2, colorMix * 2.0);
+    } else {
+      finalColor = mix(uColor2, uColor3, (colorMix - 0.5) * 2.0);
+    }
     
     // Add a slight bright rim at the edge of the wave when active
     float rim = smoothstep(0.0, 0.05, dist) * smoothstep(0.1, 0.0, dist);
@@ -147,18 +157,18 @@ void main() {
         }
     }
     _updateColors() {
-        if (!this._targetColor1 || !this._targetColor2)
+        if (!this._targetColor1 || !this._targetColor2 || !this._targetColor3)
             return;
-        if (this.colors && this.colors.length === 2) {
+        if (this.colors && this.colors.length >= 3) {
             this._targetColor1.set(this.colors[0]);
             this._targetColor2.set(this.colors[1]);
+            this._targetColor3.set(this.colors[2]);
         }
         else {
-            const style = getComputedStyle(this);
-            const primary = style.getPropertyValue('--md-sys-color-primary').trim() || '#0A56D9'; // Deep blue
-            const secondary = style.getPropertyValue('--md-sys-color-secondary').trim() || '#5C8DF6'; // Lighter blue/cyan
-            this._targetColor1.set(primary);
-            this._targetColor2.set(secondary);
+            // Default to the requested blue variants
+            this._targetColor1.set('#0068FF');
+            this._targetColor2.set('#0077FF');
+            this._targetColor3.set('#0073FF');
         }
     }
     disconnectedCallback() {
@@ -179,6 +189,7 @@ void main() {
             return;
         this._targetColor1 = new THREE.Color();
         this._targetColor2 = new THREE.Color();
+        this._targetColor3 = new THREE.Color();
         this._updateColors();
         const width = this._container.clientWidth;
         const height = this._container.clientHeight;
@@ -196,11 +207,13 @@ void main() {
         const uniforms = {
             uColor1: new THREE.Uniform(this._targetColor1),
             uColor2: new THREE.Uniform(this._targetColor2),
+            uColor3: new THREE.Uniform(this._targetColor3),
             uTime: new THREE.Uniform(0),
             uInputVolume: new THREE.Uniform(0),
             uOutputVolume: new THREE.Uniform(0),
             uOpacity: new THREE.Uniform(0),
             uAspect: new THREE.Uniform(width / height),
+            uBaseHeight: new THREE.Uniform(this.baseHeight),
         };
         const geometry = new THREE.PlaneGeometry(2, 2);
         const material = new THREE.ShaderMaterial({
@@ -306,6 +319,12 @@ __decorate([
 __decorate([
     property({ type: String })
 ], UiMovingGradient.prototype, "volumeMode", void 0);
+__decorate([
+    property({ type: Number })
+], UiMovingGradient.prototype, "baseHeight", void 0);
+__decorate([
+    property({ type: Number })
+], UiMovingGradient.prototype, "speed", void 0);
 __decorate([
     query('.container')
 ], UiMovingGradient.prototype, "_container", void 0);

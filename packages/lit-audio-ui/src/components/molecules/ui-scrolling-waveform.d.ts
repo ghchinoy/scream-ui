@@ -13,7 +13,8 @@ export declare class UiScrollingWaveform extends LitElement {
     barColor?: string;
     fadeEdges: boolean;
     fadeWidth: number;
-    height: number;
+    height?: number | string;
+    align: 'center' | 'bottom' | 'top';
     data?: number[];
     peaks?: number[];
     analyserNode?: AnalyserNode;

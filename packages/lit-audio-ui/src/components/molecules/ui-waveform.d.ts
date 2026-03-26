@@ -22,9 +22,10 @@ export declare class UiWaveform extends LitElement {
     barGap: number;
     barRadius: number;
     barColor?: string;
+    align: 'center' | 'bottom' | 'top';
     fadeEdges: boolean;
     fadeWidth: number;
-    height: number;
+    height?: number | string;
     private _canvas;
     private _container;
     private _resizeObserver?;

@@ -4,11 +4,13 @@ import type { AgentState } from './ui-orb.js';
  * A 3D WebGL 'Moving Gradient' component used to visualize AI agent states.
  */
 export declare class UiMovingGradient extends LitElement {
-    colors?: [string, string];
+    colors?: [string, string, string];
     agentState: AgentState;
     inputVolume: number;
     outputVolume: number;
     volumeMode: 'auto' | 'manual';
+    baseHeight: number;
+    speed: number;
     private _container;
     private _renderer?;
     private _scene?;
@@ -21,6 +23,7 @@ export declare class UiMovingGradient extends LitElement {
     private _curOut;
     private _targetColor1;
     private _targetColor2;
+    private _targetColor3;
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
     protected firstUpdated(): void;
