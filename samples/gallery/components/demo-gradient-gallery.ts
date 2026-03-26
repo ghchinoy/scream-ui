@@ -252,88 +252,107 @@ export class DemoGradientGallery extends LitElement {
     this._stops = newStops;
   }
 
+  private _generateCodeSnippet() {
+    const colorsStr = `['${this._colors.join("', '")}']`;
+    const stopsStr = `[${this._stops.join(', ')}]`;
+    const agentStateStr = this._agentState ? `'${this._agentState}'` : 'null';
+    
+    return `<div style="width: 100%; height: 600px; background: #0E0E0F;">
+  <ui-moving-gradient
+    .agentState=\${${agentStateStr}}
+    .colors="\${${colorsStr}}"
+    .stops="\${${stopsStr}}"
+    baseHeight="${this._baseHeight}"
+    speed="${this._speed}"
+  ></ui-moving-gradient>
+</div>`;
+  }
+
   render() {
     return html`
       <div class="gallery-grid">
-        <div class="gradient-item">
-          <div class="gradient-container">
-            <div class="screen-mock">
-              <ui-moving-gradient
-                .agentState=${this._agentState}
-                .colors=${this._colors}
-                .stops=${this._stops}
-                .baseHeight=${this._baseHeight}
-                .speed=${this._speed}
-              ></ui-moving-gradient>
-            </div>
-          </div>
-          
-          <div class="controls">
-            <div class="button-group">
-              <button 
-                class=${this._agentState === null ? 'active' : ''}
-                @click=${() => this._agentState = null}>Idle</button>
-              <button 
-                class=${this._agentState === 'listening' ? 'active' : ''}
-                @click=${() => this._agentState = 'listening'}>User Speaking</button>
-              <button 
-                class=${this._agentState === 'thinking' ? 'active' : ''}
-                @click=${() => this._agentState = 'thinking'}>Thinking</button>
-              <button 
-                class=${this._agentState === 'talking' ? 'active' : ''}
-                @click=${() => this._agentState = 'talking'}>AI Talking</button>
+        <ui-showcase-card title="Moving Gradient" description="Interactive 3D WebGL visualization" style="width: 100%; max-width: 500px;">
+          <div class="gradient-item">
+            <div class="gradient-container">
+              <div class="screen-mock">
+                <ui-moving-gradient
+                  .agentState=${this._agentState}
+                  .colors=${this._colors}
+                  .stops=${this._stops}
+                  .baseHeight=${this._baseHeight}
+                  .speed=${this._speed}
+                ></ui-moving-gradient>
+              </div>
             </div>
             
-            <div class="slider-group">
-              <label>Base Height:</label>
-              <input type="range" min="0" max="0.5" step="0.01" .value=${this._baseHeight.toString()} @input=${(e: Event) => this._baseHeight = parseFloat((e.target as HTMLInputElement).value)}>
-              <span>${this._baseHeight.toFixed(2)}</span>
-            </div>
-            
-            <div class="slider-group">
-              <label>Speed:</label>
-              <input type="range" min="0" max="5" step="0.1" .value=${this._speed.toString()} @input=${(e: Event) => this._speed = parseFloat((e.target as HTMLInputElement).value)}>
-              <span>${this._speed.toFixed(1)}</span>
-            </div>
-
-            <div class="stops-editor">
-              <div class="stops-header">
-                <span>Stops</span>
+            <div class="controls">
+              <div class="button-group">
+                <button 
+                  class=${this._agentState === null ? 'active' : ''}
+                  @click=${() => this._agentState = null}>Idle</button>
+                <button 
+                  class=${this._agentState === 'listening' ? 'active' : ''}
+                  @click=${() => this._agentState = 'listening'}>User Speaking</button>
+                <button 
+                  class=${this._agentState === 'thinking' ? 'active' : ''}
+                  @click=${() => this._agentState = 'thinking'}>Thinking</button>
+                <button 
+                  class=${this._agentState === 'talking' ? 'active' : ''}
+                  @click=${() => this._agentState = 'talking'}>AI Talking</button>
               </div>
               
-              ${[0, 1, 2].map(i => html`
-                <div class="stop-row">
-                  <div class="stop-pct">
-                    <input 
-                      type="number" 
-                      min="0" max="100" 
-                      .value=${Math.round(this._stops[i] * 100).toString()}
-                      @change=${(e: Event) => this._updateStop(i, parseInt((e.target as HTMLInputElement).value) || 0)}
-                    >
-                    <span>%</span>
-                  </div>
-                  <div class="stop-color">
-                    <input 
-                      type="color" 
-                      .value=${this._colors[i]}
-                      @input=${(e: Event) => this._updateColor(i, (e.target as HTMLInputElement).value)}
-                    >
-                    <input 
-                      type="text" 
-                      .value=${this._colors[i].toUpperCase()}
-                      @change=${(e: Event) => {
-                        let val = (e.target as HTMLInputElement).value;
-                        if (!val.startsWith('#')) val = '#' + val;
-                        this._updateColor(i, val);
-                      }}
-                    >
-                  </div>
+              <div class="slider-group">
+                <label>Base Height:</label>
+                <input type="range" min="0" max="0.5" step="0.01" .value=${this._baseHeight.toString()} @input=${(e: Event) => this._baseHeight = parseFloat((e.target as HTMLInputElement).value)}>
+                <span>${this._baseHeight.toFixed(2)}</span>
+              </div>
+              
+              <div class="slider-group">
+                <label>Speed:</label>
+                <input type="range" min="0" max="5" step="0.1" .value=${this._speed.toString()} @input=${(e: Event) => this._speed = parseFloat((e.target as HTMLInputElement).value)}>
+                <span>${this._speed.toFixed(1)}</span>
+              </div>
+
+              <div class="stops-editor">
+                <div class="stops-header">
+                  <span>Stops</span>
                 </div>
-              `)}
+                
+                ${[0, 1, 2].map(i => html`
+                  <div class="stop-row">
+                    <div class="stop-pct">
+                      <input 
+                        type="number" 
+                        min="0" max="100" 
+                        .value=${Math.round(this._stops[i] * 100).toString()}
+                        @change=${(e: Event) => this._updateStop(i, parseInt((e.target as HTMLInputElement).value) || 0)}
+                      >
+                      <span>%</span>
+                    </div>
+                    <div class="stop-color">
+                      <input 
+                        type="color" 
+                        .value=${this._colors[i]}
+                        @input=${(e: Event) => this._updateColor(i, (e.target as HTMLInputElement).value)}
+                      >
+                      <input 
+                        type="text" 
+                        .value=${this._colors[i].toUpperCase()}
+                        @change=${(e: Event) => {
+                          let val = (e.target as HTMLInputElement).value;
+                          if (!val.startsWith('#')) val = '#' + val;
+                          this._updateColor(i, val);
+                        }}
+                      >
+                    </div>
+                  </div>
+                `)}
+              </div>
+              
             </div>
-            
           </div>
-        </div>
+          <div slot="code">${this._generateCodeSnippet()}</div>
+        </ui-showcase-card>
       </div>
     `;
   }

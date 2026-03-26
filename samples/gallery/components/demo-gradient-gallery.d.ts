@@ -26,5 +26,6 @@ export declare class DemoGradientGallery extends LitElement {
     static styles: import("lit").CSSResult;
     private _updateColor;
     private _updateStop;
+    private _generateCodeSnippet;
     render(): import("lit-html").TemplateResult<1>;
 }
