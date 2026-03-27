@@ -33,6 +33,7 @@ export interface AudioPlayerState {
   duration: number;
   volume: number;
   muted: boolean;
+  loop: boolean;
   error?: string;
   transcript?: TranscriptWord[];
 

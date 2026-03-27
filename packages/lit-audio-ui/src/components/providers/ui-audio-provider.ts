@@ -17,6 +17,7 @@ export class UiAudioProvider extends LitElement {
   @property({type: String}) src = '';
   @property({type: Array}) items: PlaylistTrack[] = [];
   @property({type: Boolean}) autoAdvance = true;
+  @property({type: Boolean}) loop = false;
 
   @query('audio') private _audioEl!: HTMLAudioElement;
 
@@ -36,6 +37,7 @@ export class UiAudioProvider extends LitElement {
     duration: 0,
     volume: 1,
     muted: false,
+    loop: false,
     items: [],
     currentIndex: -1,
     autoAdvance: true,
@@ -66,6 +68,7 @@ export class UiAudioProvider extends LitElement {
       <audio
         crossorigin="anonymous"
         src="${this.src}"
+        ?loop="${this.loop}"
         preload="metadata"
         @loadedmetadata="${this._handleLoadedMetadata}"
         @ended="${this._handleEnded}"
@@ -103,6 +106,9 @@ export class UiAudioProvider extends LitElement {
     }
     if (changed.has('autoAdvance')) {
       this._updateState({autoAdvance: this.autoAdvance});
+    }
+    if (changed.has('loop')) {
+      this._updateState({loop: this.loop});
     }
   }
 
@@ -250,6 +256,8 @@ export class UiAudioProvider extends LitElement {
   }
 
   private _handleEnded() {
+    this.dispatchEvent(new CustomEvent("ended", { bubbles: true, composed: true }));
+
     if (this.autoAdvance && this.items.length > 0) {
       // If we're at the last track, loop back to start
       // isPlaying remains true, so updated() will automatically call play() after load()
