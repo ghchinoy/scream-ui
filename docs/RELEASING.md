@@ -1,6 +1,8 @@
-# Releasing `@ghchinoy/lit-audio-ui`
+# Releasing Workspace Packages
 
-This document outlines the steps required to bump the version of the `lit-audio-ui` library and publish it to the npm registry.
+This document outlines the steps required to bump the version of the workspace libraries (`@ghchinoy/lit-audio-ui` and `@ghchinoy/lit-prompt-editor`) and publish them to the npm registry.
+
+**Important:** These packages are versioned independently. You only need to release the package(s) that have changed.
 
 ## Prerequisites
 
@@ -20,18 +22,26 @@ This document outlines the steps required to bump the version of the `lit-audio-
 Before releasing, verify that the entire workspace builds successfully.
 ```bash
 make build
+# or npm run build
 ```
 
 ### 2. Bump the Version
-Navigate to the library package directory and use `npm version` to bump the version. This will automatically update `package.json`.
+Navigate to the specific library package directory and use `npm version` to bump the version. This will automatically update `package.json`.
 
+For `lit-audio-ui`:
 ```bash
 cd packages/lit-audio-ui
 npm version patch  # Use 'patch', 'minor', or 'major' depending on the changes
 ```
 
+For `lit-prompt-editor`:
+```bash
+cd packages/lit-prompt-editor
+npm version patch  # Use 'patch', 'minor', or 'major' depending on the changes
+```
+
 ### 3. Update the Root Lockfile
-Since this is an npm workspace, you must update the root `package-lock.json` to reflect the newly bumped version.
+Since this is an npm workspace, you must update the root `package-lock.json` to reflect the newly bumped version(s).
 
 ```bash
 cd ../..
@@ -40,16 +50,26 @@ npm install --ignore-scripts
 *(Note: `--ignore-scripts` is recommended to avoid unnecessary re-builds during lockfile updates).*
 
 ### 4. Commit and Tag
-Stage the version bump and lockfile changes, commit them, and tag the release.
+Stage the version bump and lockfile changes, commit them, and tag the release. Because packages are versioned independently, it's best practice to prefix the tag with the package name to avoid collisions.
 
+For example, if you bumped `lit-audio-ui` to v1.2.3:
 ```bash
 git add packages/lit-audio-ui/package.json package-lock.json
-git commit -m "chore(release): bump lit-audio-ui to $(cat packages/lit-audio-ui/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[", ]//g')"
-git tag v$(cat packages/lit-audio-ui/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+git commit -m "chore(release): bump lit-audio-ui to v1.2.3"
+git tag lit-audio-ui-v1.2.3
 ```
 
+If you bumped `lit-prompt-editor` to v0.1.1:
+```bash
+git add packages/lit-prompt-editor/package.json package-lock.json
+git commit -m "chore(release): bump lit-prompt-editor to v0.1.1"
+git tag lit-prompt-editor-v0.1.1
+```
+
+*(Note: If you release both simultaneously, you can commit them together and push two tags.)*
+
 ### 5. Push to GitHub
-Push the commit and the new tag to the remote repository.
+Push the commit and the new tag(s) to the remote repository.
 
 ```bash
 git push origin main
@@ -57,10 +77,17 @@ git push --tags
 ```
 
 ### 6. Publish to npm
-Finally, navigate back to the library directory and publish the package. Since this is a scoped package (`@ghchinoy`), you must explicitly set the access to public.
+Finally, navigate back to the specific library directory and publish the package. Since these are scoped packages (`@ghchinoy`), you must explicitly set the access to public.
 
+For `lit-audio-ui`:
 ```bash
 cd packages/lit-audio-ui
+npm publish --access public
+```
+
+For `lit-prompt-editor`:
+```bash
+cd packages/lit-prompt-editor
 npm publish --access public
 ```
 
