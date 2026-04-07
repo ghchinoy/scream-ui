@@ -126,7 +126,8 @@ export class UiSyncedTranscript extends LitElement {
     const container = this.shadowRoot?.querySelector('.container');
     if (!container) return;
 
-    const width = container.getBoundingClientRect().width;
+    const containerEl = container as HTMLElement;
+    const width = containerEl.clientWidth;
     if (width === 0) return;
 
     const { height, lines } = layoutWithLines(this._preparedText, width, this.lineHeight);
@@ -136,13 +137,11 @@ export class UiSyncedTranscript extends LitElement {
     const dpr = window.devicePixelRatio || 1;
     this._canvas.width = width * dpr;
     this._canvas.height = height * dpr;
-    this._canvas.style.width = `${width}px`;
+    // Let CSS handle width: 100%, just set the height
     this._canvas.style.height = `${height}px`;
-    
+
     // In order for Lit to know the host should be the right height, we could style the container height
-    const containerEl = container as HTMLElement;
-    containerEl.style.height = `${height}px`;
-  }
+    containerEl.style.height = `${height}px`;  }
 
   private _renderCanvas() {
     if (!this._canvas || !this._layoutLines) return;
@@ -152,7 +151,7 @@ export class UiSyncedTranscript extends LitElement {
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = container.getBoundingClientRect().width;
+    const width = (container as HTMLElement).clientWidth;
     const height = this._layoutHeight;
     const dpr = window.devicePixelRatio || 1;
 

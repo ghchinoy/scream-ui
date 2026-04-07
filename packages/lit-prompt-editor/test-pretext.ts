@@ -43,17 +43,14 @@ const fontString = `bold ${fontSize}px ${fontFamily}`;
 const lineHeight = fontSize * 1.5;
 
 function resizeCanvas() {
-  const rect = canvas.parentElement!.getBoundingClientRect();
+  const width = canvas.clientWidth;
   const dpr = window.devicePixelRatio || 1;
   
-  // Set logical dimensions (CSS)
-  canvas.style.width = `${rect.width}px`;
-  
   // Set physical dimensions (buffer)
-  canvas.width = rect.width * dpr;
+  canvas.width = width * dpr;
   // Note: we'll set height after we measure the text!
   
-  return { width: rect.width, dpr };
+  return { width, dpr };
 }
 
 function render(currentTime: number) {
