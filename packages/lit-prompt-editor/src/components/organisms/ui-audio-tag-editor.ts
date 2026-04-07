@@ -263,7 +263,7 @@ export class UiAudioTagEditor extends LitElement {
     this._paddingR = parseFloat(computed.paddingRight) || 16;
 
     // Prepare the Pretext layout engine with the plain string
-    this._prepared = prepareWithSegments(this.value, this._computedFont);
+    this._prepared = prepareWithSegments(this.value, this._computedFont, { whiteSpace: 'pre-wrap' });
     this._triggerRender();
   }
 
@@ -362,58 +362,9 @@ export class UiAudioTagEditor extends LitElement {
             ctx.fillStyle = colors.fg;
             ctx.fillText(part, x, y + textYOffset);
         } else {
-            // Regular text. Check if the NEXT part is a tag.
-            const nextPart = parts[i + 1];
-            const nextIsTag = nextPart && nextPart.startsWith('[') && nextPart.endsWith(']');
-            
-            if (nextIsTag) {
-                // Highlight the last word in this part!
-                const words = part.split(/(\s+)/);
-                let lastWordIdx = -1;
-                for (let j = words.length - 1; j >= 0; j--) {
-                    if (words[j].trim().length > 0) {
-                        lastWordIdx = j;
-                        break;
-                    }
-                }
-                
-                const innerText = nextPart.slice(1, -1).toLowerCase();
-                const tag = AUDIO_TAGS.find(t => t.id === innerText);
-                const category = tag ? tag.category : 'Custom';
-                const colors = this._themeColors[category] || this._themeColors['Custom'];
-                
-                let wordX = x;
-                for (let j = 0; j < words.length; j++) {
-                    const wText = words[j];
-                    if (!wText) continue;
-                    const wWidth = ctx.measureText(wText).width;
-                    
-                    if (j === lastWordIdx) {
-                        // Draw Highlight!
-                        ctx.fillStyle = colors.bg;
-                        if (ctx.roundRect) {
-                            ctx.beginPath();
-                            ctx.roundRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4, 4);
-                            ctx.fill();
-                        } else {
-                            ctx.fillRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4);
-                        }
-                        
-                        // Draw Word
-                        ctx.fillStyle = colors.fg;
-                        ctx.fillText(wText, wordX, y + textYOffset);
-                    } else {
-                        // Normal un-highlighted word
-                        ctx.fillStyle = this._computedColor;
-                        ctx.fillText(wText, wordX, y + textYOffset);
-                    }
-                    wordX += wWidth;
-                }
-            } else {
-                // Draw Regular Text
-                ctx.fillStyle = this._computedColor;
-                ctx.fillText(part, x, y + textYOffset);
-            }
+            // Draw Regular Text
+            ctx.fillStyle = this._computedColor;
+            ctx.fillText(part, x, y + textYOffset);
         }
         
         x += partWidth;
