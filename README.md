@@ -11,6 +11,7 @@ This repository is a monorepo containing the core component library and its deve
     -   `src/components/molecules/`: Functional units (waveforms, pickers, visualizers).
     -   `src/components/organisms/`: Complex composite components.
     -   `src/components/providers/`: Headless context providers for state management.
+-   **`packages/lit-prompt-editor/`**: A specialized, high-performance canvas-based text editor for prompt and audio tag editing powered by \`@chenglou/pretext\`.
 -   **`samples/`**: Example applications demonstrating library usage.
     -   `gallery/`: The interactive component documentation and playground.
     -   `reference-agent/`: A minimalist implementation for AI agents to follow.
@@ -24,6 +25,7 @@ This repository is a monorepo containing the core component library and its deve
 -   **Zero-JS Branding:** Completely customizable via standard CSS variables, MD3 tokens, and spacing/density tokens.
 -   **Accessibility First:** Comprehensive ARIA support with dynamic labels that react to playback and recording states.
 -   **High-Performance Visualizers:** Real-time 2D Canvas and 3D WebGL (Three.js) audio visualizations.
+-   **Canvas-Based Text Layout:** Accurate, DOM-independent text measurement and layout using `@chenglou/pretext`.
 -   **Agent Optimized:** Includes specialized `AGENT_SKILL.md` protocols for AI coding agents to autonomously build complex audio interfaces.
 
 ## 📖 Quick Links
