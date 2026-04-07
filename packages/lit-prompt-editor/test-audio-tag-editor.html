@@ -81,6 +81,17 @@
       <div>
         <h2>&lt;ui-audio-tag-editor&gt;</h2>
         <div class="description">Type '[' to open autocomplete for audio markup tags.</div>
+        
+        <div style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+          <label class="label" style="margin-bottom: 0;" for="fontSelect">Editor Font:</label>
+          <select id="fontSelect" style="padding: 6px; border-radius: 4px; background: #333; color: white; border: 1px solid #555;">
+            <option value="system-ui">System UI</option>
+            <option value="'Inter', sans-serif" selected>Inter</option>
+            <option value="'Courier New', monospace">Monospace</option>
+            <option value="Georgia, serif">Serif (Georgia)</option>
+            <option value="'Comic Sans MS', monospace">Comic Sans MS</option>
+          </select>
+        </div>
       </div>
       
       <div>
@@ -99,10 +110,20 @@
 
       const editor = document.getElementById('editor');
       const output = document.getElementById('output');
+      const fontSelect = document.getElementById('fontSelect');
 
       editor.addEventListener('change', (e) => {
         output.textContent = e.detail.value || ' ';
       });
+      
+      fontSelect.addEventListener('change', (e) => {
+        editor.style.fontFamily = e.target.value;
+        // The Custom Element might not catch the CSS change immediately, so we explicitly refresh
+        requestAnimationFrame(() => editor.refresh());
+      });
+      
+      // Initialize
+      editor.style.fontFamily = fontSelect.value;
     </script>
   </body>
 </html>

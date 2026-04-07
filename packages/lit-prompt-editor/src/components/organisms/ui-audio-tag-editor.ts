@@ -58,6 +58,9 @@ export class UiAudioTagEditor extends LitElement {
   @state() private _selectedIndex = 0;
   
   @state() private _suggestionPos = { x: 0, y: 0 };
+  
+  @state() private _hoveredTag: any = null;
+  @state() private _hoverPos = { x: 0, y: 0 };
 
   @query('textarea') private _textarea!: HTMLTextAreaElement;
   @query('canvas') private _canvas!: HTMLCanvasElement;
@@ -70,6 +73,7 @@ export class UiAudioTagEditor extends LitElement {
   private _paddingR = 16;
   
   private _prepared: PreparedTextWithSegments | null = null;
+  private _renderedTags: Array<{x: number, y: number, w: number, h: number, tag: any}> = [];
   
   // Theme colors parsed once
   private _themeColors: Record<string, {bg: string, fg: string}> = {
@@ -199,10 +203,36 @@ export class UiAudioTagEditor extends LitElement {
        letter-spacing: 0.5px;
        color: var(--md-sys-color-primary, #0066cc);
     }
+    
+    /* Tag Tooltip */
+    .tag-tooltip {
+      position: absolute;
+      z-index: 20;
+      background: var(--md-sys-color-on-surface, #111);
+      color: var(--md-sys-color-surface, #fff);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      transform: translate(-50%, -100%);
+      box-shadow: var(--md-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.2));
+      white-space: nowrap;
+    }
+    .tooltip-category {
+      font-weight: bold;
+      color: var(--md-sys-color-primary, #8ab4f8);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .tooltip-desc {
+      opacity: 0.9;
+    }
   `;
 
   render() {
-    return html`<div class="editor-wrapper"><canvas class="background-canvas"></canvas><textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @scroll=${this._triggerRender} spellcheck="false"></textarea></div>${this._renderSuggestions()}`;
+    return html`<div class="editor-wrapper" @mouseleave=${this._handleMouseLeave}><canvas class="background-canvas"></canvas><textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @mousemove=${this._handleMouseMove} @scroll=${this._triggerRender} spellcheck="false"></textarea>${this._renderTooltip()}</div>${this._renderSuggestions()}`;
   }
   
   firstUpdated() {
@@ -219,6 +249,11 @@ export class UiAudioTagEditor extends LitElement {
     if (this._resizeObserver) {
       this._resizeObserver.disconnect();
     }
+  }
+
+  public refresh() {
+    this._parseThemeColors();
+    this._parseValue();
   }
 
   private _parseThemeColors() {
@@ -290,6 +325,7 @@ export class UiAudioTagEditor extends LitElement {
     ctx.scale(dpr, dpr);
     
     ctx.clearRect(0, 0, rect.width, rect.height);
+    this._renderedTags = [];
     
     // The available width for text to wrap (clientWidth excludes borders and scrollbars)
     const layoutWidth = this._textarea.clientWidth - (this._paddingL + this._paddingR);
@@ -344,9 +380,12 @@ export class UiAudioTagEditor extends LitElement {
             
             // Draw Pill Background for the tag itself
             ctx.fillStyle = colors.bg;
+            const radius = (this._lineHeight - 4) / 2;
+            const paddingX = 4; // visual padding inside the pill
+            
             if (ctx.roundRect) {
                 ctx.beginPath();
-                ctx.roundRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4, 4);
+                ctx.roundRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4, radius);
                 ctx.fill();
                 if (category === 'Custom') {
                     ctx.strokeStyle = this._themeColors['Pacing'].fg;
@@ -355,12 +394,20 @@ export class UiAudioTagEditor extends LitElement {
                     ctx.setLineDash([]);
                 }
             } else {
-                ctx.fillRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4);
+                ctx.fillRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4);
             }
             
             // Draw Pill Text
             ctx.fillStyle = colors.fg;
             ctx.fillText(part, x, y + textYOffset);
+            
+            this._renderedTags.push({
+                x: x - paddingX,
+                y: y + 2,
+                w: partWidth + (paddingX * 2),
+                h: this._lineHeight - 4,
+                tag: tag || { id: innerText, label: part, category: 'Custom', description: 'Custom user tag' }
+            });
         } else {
             // Draw Regular Text
             ctx.fillStyle = this._computedColor;
@@ -371,6 +418,48 @@ export class UiAudioTagEditor extends LitElement {
       }
       y += this._lineHeight;
     }
+  }
+
+  private _handleMouseMove(e: MouseEvent) {
+    const rect = this._textarea.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Convert to logical Canvas coordinates
+    const logicalX = x + this._textarea.scrollLeft - this._paddingL;
+    const logicalY = y + this._textarea.scrollTop - this._paddingL;
+
+    let foundTag = null;
+    for (const tagBox of this._renderedTags) {
+        if (logicalX >= tagBox.x && logicalX <= tagBox.x + tagBox.w &&
+            logicalY >= tagBox.y && logicalY <= tagBox.y + tagBox.h) {
+            foundTag = tagBox.tag;
+            break;
+        }
+    }
+    
+    if (foundTag !== this._hoveredTag) {
+        this._hoveredTag = foundTag;
+    }
+    
+    if (foundTag) {
+        this._hoverPos = { x, y };
+    }
+  }
+
+  private _handleMouseLeave() {
+    this._hoveredTag = null;
+  }
+
+  private _renderTooltip() {
+    if (!this._hoveredTag) return nothing;
+    
+    return html`
+      <div class="tag-tooltip" style="left: ${this._hoverPos.x}px; top: ${this._hoverPos.y - 10}px;">
+        <div class="tooltip-category">${this._hoveredTag.category}</div>
+        <div class="tooltip-desc">${this._hoveredTag.description || 'Custom user tag'}</div>
+      </div>
+    `;
   }
 
   private _renderSuggestions() {
