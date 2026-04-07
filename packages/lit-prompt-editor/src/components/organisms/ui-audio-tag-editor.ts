@@ -312,7 +312,7 @@ export class UiAudioTagEditor extends LitElement {
     for (const line of layoutResult.lines) {
       let x = 0;
       
-      const parts = line.text.split(/(\\[.*?\\])/g);
+      const parts = line.text.split(/(\[.*?\])/g);
       
       for (let i = 0; i < parts.length; i++) {
         const part = parts[i];
@@ -337,11 +337,30 @@ export class UiAudioTagEditor extends LitElement {
         const isTag = part.startsWith('[') && part.endsWith(']');
         
         if (isTag) {
-            // Draw tag faintly so it holds cursor space but doesn't distract
-            ctx.fillStyle = this._computedColor;
-            ctx.globalAlpha = 0.3;
+            const innerText = part.slice(1, -1).toLowerCase();
+            const tag = AUDIO_TAGS.find(t => t.id === innerText);
+            const category = tag ? tag.category : 'Custom';
+            const colors = this._themeColors[category] || this._themeColors['Custom'];
+            
+            // Draw Pill Background for the tag itself
+            ctx.fillStyle = colors.bg;
+            if (ctx.roundRect) {
+                ctx.beginPath();
+                ctx.roundRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4, 4);
+                ctx.fill();
+                if (category === 'Custom') {
+                    ctx.strokeStyle = this._themeColors['Pacing'].fg;
+                    ctx.setLineDash([2, 2]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            } else {
+                ctx.fillRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4);
+            }
+            
+            // Draw Pill Text
+            ctx.fillStyle = colors.fg;
             ctx.fillText(part, x, y + textYOffset);
-            ctx.globalAlpha = 1.0;
         } else {
             // Regular text. Check if the NEXT part is a tag.
             const nextPart = parts[i + 1];
@@ -349,7 +368,7 @@ export class UiAudioTagEditor extends LitElement {
             
             if (nextIsTag) {
                 // Highlight the last word in this part!
-                const words = part.split(/(\\s+)/);
+                const words = part.split(/(\s+)/);
                 let lastWordIdx = -1;
                 for (let j = words.length - 1; j >= 0; j--) {
                     if (words[j].trim().length > 0) {
@@ -376,12 +395,6 @@ export class UiAudioTagEditor extends LitElement {
                             ctx.beginPath();
                             ctx.roundRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4, 4);
                             ctx.fill();
-                            if (category === 'Custom') {
-                                ctx.strokeStyle = this._themeColors['Pacing'].fg;
-                                ctx.setLineDash([2, 2]);
-                                ctx.stroke();
-                                ctx.setLineDash([]);
-                            }
                         } else {
                             ctx.fillRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4);
                         }
