@@ -1,6 +1,6 @@
 {
   "name": "@ghchinoy/lit-text-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A high-performance Canvas-based text editor for AI prompt experiences, powered by Pretext",
   "author": "G. Hussain Chinoy",
   "license": "Apache-2.0",
