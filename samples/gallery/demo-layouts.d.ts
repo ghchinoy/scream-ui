@@ -24,3 +24,4 @@ import './components/demo-gradient-gallery.js';
 import './components/demo-gradient-variants.js';
 import './components/demo-speech-input.js';
 import './components/demo-smart-textarea.js';
+import './components/demo-audio-tag-editor.js';

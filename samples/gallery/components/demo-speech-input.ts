@@ -16,12 +16,7 @@
 
 import {LitElement, html, css} from 'lit';
 import {customElement, state} from 'lit/decorators.js';
-import '@ghchinoy/lit-audio-ui/providers/ui-speech-provider.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-voice-button.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-voice-pill.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-mic-selector.js';
-import '@ghchinoy/lit-audio-ui/atoms/ui-speech-record-button.js';
-import '@ghchinoy/lit-audio-ui/atoms/ui-speech-cancel-button.js';
+import '@ghchinoy/lit-audio-ui';
 
 @customElement('demo-speech-input')
 export class DemoSpeechInput extends LitElement {

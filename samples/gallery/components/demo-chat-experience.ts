@@ -17,11 +17,7 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-chat-list.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-chat-item.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-conversation-bar.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-typing-indicator.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-orb.js';
+import '@ghchinoy/lit-audio-ui';
 
 interface Message {
   id: string;

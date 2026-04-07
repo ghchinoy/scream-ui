@@ -55,6 +55,7 @@ export * from './components/molecules/ui-chat-list.js';
 
 // --- ORGANISMS (Composite Components) ---
 export * from './components/organisms/ui-audio-player.js';
+export * from './components/organisms/ui-audio-tag-editor.js';
 
 // --- PROVIDERS (State Orchestration) ---
 export * from './components/providers/ui-audio-provider.js';

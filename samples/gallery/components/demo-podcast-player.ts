@@ -15,8 +15,8 @@
  */
 
 import {LitElement, html, css} from 'lit';
-import {customElement, query, state} from 'lit/decorators.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-scrolling-waveform.js';
+import {customElement, state, query} from 'lit/decorators.js';
+import '@ghchinoy/lit-audio-ui';
 
 @customElement('demo-podcast-player')
 export class DemoPodcastPlayer extends LitElement {

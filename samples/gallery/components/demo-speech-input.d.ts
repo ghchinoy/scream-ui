@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 import { LitElement } from 'lit';
-import '@ghchinoy/lit-audio-ui/providers/ui-speech-provider.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-voice-button.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-voice-pill.js';
-import '@ghchinoy/lit-audio-ui/molecules/ui-mic-selector.js';
-import '@ghchinoy/lit-audio-ui/atoms/ui-speech-record-button.js';
-import '@ghchinoy/lit-audio-ui/atoms/ui-speech-cancel-button.js';
+import '@ghchinoy/lit-audio-ui';
 export declare class DemoSpeechInput extends LitElement {
     private _state;
     private _transcript;

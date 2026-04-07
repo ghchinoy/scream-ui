@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { LitElement } from 'lit';
-import '@ghchinoy/lit-audio-ui/molecules/ui-scrolling-waveform.js';
+import '@ghchinoy/lit-audio-ui';
 export declare class DemoPodcastPlayer extends LitElement {
     private _orb;
     private _isPlaying;
