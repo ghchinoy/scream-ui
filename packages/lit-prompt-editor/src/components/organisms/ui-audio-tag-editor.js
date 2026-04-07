@@ -52,7 +52,8 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._computedFont = '16px system-ui';
         this._computedColor = '#000000';
         this._lineHeight = 24;
-        this._padding = 16;
+        this._paddingL = 16;
+        this._paddingR = 16;
         this._items = [];
         this._prepared = null;
         // Theme colors parsed once
@@ -185,13 +186,6 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
     }
     firstUpdated() {
         this._parseThemeColors();
-        // Extract exact computed font details for Pretext measurement
-        const computed = window.getComputedStyle(this._textarea);
-        const hostComputed = window.getComputedStyle(this);
-        this._computedFont = `${computed.fontWeight} ${computed.fontSize} ${computed.fontFamily}`;
-        this._computedColor = hostComputed.color;
-        this._lineHeight = parseFloat(computed.lineHeight) || 24;
-        this._padding = parseFloat(computed.paddingTop) || 16;
         this._resizeObserver = new ResizeObserver(() => this._triggerRender());
         this._resizeObserver.observe(this._textarea);
         this._parseValue();
@@ -231,6 +225,14 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         };
     }
     _parseValue() {
+        const computed = window.getComputedStyle(this._textarea);
+        const weight = computed.fontWeight || '400';
+        const size = computed.fontSize || '16px';
+        const family = computed.fontFamily || 'system-ui, sans-serif';
+        this._computedFont = `${weight} ${size} ${family}`;
+        this._lineHeight = parseFloat(computed.lineHeight) || 24;
+        this._paddingL = parseFloat(computed.paddingLeft) || 16;
+        this._paddingR = parseFloat(computed.paddingRight) || 16;
         const parts = this.value.split(/(\[.*?\])/g);
         this._items = [];
         for (const part of parts) {
@@ -275,10 +277,10 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._canvas.height = rect.height * dpr;
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, rect.width, rect.height);
-        // The available width for text to wrap
-        const layoutWidth = rect.width - (this._padding * 2);
-        // Offset rendering by padding and textarea scroll position
-        ctx.translate(this._padding - this._textarea.scrollLeft, this._padding - this._textarea.scrollTop);
+        // The available width for text to wrap (clientWidth excludes borders and scrollbars)
+        const layoutWidth = this._textarea.clientWidth - (this._paddingL + this._paddingR);
+        // Offset rendering by padding and textarea scroll position (assuming paddingTop == paddingLeft)
+        ctx.translate(this._paddingL - this._textarea.scrollLeft, this._paddingL - this._textarea.scrollTop);
         // Canvas textBaseline aligns top of font to Y.
         // Tweak to align natively with Textarea baseline
         ctx.textBaseline = 'top';
@@ -350,7 +352,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         if (filteredTags.length === 0)
             return nothing;
         return html `
-      <div class="suggestions-menu" style="left: ${this._padding + this._suggestionPos.x}px; top: ${this._padding + this._suggestionPos.y + 4}px;">
+      <div class="suggestions-menu" style="left: ${this._paddingL + this._suggestionPos.x}px; top: ${this._paddingL + this._suggestionPos.y + 4}px;">
         ${filteredTags.map((tag, index) => html `
             <div
               class="suggestion-item ${index === this._selectedIndex ? 'selected' : ''}"

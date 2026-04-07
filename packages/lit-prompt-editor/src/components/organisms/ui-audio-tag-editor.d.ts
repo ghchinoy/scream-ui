@@ -35,7 +35,8 @@ export declare class UiAudioTagEditor extends LitElement {
     private _computedFont;
     private _computedColor;
     private _lineHeight;
-    private _padding;
+    private _paddingL;
+    private _paddingR;
     private _items;
     private _prepared;
     private _themeColors;

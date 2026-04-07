@@ -68,7 +68,8 @@ export class UiAudioTagEditor extends LitElement {
   private _computedFont = '16px system-ui';
   private _computedColor = '#000000';
   private _lineHeight = 24;
-  private _padding = 16;
+  private _paddingL = 16;
+  private _paddingR = 16;
   
   private _items: RichInlineItem[] = [];
   private _prepared: PreparedRichInline | null = null;
@@ -206,14 +207,6 @@ export class UiAudioTagEditor extends LitElement {
   firstUpdated() {
     this._parseThemeColors();
     
-    // Extract exact computed font details for Pretext measurement
-    const computed = window.getComputedStyle(this._textarea);
-    const hostComputed = window.getComputedStyle(this);
-    this._computedFont = `${computed.fontWeight} ${computed.fontSize} ${computed.fontFamily}`;
-    this._computedColor = hostComputed.color;
-    this._lineHeight = parseFloat(computed.lineHeight) || 24;
-    this._padding = parseFloat(computed.paddingTop) || 16;
-    
     this._resizeObserver = new ResizeObserver(() => this._triggerRender());
     this._resizeObserver.observe(this._textarea);
     
@@ -259,6 +252,15 @@ export class UiAudioTagEditor extends LitElement {
   }
 
   private _parseValue() {
+    const computed = window.getComputedStyle(this._textarea);
+    const weight = computed.fontWeight || '400';
+    const size = computed.fontSize || '16px';
+    const family = computed.fontFamily || 'system-ui, sans-serif';
+    this._computedFont = `${weight} ${size} ${family}`;
+    this._lineHeight = parseFloat(computed.lineHeight) || 24;
+    this._paddingL = parseFloat(computed.paddingLeft) || 16;
+    this._paddingR = parseFloat(computed.paddingRight) || 16;
+
     const parts = this.value.split(/(\[.*?\])/g);
     this._items = [];
     
@@ -309,11 +311,11 @@ export class UiAudioTagEditor extends LitElement {
     
     ctx.clearRect(0, 0, rect.width, rect.height);
     
-    // The available width for text to wrap
-    const layoutWidth = rect.width - (this._padding * 2);
+    // The available width for text to wrap (clientWidth excludes borders and scrollbars)
+    const layoutWidth = this._textarea.clientWidth - (this._paddingL + this._paddingR);
     
-    // Offset rendering by padding and textarea scroll position
-    ctx.translate(this._padding - this._textarea.scrollLeft, this._padding - this._textarea.scrollTop);
+    // Offset rendering by padding and textarea scroll position (assuming paddingTop == paddingLeft)
+    ctx.translate(this._paddingL - this._textarea.scrollLeft, this._paddingL - this._textarea.scrollTop);
     
     // Canvas textBaseline aligns top of font to Y.
     // Tweak to align natively with Textarea baseline
@@ -399,7 +401,7 @@ export class UiAudioTagEditor extends LitElement {
     if (filteredTags.length === 0) return nothing;
 
     return html`
-      <div class="suggestions-menu" style="left: ${this._padding + this._suggestionPos.x}px; top: ${this._padding + this._suggestionPos.y + 4}px;">
+      <div class="suggestions-menu" style="left: ${this._paddingL + this._suggestionPos.x}px; top: ${this._paddingL + this._suggestionPos.y + 4}px;">
         ${filteredTags.map(
           (tag, index) => html`
             <div
