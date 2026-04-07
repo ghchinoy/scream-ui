@@ -11,12 +11,12 @@ export default defineConfig({
     emptyOutDir: false,
     lib: {
       entry: 'src/index.ts',
-      name: 'ScreamPromptEditor',
+      name: 'ScreamTextUI',
       formats: ['es', 'umd'],
-      fileName: (format) => `scream-prompt-editor.${format}.js`,
+      fileName: (format) => `scream-text-ui.${format}.js`,
     },
     rollupOptions: {
-      external: [/^lit/, /^@material\/web/, /^@chenglou\/pretext/],
+      external: [/^@material\/web\/.*/, 'lit', 'lit/decorators.js', '@chenglou/pretext'],
       output: [
         {
           format: 'es',
@@ -26,8 +26,8 @@ export default defineConfig({
         },
         {
           format: 'umd',
-          name: 'ScreamPromptEditor',
-          entryFileNames: 'scream-prompt-editor.umd.js',
+          name: 'ScreamTextUI',
+          entryFileNames: 'scream-text-ui.umd.js',
           globals: {
             'lit': 'Lit',
             'lit/decorators.js': 'LitDecorators',

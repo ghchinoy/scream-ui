@@ -136,6 +136,18 @@
             <div slot="code">&lt;ui-audio-tag-editor .value="\${this.text}"&gt;&lt;/ui-audio-tag-editor&gt;</div>
           </ui-showcase-card>
 
+          <ui-showcase-card title="Kinetic Lyrics (Canvas Text)" description="Synchronized transcript highlighting powered by Pretext Canvas rendering.">
+            <demo-kinetic-lyrics></demo-kinetic-lyrics>
+            <div slot="code">&lt;ui-synced-transcript font="20px Inter"&gt;&lt;/ui-synced-transcript&gt;</div>
+          </ui-showcase-card>
+
+          <ui-showcase-card title="Masked Gradient Visualizer" description="Audio waveform acting as an alpha mask over a CSS animated gradient background.">
+            <demo-masked-gradient></demo-masked-gradient>
+            <div slot="code">&lt;div class="gradient-bg"&gt;
+  &lt;ui-waveform mask="true"&gt;&lt;/ui-waveform&gt;
+&lt;/div&gt;</div>
+          </ui-showcase-card>
+
           <ui-showcase-card title="Smart Textarea" description="Atomic speech primitives (Record, Preview, Cancel) embedded inside a standard textarea.">
             <demo-smart-textarea></demo-smart-textarea>
             <div slot="code">&lt;ui-speech-provider simulation&gt;

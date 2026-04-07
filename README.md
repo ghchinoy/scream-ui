@@ -11,7 +11,7 @@ This repository is a monorepo containing the core component library and its deve
     -   `src/components/molecules/`: Functional units (waveforms, pickers, visualizers).
     -   `src/components/organisms/`: Complex composite components.
     -   `src/components/providers/`: Headless context providers for state management.
--   **`packages/lit-prompt-editor/`**: A specialized, high-performance canvas-based text editor for prompt and audio tag editing powered by \`@chenglou/pretext\`.
+-   **`packages/lit-text-ui/`**: A specialized, high-performance canvas-based text editor for prompt and audio tag editing powered by `@chenglou/pretext`.
 -   **`samples/`**: Example applications demonstrating library usage.
     -   `gallery/`: The interactive component documentation and playground.
     -   `reference-agent/`: A minimalist implementation for AI agents to follow.

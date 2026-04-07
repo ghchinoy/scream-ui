@@ -48,6 +48,8 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._cursorIndex = 0;
         this._selectedIndex = 0;
         this._suggestionPos = { x: 0, y: 0 };
+        this._hoveredTag = null;
+        this._hoverPos = { x: 0, y: 0 };
         this._resizeObserver = null;
         this._computedFont = '16px system-ui';
         this._computedColor = '#000000';
@@ -55,6 +57,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._paddingL = 16;
         this._paddingR = 16;
         this._prepared = null;
+        this._renderedTags = [];
         // Theme colors parsed once
         this._themeColors = {
             'Non-Speech': { bg: '#c8e6c9', fg: '#003300' }, // fallback greens
@@ -70,6 +73,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
       width: 100%;
       position: relative;
       font-family: var(--md-sys-typescale-body-large-font-family-name, system-ui);
+      color: var(--md-sys-color-on-surface, #111111);
     }
 
     .editor-wrapper {
@@ -82,7 +86,6 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
       box-sizing: border-box;
       transition: all 0.2s ease;
       cursor: text;
-      overflow: hidden;
     }
 
     .editor-wrapper:focus-within {
@@ -114,6 +117,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
       left: 0;
       pointer-events: none; /* Let clicks pass through */
       z-index: 1;
+      border-radius: 12px;
     }
 
     .foreground-textarea {
@@ -128,6 +132,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
       z-index: 2;
       white-space: pre-wrap;
       word-wrap: break-word;
+      border-radius: 12px;
     }
 
     .foreground-textarea::placeholder {
@@ -182,9 +187,35 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
        letter-spacing: 0.5px;
        color: var(--md-sys-color-primary, #0066cc);
     }
+    
+    /* Tag Tooltip */
+    .tag-tooltip {
+      position: absolute;
+      z-index: 20;
+      background: var(--md-sys-color-on-surface, #111);
+      color: var(--md-sys-color-surface, #fff);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      transform: translate(-50%, -100%);
+      box-shadow: var(--md-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.2));
+      white-space: nowrap;
+    }
+    .tooltip-category {
+      font-weight: bold;
+      color: var(--md-sys-color-primary, #8ab4f8);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .tooltip-desc {
+      opacity: 0.9;
+    }
   `; }
     render() {
-        return html `<div class="editor-wrapper"><canvas class="background-canvas"></canvas><textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @scroll=${this._triggerRender} spellcheck="false"></textarea></div>${this._renderSuggestions()}`;
+        return html `<div class="editor-wrapper" @mouseleave=${this._handleMouseLeave}><canvas class="background-canvas"></canvas><textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @mousemove=${this._handleMouseMove} @scroll=${this._triggerRender} spellcheck="false"></textarea>${this._renderTooltip()}</div>${this._renderSuggestions()}`;
     }
     firstUpdated() {
         this._parseThemeColors();
@@ -197,6 +228,10 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         if (this._resizeObserver) {
             this._resizeObserver.disconnect();
         }
+    }
+    refresh() {
+        this._parseThemeColors();
+        this._parseValue();
     }
     _parseThemeColors() {
         // Attempt to grab colors from CSS variables on the host element
@@ -236,7 +271,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._paddingL = parseFloat(computed.paddingLeft) || 16;
         this._paddingR = parseFloat(computed.paddingRight) || 16;
         // Prepare the Pretext layout engine with the plain string
-        this._prepared = prepareWithSegments(this.value, this._computedFont);
+        this._prepared = prepareWithSegments(this.value, this._computedFont, { whiteSpace: 'pre-wrap' });
         this._triggerRender();
     }
     _triggerRender() {
@@ -259,6 +294,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._canvas.height = rect.height * dpr;
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, rect.width, rect.height);
+        this._renderedTags = [];
         // The available width for text to wrap (clientWidth excludes borders and scrollbars)
         const layoutWidth = this._textarea.clientWidth - (this._paddingL + this._paddingR);
         // Offset rendering by padding and textarea scroll position (assuming paddingTop == paddingLeft)
@@ -273,8 +309,9 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         const layoutResult = layoutWithLines(this._prepared, layoutWidth, this._lineHeight);
         for (const line of layoutResult.lines) {
             let x = 0;
-            const parts = line.text.split(/(\\[.*?\\])/g);
-            for (const part of parts) {
+            const parts = line.text.split(/(\[.*?\])/g);
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
                 if (!part)
                     continue;
                 ctx.font = this._computedFont;
@@ -295,12 +332,13 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
                     const tag = AUDIO_TAGS.find(t => t.id === innerText);
                     const category = tag ? tag.category : 'Custom';
                     const colors = this._themeColors[category] || this._themeColors['Custom'];
-                    // Draw Pill Background
+                    // Draw Pill Background for the tag itself
                     ctx.fillStyle = colors.bg;
-                    // polyfill for roundRect (Safari < 16 doesn't have it)
+                    const radius = (this._lineHeight - 4) / 2;
+                    const paddingX = 4; // visual padding inside the pill
                     if (ctx.roundRect) {
                         ctx.beginPath();
-                        ctx.roundRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4, 4);
+                        ctx.roundRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4, radius);
                         ctx.fill();
                         if (category === 'Custom') {
                             ctx.strokeStyle = this._themeColors['Pacing'].fg;
@@ -310,11 +348,20 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
                         }
                     }
                     else {
-                        ctx.fillRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4);
+                        ctx.fillRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4);
                     }
                     // Draw Pill Text
                     ctx.fillStyle = colors.fg;
-                    ctx.fillText(part, x, y + textYOffset);
+                    const innerTextWidth = ctx.measureText(innerText).width;
+                    const textXOffset = (partWidth - innerTextWidth) / 2;
+                    ctx.fillText(innerText, x + textXOffset, y + textYOffset);
+                    this._renderedTags.push({
+                        x: x - paddingX,
+                        y: y + 2,
+                        w: partWidth + (paddingX * 2),
+                        h: this._lineHeight - 4,
+                        tag: tag || { id: innerText, label: part, category: 'Custom', description: 'Custom user tag' }
+                    });
                 }
                 else {
                     // Draw Regular Text
@@ -325,6 +372,41 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
             }
             y += this._lineHeight;
         }
+    }
+    _handleMouseMove(e) {
+        const rect = this._textarea.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        // Convert to logical Canvas coordinates
+        const logicalX = x + this._textarea.scrollLeft - this._paddingL;
+        const logicalY = y + this._textarea.scrollTop - this._paddingL;
+        let foundTag = null;
+        for (const tagBox of this._renderedTags) {
+            if (logicalX >= tagBox.x && logicalX <= tagBox.x + tagBox.w &&
+                logicalY >= tagBox.y && logicalY <= tagBox.y + tagBox.h) {
+                foundTag = tagBox.tag;
+                break;
+            }
+        }
+        if (foundTag !== this._hoveredTag) {
+            this._hoveredTag = foundTag;
+        }
+        if (foundTag) {
+            this._hoverPos = { x, y };
+        }
+    }
+    _handleMouseLeave() {
+        this._hoveredTag = null;
+    }
+    _renderTooltip() {
+        if (!this._hoveredTag)
+            return nothing;
+        return html `
+      <div class="tag-tooltip" style="left: ${this._hoverPos.x}px; top: ${this._hoverPos.y - 10}px;">
+        <div class="tooltip-category">${this._hoveredTag.category}</div>
+        <div class="tooltip-desc">${this._hoveredTag.description || 'Custom user tag'}</div>
+      </div>
+    `;
     }
     _renderSuggestions() {
         if (!this._isSuggesting)
@@ -465,6 +547,12 @@ __decorate([
 __decorate([
     state()
 ], UiAudioTagEditor.prototype, "_suggestionPos", void 0);
+__decorate([
+    state()
+], UiAudioTagEditor.prototype, "_hoveredTag", void 0);
+__decorate([
+    state()
+], UiAudioTagEditor.prototype, "_hoverPos", void 0);
 __decorate([
     query('textarea')
 ], UiAudioTagEditor.prototype, "_textarea", void 0);

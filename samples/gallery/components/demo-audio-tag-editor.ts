@@ -17,7 +17,7 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, state} from 'lit/decorators.js';
 import '@ghchinoy/lit-audio-ui';
-import '@ghchinoy/lit-prompt-editor';
+import '@ghchinoy/lit-text-ui';
 
 @customElement('demo-audio-tag-editor')
 export class DemoAudioTagEditor extends LitElement {

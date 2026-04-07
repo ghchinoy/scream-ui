@@ -38,7 +38,7 @@ jobs:
       - name: Build Demo
         run: |
           npm run build -w @ghchinoy/lit-audio-ui
-          npm run build -w @ghchinoy/lit-prompt-editor
+          npm run build -w @ghchinoy/lit-text-ui
           npm run build -w @scream-ui/gallery
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

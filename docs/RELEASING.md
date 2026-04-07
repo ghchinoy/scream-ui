@@ -1,6 +1,6 @@
 # Releasing Workspace Packages
 
-This document outlines the steps required to bump the version of the workspace libraries (`@ghchinoy/lit-audio-ui` and `@ghchinoy/lit-prompt-editor`) and publish them to the npm registry.
+This document outlines the steps required to bump the version of the workspace libraries (`@ghchinoy/lit-audio-ui` and `@ghchinoy/lit-text-ui`) and publish them to the npm registry.
 
 **Important:** These packages are versioned independently. You only need to release the package(s) that have changed.
 
@@ -34,9 +34,9 @@ cd packages/lit-audio-ui
 npm version patch  # Use 'patch', 'minor', or 'major' depending on the changes
 ```
 
-For `lit-prompt-editor`:
+For `lit-text-ui`:
 ```bash
-cd packages/lit-prompt-editor
+cd packages/lit-text-ui
 npm version patch  # Use 'patch', 'minor', or 'major' depending on the changes
 ```
 
@@ -59,11 +59,11 @@ git commit -m "chore(release): bump lit-audio-ui to v1.2.3"
 git tag lit-audio-ui-v1.2.3
 ```
 
-If you bumped `lit-prompt-editor` to v0.1.1:
+If you bumped `lit-text-ui` to v0.1.1:
 ```bash
-git add packages/lit-prompt-editor/package.json package-lock.json
-git commit -m "chore(release): bump lit-prompt-editor to v0.1.1"
-git tag lit-prompt-editor-v0.1.1
+git add packages/lit-text-ui/package.json package-lock.json
+git commit -m "chore(release): bump lit-text-ui to v0.1.1"
+git tag lit-text-ui-v0.1.1
 ```
 
 *(Note: If you release both simultaneously, you can commit them together and push two tags.)*
@@ -85,9 +85,9 @@ cd packages/lit-audio-ui
 npm publish --access public
 ```
 
-For `lit-prompt-editor`:
+For `lit-text-ui`:
 ```bash
-cd packages/lit-prompt-editor
+cd packages/lit-text-ui
 npm publish --access public
 ```
 
