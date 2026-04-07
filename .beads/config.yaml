@@ -69,3 +69,5 @@ sync-branch: "beads-sync"
 sync.last_import: "2026-03-01T00:00:00Z"
 
 dolt.auto-commit: "on"
+
+dolt.engine: "server"
