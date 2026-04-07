@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jank-Free Textarea Sizing with Pretext</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 50px;
+        margin: 0;
+      }
+      .container {
+        width: 600px;
+        background: #1e1e1e;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #333;
+      }
+      
+      /* The magic container that defines the height */
+      .textarea-wrapper {
+        position: relative;
+        width: 100%;
+        /* Default starting height, smoothly transitions */
+        height: var(--ui-textarea-height, 48px);
+        transition: height 0.15s cubic-bezier(0.2, 0, 0, 1);
+        background: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+
+      /* The actual textarea fills the wrapper */
+      textarea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 12px 16px;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        resize: none;
+        outline: none;
+        box-sizing: border-box;
+        overflow: hidden; /* Hide scrollbar since we auto-expand */
+      }
+      
+      textarea::placeholder {
+        color: #888;
+      }
+      
+      .info {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Jank-Free Textarea</h2>
+      <p>Type below. The height is calculated purely by pretext (no DOM reflows) and animated via CSS variables.</p>
+      
+      <div class="textarea-wrapper" id="wrapper">
+        <textarea id="inputBox" placeholder="Send a message..."></textarea>
+      </div>
+
+      <div class="info">
+        Calculated height: <span id="heightDisplay">48px</span>
+      </div>
+    </div>
+
+    <script type="module">
+      import { prepare, layout } from '@chenglou/pretext';
+
+      const textarea = document.getElementById('inputBox');
+      const wrapper = document.getElementById('wrapper');
+      const heightDisplay = document.getElementById('heightDisplay');
+
+      // Constants that must EXACTLY match the textarea's CSS font properties
+      const FONT_STRING = "16px Inter, sans-serif";
+      const LINE_HEIGHT = 24; // 24px
+      const PADDING_Y = 24; // 12px top + 12px bottom
+      const PADDING_X = 32; // 16px left + 16px right
+      const MIN_HEIGHT = 48; // Minimum height of textarea wrapper
+
+      function updateHeight() {
+        const text = textarea.value || textarea.placeholder;
+        
+        // The available width for text inside the textarea
+        const availableWidth = wrapper.getBoundingClientRect().width - PADDING_X;
+        if (availableWidth <= 0) return;
+
+        // Use pretext to prepare and layout the text without touching the DOM!
+        const prepared = prepare(text, FONT_STRING, { whiteSpace: 'pre-wrap' });
+        const { height } = layout(prepared, availableWidth, LINE_HEIGHT);
+
+        // Add vertical padding back to the text block height
+        const finalHeight = Math.max(MIN_HEIGHT, height + PADDING_Y);
+
+        // Apply the calculated height to a CSS variable to trigger hardware-accelerated transitions
+        wrapper.style.setProperty('--ui-textarea-height', `${finalHeight}px`);
+        heightDisplay.textContent = `${finalHeight}px`;
+      }
+
+      // Update height on input
+      textarea.addEventListener('input', updateHeight);
+
+      // Re-calculate if the window resizes (changes availableWidth)
+      window.addEventListener('resize', updateHeight);
+
+      // Initial calculation
+      // Wait a tiny bit for initial layout to settle so getBoundingClientRect works
+      setTimeout(updateHeight, 0);
+    </script>
+  </body>
+</html>

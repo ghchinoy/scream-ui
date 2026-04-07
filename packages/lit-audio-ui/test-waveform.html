@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Waveform Lit Component Test</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        width: 800px;
+        border: 1px solid #333;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .waveform-container {
+        background: #2a2a2a;
+        border-radius: 8px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>&lt;ui-waveform&gt; (Auto-Peaks)</h2>
+      
+      <p>This waveform automatically calculates its peaks using the Web Audio API simply by providing an audio <code>src</code> attribute.</p>
+
+      <div class="waveform-container">
+        <!-- We'll use a public sound file for testing. Ensure this is accessible. -->
+        <ui-waveform 
+          id="testWaveform"
+          src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" 
+          barWidth="4" 
+          barGap="2" 
+          barColor="#9c27b0"
+          overlayText="0:00 - Morning Alarm (Pretext Overlay)"
+          overlayColor="#ffffff"
+          height="100">
+        </ui-waveform>
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+         <button id="btn1">Load Short Audio</button>
+         <button id="btn2">Load Long Audio</button>
+         <button id="btnText">Change Overlay Text</button>
+      </div>
+
+    </div>
+
+    <script type="module">
+      import './src/components/molecules/ui-waveform.ts';
+      
+      const waveform = document.getElementById('testWaveform');
+      const btn1 = document.getElementById('btn1');
+      const btn2 = document.getElementById('btn2');
+      const btnText = document.getElementById('btnText');
+      
+      btn1.addEventListener('click', () => {
+        waveform.src = "https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg";
+        waveform.overlayText = "Boing Sound Effect";
+      });
+      
+      btn2.addEventListener('click', () => {
+        waveform.src = "https://actions.google.com/sounds/v1/weather/thunder_crack.ogg";
+        waveform.overlayText = "Thunder Crack - Very Loud";
+      });
+
+      btnText.addEventListener('click', () => {
+        waveform.overlayText = "Here is a much longer text overlay that will demonstrate how pretext handles line wrapping automatically when the text gets too long to fit on a single line within the canvas bounds.";
+      });
+    </script>
+  </body>
+</html>

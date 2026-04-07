@@ -98,15 +98,22 @@ export class UiSpectrumVisualizer extends LitElement {
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = this._canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    if (this._canvas.width !== rect.width * dpr) {
-      this._canvas.width = rect.width * dpr;
-      this._canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-    }
+    const rect = this.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
 
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    const dpr = window.devicePixelRatio || 1;
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+
+    if (this._canvas.width !== targetWidth || this._canvas.height !== targetHeight) {
+      this._canvas.width = targetWidth;
+      this._canvas.height = targetHeight;
+      this._canvas.style.width = `${rect.width}px`;
+      this._canvas.style.height = `${rect.height}px`;
+      ctx.scale(dpr, dpr);
+    } else {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
 
     const frequencies = getNormalizedFrequencyData(analyser, this._dataArray);
     const step = this.barWidth + this.barGap;

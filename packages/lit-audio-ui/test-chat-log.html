@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualized Generative Chat Log</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        margin: 0;
+      }
+      .container {
+        width: 600px;
+        background: #1e1e1e;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .viewport {
+        width: 100%;
+        height: 500px;
+        overflow-y: auto;
+        background: #2a2a2a;
+        border-radius: 8px;
+        border: 1px solid #444;
+        position: relative;
+        box-sizing: border-box;
+      }
+
+      /* The invisible element that forces the scrollbar to the true full height */
+      .scroll-sizer {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      /* The actual chat bubbles that will be recycled and positioned */
+      .chat-bubble {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        /* Height will be managed by JS, but we pad inside */
+        background: #3a3a3a;
+        border-radius: 8px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      
+      /* Pretext requires exact matching CSS fonts */
+      .chat-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        padding: 12px 16px;
+        white-space: pre-wrap;
+        word-break: normal;
+        overflow-wrap: break-word;
+        margin: 0;
+      }
+
+      .info {
+        font-size: 14px;
+        color: #aaa;
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      button {
+        padding: 8px 16px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      button:hover { background: #005bb5; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Virtualized Chat Log (Pretext)</h2>
+      <p>This container smoothly scrolls <strong>10,000</strong> variable-height AI messages while only rendering the visible subset in the DOM.</p>
+      
+      <div class="info">
+        <span id="statsNodes">DOM Nodes: 0</span>
+        <span id="statsTotalHeight">Total Height: 0px</span>
+      </div>
+
+      <div class="viewport" id="viewport">
+        <div class="scroll-sizer" id="scrollSizer"></div>
+        <div id="renderSurface"></div>
+      </div>
+      
+      <div>
+        <button id="btnAdd">Simulate incoming generation (+1)</button>
+      </div>
+    </div>
+
+    <script type="module">
+      import { prepare, layout } from '@chenglou/pretext';
+
+      const viewport = document.getElementById('viewport');
+      const scrollSizer = document.getElementById('scrollSizer');
+      const renderSurface = document.getElementById('renderSurface');
+      const statsNodes = document.getElementById('statsNodes');
+      const statsTotalHeight = document.getElementById('statsTotalHeight');
+      const btnAdd = document.getElementById('btnAdd');
+
+      // Configuration matching CSS exactly
+      const FONT_STRING = "16px Inter, sans-serif";
+      const LINE_HEIGHT = 24; 
+      const PADDING_Y = 24; // 12px top + 12px bottom padding inside bubble
+      const GAP = 12; // 12px gap between bubbles
+
+      // The core data structure for the virtualized list
+      const items = []; // Holds { text, height, offsetTop }
+      
+      // Calculate available width for text 
+      // Viewport width minus scrollbar (approx 15px) minus chat-bubble left/right coords (32px) minus inner padding (32px)
+      // Actually, since chat-text has padding, let's measure carefully:
+      // viewport clientWidth = 560px
+      // bubble left=16, right=16 => bubble width = 560 - 32 = 528px
+      // text padding left=16, right=16 => available text width = 528 - 32 = 496px
+      let availableTextWidth = 0;
+
+      function measureAvailableWidth() {
+        const viewportWidth = viewport.clientWidth; // Excludes scrollbar
+        // 32px external bubble margin (left+right), 32px internal text padding (left+right)
+        availableTextWidth = viewportWidth - 32 - 32; 
+      }
+
+      // Pre-generate some random paragraphs
+      const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
+      
+      function getRandomText() {
+        const words = lorem.split(' ');
+        const numWords = Math.floor(Math.random() * 40) + 5; // 5 to 45 words
+        return words.slice(0, numWords).join(' ') + (Math.random() > 0.5 ? "\n\nAnd some multi-line formatting." : ".");
+      }
+
+      function calculateItemDimensions(text, currentOffset) {
+        // Prepare pretext
+        const prepared = prepare(text, FONT_STRING, { whiteSpace: 'pre-wrap' });
+        
+        // Calculate height WITHOUT hitting the DOM
+        const { height } = layout(prepared, availableTextWidth, LINE_HEIGHT);
+        
+        const totalBubbleHeight = height + PADDING_Y;
+        
+        return {
+          text,
+          height: totalBubbleHeight,
+          offsetTop: currentOffset
+        };
+      }
+
+      function initData(count) {
+        measureAvailableWidth();
+        items.length = 0; // Clear
+        let currentOffset = GAP; // Start with initial gap
+
+        console.time('pretext-10k-measure');
+        for (let i = 0; i < count; i++) {
+          const text = `Message #${i}: ` + getRandomText();
+          const item = calculateItemDimensions(text, currentOffset);
+          items.push(item);
+          currentOffset += item.height + GAP;
+        }
+        console.timeEnd('pretext-10k-measure');
+
+        updateScrollSizer();
+        renderVisible();
+      }
+
+      function addIncomingMessage() {
+        const text = `Message #${items.length} (New!): ` + getRandomText();
+        const lastItem = items.length > 0 ? items[items.length - 1] : null;
+        const currentOffset = lastItem ? lastItem.offsetTop + lastItem.height + GAP : GAP;
+        
+        const item = calculateItemDimensions(text, currentOffset);
+        items.push(item);
+        
+        updateScrollSizer();
+        
+        // Auto-scroll to bottom if we were already at the bottom
+        const isAtBottom = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 50;
+        
+        renderVisible();
+        
+        if (isAtBottom) {
+          viewport.scrollTop = viewport.scrollHeight;
+        }
+      }
+
+      function updateScrollSizer() {
+        const lastItem = items.length > 0 ? items[items.length - 1] : null;
+        const totalHeight = lastItem ? lastItem.offsetTop + lastItem.height + GAP : 0;
+        scrollSizer.style.height = `${totalHeight}px`;
+        statsTotalHeight.textContent = `Total Height: ${totalHeight.toLocaleString()}px`;
+      }
+
+      // Simple binary search to find the first visible item
+      function findStartIndex(scrollTop) {
+        let low = 0;
+        let high = items.length - 1;
+        while (low <= high) {
+          const mid = Math.floor((low + high) / 2);
+          const item = items[mid];
+          if (item.offsetTop + item.height < scrollTop) {
+            low = mid + 1;
+          } else if (item.offsetTop > scrollTop) {
+            high = mid - 1;
+          } else {
+            return mid;
+          }
+        }
+        return Math.max(0, low);
+      }
+
+      // The core render loop
+      function renderVisible() {
+        const scrollTop = viewport.scrollTop;
+        const viewportHeight = viewport.clientHeight;
+        
+        // Overscan by 1 viewport height in both directions for smoother fast scrolling
+        const renderTop = Math.max(0, scrollTop - viewportHeight);
+        const renderBottom = scrollTop + viewportHeight * 2;
+
+        const startIndex = findStartIndex(renderTop);
+        
+        let endIndex = startIndex;
+        while (endIndex < items.length && items[endIndex].offsetTop <= renderBottom) {
+          endIndex++;
+        }
+
+        const visibleItems = items.slice(startIndex, endIndex);
+        
+        // Map DOM nodes (in a real framework like Lit, this is automatic via repeat directive)
+        // Here we just use a brutal DOM dump for the prototype
+        let htmlContent = '';
+        for (let i = 0; i < visibleItems.length; i++) {
+          const item = visibleItems[i];
+          htmlContent += `
+            <div class="chat-bubble" style="top: ${item.offsetTop}px; height: ${item.height}px;">
+              <p class="chat-text">${item.text}</p>
+            </div>
+          `;
+        }
+        
+        renderSurface.innerHTML = htmlContent;
+        statsNodes.textContent = `DOM Nodes: ${visibleItems.length}`;
+      }
+
+      // Event Listeners
+      viewport.addEventListener('scroll', renderVisible);
+      
+      window.addEventListener('resize', () => {
+        // On resize, all heights change! We have to re-measure EVERYTHING.
+        // Pretext makes this so fast that it's actually completely viable to re-measure 10k items on resize debounce.
+        measureAvailableWidth();
+        let currentOffset = GAP;
+        for (let i = 0; i < items.length; i++) {
+          items[i].offsetTop = currentOffset;
+          // Note: to be perfectly accurate we should recalculate the height too, 
+          // but for this prototype we'll just recalculate offsets.
+          // Real impl: items[i] = calculateItemDimensions(items[i].text, currentOffset);
+          currentOffset += items[i].height + GAP;
+        }
+        updateScrollSizer();
+        renderVisible();
+      });
+
+      btnAdd.addEventListener('click', addIncomingMessage);
+
+      // Boot
+      // Slight delay to ensure fonts/CSS load before measuring
+      setTimeout(() => {
+        initData(10000); // Create 10,000 chat messages instantly!
+      }, 100);
+
+    </script>
+  </body>
+</html>

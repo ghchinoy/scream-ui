@@ -1,6 +1,7 @@
 import {LitElement, html, css} from 'lit';
 import {customElement, property, state, query} from 'lit/decorators.js';
 import {provide} from '@lit/context';
+import { clearCache } from '@chenglou/pretext';
 import {
   audioPlayerContext,
   type AudioPlayerState,
@@ -60,6 +61,10 @@ export class UiAudioProvider extends LitElement {
       display: none;
     }
   `;
+
+  public clearTextCache() {
+    clearCache();
+  }
 
   render() {
     return html`
@@ -313,6 +318,7 @@ export interface AudioProviderElement extends HTMLElement {
   next(): void;
   previous(): void;
   select(index: number): void;
+  clearTextCache(): void;
 }
 
 declare global {

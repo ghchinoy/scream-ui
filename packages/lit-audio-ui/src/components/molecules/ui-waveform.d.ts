@@ -15,6 +15,7 @@
  */
 import { LitElement, type PropertyValues } from 'lit';
 export declare class UiWaveform extends LitElement {
+    src?: string;
     data: number[];
     peaks?: number[];
     barWidth: number;
@@ -26,13 +27,18 @@ export declare class UiWaveform extends LitElement {
     fadeEdges: boolean;
     fadeWidth: number;
     height?: number | string;
+    overlayText?: string;
+    overlayFont: string;
+    overlayColor: string;
+    private _computedPeaks;
+    private _preparedOverlayText;
     private _canvas;
     private _container;
     private _resizeObserver?;
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
     firstUpdated(): void;
-    updated(changedProperties: PropertyValues): void;
+    updated(changedProperties: PropertyValues): Promise<void>;
     disconnectedCallback(): void;
     private _handleResize;
     private _renderWaveform;

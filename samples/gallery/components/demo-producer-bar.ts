@@ -81,7 +81,7 @@ export class DemoProducerBar extends LitElement {
             class="producer-waveform" 
             .peaks="${this.peaks}" 
             height="64" 
-            align="bottom" 
+            align="center" 
             barColor="var(--md-sys-color-primary, #0066cc)" 
             fadeEdges="false"
           ></ui-waveform>

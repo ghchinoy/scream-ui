@@ -118,7 +118,6 @@ export class DemoPodcastPlayer extends LitElement {
             <ui-scrolling-waveform
               .active=${this._isPlaying}
               .analyserNode=${this._analyser}
-              height="32"
               barWidth="2"
               barGap="1"
             ></ui-scrolling-waveform>

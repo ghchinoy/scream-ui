@@ -154,8 +154,25 @@ export class UiScrollingWaveform extends LitElement {
         : 0;
       this._lastTime = currentTime;
 
-      const rect = this._canvas.getBoundingClientRect();
-      ctx.clearRect(0, 0, rect.width, rect.height);
+      const dpr = window.devicePixelRatio || 1;
+      const rect = this._container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        this._animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      
+      const targetWidth = Math.round(rect.width * dpr);
+      const targetHeight = Math.round(rect.height * dpr);
+      
+      if (this._canvas.width !== targetWidth || this._canvas.height !== targetHeight) {
+        this._canvas.width = targetWidth;
+        this._canvas.height = targetHeight;
+        this._canvas.style.width = `${rect.width}px`;
+        this._canvas.style.height = `${rect.height}px`;
+        ctx.scale(dpr, dpr);
+      } else {
+        ctx.clearRect(0, 0, rect.width, rect.height);
+      }
 
       // Resolve color from CSS vars if not explicitly provided
       let computedBarColor = this.barColor;

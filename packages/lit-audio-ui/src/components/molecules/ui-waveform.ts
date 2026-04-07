@@ -15,11 +15,13 @@
  */
 
 import {LitElement, html, css, type PropertyValues} from 'lit';
-import {customElement, property, query} from 'lit/decorators.js';
-import {applyCanvasEdgeFade} from '../../utils/audio-utils.js';
+import {customElement, property, query, state} from 'lit/decorators.js';
+import { prepareWithSegments, layoutWithLines, type PreparedTextWithSegments } from '@chenglou/pretext';
+import {applyCanvasEdgeFade, computeAudioPeaks} from '../../utils/audio-utils.js';
 
 @customElement('ui-waveform')
 export class UiWaveform extends LitElement {
+  @property({type: String}) src?: string;
   @property({type: Array}) data: number[] = [];
   @property({type: Array}) peaks?: number[];
   @property({type: Number}) barWidth: number = 4;
@@ -31,6 +33,14 @@ export class UiWaveform extends LitElement {
   @property({type: Boolean}) fadeEdges: boolean = true;
   @property({type: Number}) fadeWidth: number = 24;
   @property() height?: number | string;
+
+  // Pretext overlay properties
+  @property({type: String}) overlayText?: string;
+  @property({type: String}) overlayFont: string = '14px Inter, sans-serif';
+  @property({type: String}) overlayColor: string = '#ffffff';
+
+  @state() private _computedPeaks: number[] | null = null;
+  private _preparedOverlayText: PreparedTextWithSegments | null = null;
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
   @query('.container') private _container!: HTMLDivElement;
@@ -76,9 +86,35 @@ export class UiWaveform extends LitElement {
     this._resizeObserver.observe(this._container);
   }
 
-  updated(changedProperties: PropertyValues) {
+  async updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    if (changedProperties.has('data') || changedProperties.has('peaks') || changedProperties.has('barColor') || changedProperties.has('align')) {
+    
+    let needsRender = false;
+
+    if (changedProperties.has('overlayText') || changedProperties.has('overlayFont')) {
+      if (this.overlayText) {
+        this._preparedOverlayText = prepareWithSegments(this.overlayText, this.overlayFont, { whiteSpace: 'pre-wrap' });
+      } else {
+        this._preparedOverlayText = null;
+      }
+      needsRender = true;
+    }
+
+    if (changedProperties.has('src') && this.src) {
+      this._computedPeaks = null; // Clear old peaks while loading
+      this._renderWaveform(); // Trigger a render to clear/show loading state if we want one
+      
+      try {
+        const width = this._container?.getBoundingClientRect().width || 800;
+        const estimatedBarCount = Math.max(10, Math.floor(width / (this.barWidth + this.barGap)));
+        
+        this._computedPeaks = await computeAudioPeaks(this.src, estimatedBarCount);
+      } catch (e) {
+        console.error('Failed to compute audio peaks for src:', this.src, e);
+      }
+    }
+
+    if (needsRender || changedProperties.has('data') || changedProperties.has('peaks') || changedProperties.has('src') || changedProperties.has('barColor') || changedProperties.has('align') || changedProperties.has('_computedPeaks') || changedProperties.has('overlayColor')) {
       this._renderWaveform();
     }
   }
@@ -91,33 +127,33 @@ export class UiWaveform extends LitElement {
   }
 
   private _handleResize() {
-    if (!this._canvas || !this._container) return;
-
-    const rect = this._container.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-
-    this._canvas.width = rect.width * dpr;
-    this._canvas.height = rect.height * dpr;
-    this._canvas.style.width = `${rect.width}px`;
-    this._canvas.style.height = `${rect.height}px`;
-
-    const ctx = this._canvas.getContext('2d');
-    if (ctx) {
-      ctx.scale(dpr, dpr);
-      this._renderWaveform();
-    }
+    this._renderWaveform();
   }
 
   private _renderWaveform() {
-    if (!this._canvas) return;
+    if (!this._canvas || !this._container) return;
+
+    const rect = this._container.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = this._canvas.getBoundingClientRect();
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    if (this._canvas.width !== targetWidth || this._canvas.height !== targetHeight) {
+      this._canvas.width = targetWidth;
+      this._canvas.height = targetHeight;
+      this._canvas.style.width = `${rect.width}px`;
+      this._canvas.style.height = `${rect.height}px`;
+      ctx.scale(dpr, dpr);
+    } else {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
 
     // Provide a sensible default color if none provided, looking up the CSS variable cascade
-    // Get the computed color, trimming whitespace that getPropertyValue often returns
     const styles = getComputedStyle(this);
     let computedBarColor = this.barColor;
     if (!computedBarColor) {
@@ -128,15 +164,29 @@ export class UiWaveform extends LitElement {
 
     const barCount = Math.floor(rect.width / (this.barWidth + this.barGap));
     const centerY = rect.height / 2;
+    
+    const totalBarsWidth = barCount * (this.barWidth + this.barGap) - this.barGap;
+    const startX = Math.max(0, (rect.width - totalBarsWidth) / 2);
+
+    // Determine priority of data sources: explicitly provided peaks > computed peaks > realtime data
+    const dataSource = this.peaks && this.peaks.length > 0 
+      ? this.peaks 
+      : (this._computedPeaks && this._computedPeaks.length > 0 
+        ? this._computedPeaks 
+        : this.data);
 
     for (let i = 0; i < barCount; i++) {
-      const dataSource = this.peaks && this.peaks.length > 0 ? this.peaks : this.data;
       const dataIndex = dataSource.length > 0 ? Math.floor((i / barCount) * dataSource.length) : 0;
-      const value = dataSource[dataIndex] || 0;
-      // Value should be 0.0 to 1.0. Scale it to the height of the canvas.
+      const value = dataSource[dataIndex] || 0.1; // Provide a tiny baseline if no data
       const dynamicHeight = Math.max(this.barHeight, value * rect.height * 0.8);
-      const x = i * (this.barWidth + this.barGap);
-      const y = centerY - dynamicHeight / 2;
+      const x = startX + i * (this.barWidth + this.barGap);
+      
+      let y = centerY - dynamicHeight / 2;
+      if (this.align === 'bottom') {
+        y = rect.height - dynamicHeight;
+      } else if (this.align === 'top') {
+        y = 0;
+      }
 
       ctx.fillStyle = computedBarColor;
       ctx.globalAlpha = 0.6 + value * 0.4;
@@ -150,10 +200,24 @@ export class UiWaveform extends LitElement {
       }
     }
 
+    ctx.globalAlpha = 1;
+
+    // Draw Pretext Overlay if defined
+    if (this._preparedOverlayText) {
+      const lineHeight = parseInt(this.overlayFont, 10) * 1.5 || 20; 
+      const { lines } = layoutWithLines(this._preparedOverlayText, rect.width - 20, lineHeight);
+      
+      ctx.font = this.overlayFont;
+      ctx.fillStyle = this.overlayColor;
+      ctx.textBaseline = 'top';
+
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i].text, 10, 10 + i * lineHeight);
+      }
+    }
+
     if (this.fadeEdges) {
       applyCanvasEdgeFade(ctx, rect.width, rect.height, this.fadeWidth);
     }
-
-    ctx.globalAlpha = 1;
   }
 }

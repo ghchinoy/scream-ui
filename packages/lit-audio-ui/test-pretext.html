@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pretext Prototype</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        width: 600px;
+        border: 1px solid #333;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 8px;
+      }
+      canvas {
+        background: #2a2a2a;
+        width: 100%;
+        display: block;
+      }
+      .controls {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Pretext Canvas Render</h2>
+      <canvas id="textCanvas"></canvas>
+      <div class="controls">
+        <label>Current Time:</label>
+        <input type="range" id="timeSlider" min="0" max="100" value="0" style="flex: 1;" />
+      </div>
+    </div>
+    <script type="module" src="./test-pretext.ts"></script>
+  </body>
+</html>

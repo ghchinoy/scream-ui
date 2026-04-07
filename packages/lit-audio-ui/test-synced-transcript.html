@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synced Transcript Lit Component Test</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        width: 600px;
+        border: 1px solid #333;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h2>&lt;ui-synced-transcript&gt;</h2>
+      
+      <!-- We use the provider to distribute the context to the transcript -->
+      <ui-audio-provider id="provider">
+        <!-- 
+          We'll set the styling via standard CSS properties.
+        -->
+        <ui-synced-transcript 
+          font="20px Inter, sans-serif" 
+          lineHeight="30"
+          style="--ui-timed-text-color: #777; --ui-timed-text-active-color: #fff; --ui-timed-text-active-bg: transparent; --ui-timed-text-past-color: #aaa;"
+        ></ui-synced-transcript>
+      </ui-audio-provider>
+
+      <div class="controls">
+        <label>Current Time:</label>
+        <input type="range" id="timeSlider" min="0" max="13" step="0.1" value="0" style="flex: 1;" />
+      </div>
+    </div>
+
+    <script type="module">
+      import './src/components/providers/ui-audio-provider.ts';
+      import './src/components/atoms/ui-synced-transcript.ts';
+
+      const provider = document.getElementById('provider');
+      const timeSlider = document.getElementById('timeSlider');
+
+      // Mock transcript with timestamps
+      const mockTranscript = [
+        { text: "This", start: 0, end: 0.5 },
+        { text: " is", start: 0.6, end: 1.0 },
+        { text: " the", start: 1.1, end: 1.2 },
+        { text: " actual", start: 1.3, end: 2.0 },
+        { text: " Lit", start: 2.1, end: 2.3 },
+        { text: " component", start: 2.4, end: 3.5 },
+        { text: " reacting", start: 3.6, end: 4.5 },
+        { text: " to", start: 4.6, end: 5.5 },
+        { text: " the", start: 5.6, end: 6.5 },
+        { text: " context", start: 6.6, end: 7.1 },
+        { text: " updates!", start: 7.2, end: 8.0 },
+        { text: " It", start: 8.1, end: 9.0 },
+        { text: " calculates", start: 9.1, end: 10.0 },
+        { text: " layout", start: 10.1, end: 11.0 },
+        { text: " instantly.", start: 11.1, end: 13.0 }
+      ];
+
+      // We need to inject the mock transcript into the provider's state
+      // ui-audio-provider uses an internal state object that it provides via context.
+      // For this test, we'll wait for it to be ready and then force its state.
+      
+      customElements.whenDefined('ui-audio-provider').then(() => {
+        // Manually update the provider's state for testing
+        provider.state = {
+          ...provider.state,
+          transcript: mockTranscript,
+          currentTime: 0
+        };
+
+        timeSlider.addEventListener('input', (e) => {
+          provider.state = {
+            ...provider.state,
+            currentTime: parseFloat(e.target.value)
+          };
+        });
+      });
+    </script>
+  </body>
+</html>

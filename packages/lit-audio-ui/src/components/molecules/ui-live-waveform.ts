@@ -135,8 +135,8 @@ export class UiLiveWaveform extends LitElement {
   }
 
   private _updateData(timestamp: number) {
-    if (!this._canvas) return;
-    const rect = this._canvas.getBoundingClientRect();
+    if (!this._container) return;
+    const rect = this._container.getBoundingClientRect();
     const barCount = Math.floor(rect.width / (this.barWidth + this.barGap));
 
     if (this.active && this.analyserNode && this._dataArray) {
@@ -209,8 +209,25 @@ export class UiLiveWaveform extends LitElement {
     if (!this._canvas) return;
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
-    const rect = this._canvas.getBoundingClientRect();
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    const dpr = window.devicePixelRatio || 1;
+    const rect = this._container.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      this._animationFrameId = requestAnimationFrame(() => this._renderFrame());
+      return;
+    }
+
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+
+    if (this._canvas.width !== targetWidth || this._canvas.height !== targetHeight) {
+      this._canvas.width = targetWidth;
+      this._canvas.height = targetHeight;
+      this._canvas.style.width = `${rect.width}px`;
+      this._canvas.style.height = `${rect.height}px`;
+      ctx.scale(dpr, dpr);
+    } else {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
     const styles = getComputedStyle(this);
     let computedBarColor = this.barColor || 'currentColor';
     if (computedBarColor.startsWith('var(')) {

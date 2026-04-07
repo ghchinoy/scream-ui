@@ -194,3 +194,62 @@ export function formatAudioTime(seconds: number): string {
   result += '' + secs;
   return result;
 }
+
+/**
+ * Computes an array of normalized RMS peaks from an audio URL using the Web Audio API.
+ * 
+ * @param audioUrl The URL of the audio file.
+ * @param numPeaks The number of peaks to generate.
+ * @returns Array of normalized floats between 0.1 and 1.0.
+ */
+export async function computeAudioPeaks(
+  audioUrl: string,
+  numPeaks: number = 100,
+): Promise<number[]> {
+  try {
+    const response = await fetch(audioUrl);
+    if (!response.ok) throw new Error(`Fetch failed: ${response.statusText}`);
+    const arrayBuffer = await response.arrayBuffer();
+
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const audioContext = new AudioContextClass();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    const channelData = audioBuffer.getChannelData(0);
+    const hopLength = Math.max(1, Math.floor(channelData.length / numPeaks));
+    const peaks: number[] = [];
+
+    // Compute RMS energy per frame with an overlapping sliding window
+    for (let i = 0; i < numPeaks; i++) {
+      const start = i * hopLength;
+      const end = Math.min(start + hopLength * 2, channelData.length);
+
+      let sumSquares = 0;
+      for (let j = start; j < end; j++) {
+        sumSquares += channelData[j] * channelData[j];
+      }
+
+      const rms = Math.sqrt(sumSquares / (end - start));
+      peaks.push(rms);
+    }
+
+    // Normalize to [0.1, 1.0]
+    const maxPeak = Math.max(...peaks);
+    const minPeak = 0.1;
+
+    if (maxPeak > 0) {
+      for (let i = 0; i < peaks.length; i++) {
+        peaks[i] = (peaks[i] / maxPeak) * 0.9 + minPeak;
+      }
+    } else {
+      return new Array(numPeaks).fill(minPeak);
+    }
+
+    if (audioContext.state !== 'closed') audioContext.close();
+
+    return peaks;
+  } catch (error) {
+    console.error('Error computing audio peaks:', error);
+    return new Array(numPeaks).fill(0.1);
+  }
+}
