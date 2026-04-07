@@ -86,6 +86,7 @@ export class UiAudioTagEditor extends LitElement {
       width: 100%;
       position: relative;
       font-family: var(--md-sys-typescale-body-large-font-family-name, system-ui);
+      color: var(--md-sys-color-on-surface, #111111);
     }
 
     .editor-wrapper {
@@ -313,7 +314,8 @@ export class UiAudioTagEditor extends LitElement {
       
       const parts = line.text.split(/(\\[.*?\\])/g);
       
-      for (const part of parts) {
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
         if (!part) continue;
         
         ctx.font = this._computedFont;
@@ -335,37 +337,70 @@ export class UiAudioTagEditor extends LitElement {
         const isTag = part.startsWith('[') && part.endsWith(']');
         
         if (isTag) {
-            const innerText = part.slice(1, -1).toLowerCase();
-            const tag = AUDIO_TAGS.find(t => t.id === innerText);
-            const category = tag ? tag.category : 'Custom';
-            const colors = this._themeColors[category] || this._themeColors['Custom'];
+            // Draw tag faintly so it holds cursor space but doesn't distract
+            ctx.fillStyle = this._computedColor;
+            ctx.globalAlpha = 0.3;
+            ctx.fillText(part, x, y + textYOffset);
+            ctx.globalAlpha = 1.0;
+        } else {
+            // Regular text. Check if the NEXT part is a tag.
+            const nextPart = parts[i + 1];
+            const nextIsTag = nextPart && nextPart.startsWith('[') && nextPart.endsWith(']');
             
-            // Draw Pill Background
-            ctx.fillStyle = colors.bg;
-            
-            // polyfill for roundRect (Safari < 16 doesn't have it)
-            if (ctx.roundRect) {
-                ctx.beginPath();
-                ctx.roundRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4, 4);
-                ctx.fill();
-                if (category === 'Custom') {
-                    ctx.strokeStyle = this._themeColors['Pacing'].fg;
-                    ctx.setLineDash([2, 2]);
-                    ctx.stroke();
-                    ctx.setLineDash([]);
+            if (nextIsTag) {
+                // Highlight the last word in this part!
+                const words = part.split(/(\\s+)/);
+                let lastWordIdx = -1;
+                for (let j = words.length - 1; j >= 0; j--) {
+                    if (words[j].trim().length > 0) {
+                        lastWordIdx = j;
+                        break;
+                    }
+                }
+                
+                const innerText = nextPart.slice(1, -1).toLowerCase();
+                const tag = AUDIO_TAGS.find(t => t.id === innerText);
+                const category = tag ? tag.category : 'Custom';
+                const colors = this._themeColors[category] || this._themeColors['Custom'];
+                
+                let wordX = x;
+                for (let j = 0; j < words.length; j++) {
+                    const wText = words[j];
+                    if (!wText) continue;
+                    const wWidth = ctx.measureText(wText).width;
+                    
+                    if (j === lastWordIdx) {
+                        // Draw Highlight!
+                        ctx.fillStyle = colors.bg;
+                        if (ctx.roundRect) {
+                            ctx.beginPath();
+                            ctx.roundRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4, 4);
+                            ctx.fill();
+                            if (category === 'Custom') {
+                                ctx.strokeStyle = this._themeColors['Pacing'].fg;
+                                ctx.setLineDash([2, 2]);
+                                ctx.stroke();
+                                ctx.setLineDash([]);
+                            }
+                        } else {
+                            ctx.fillRect(wordX - 2, y + 2, wWidth + 4, this._lineHeight - 4);
+                        }
+                        
+                        // Draw Word
+                        ctx.fillStyle = colors.fg;
+                        ctx.fillText(wText, wordX, y + textYOffset);
+                    } else {
+                        // Normal un-highlighted word
+                        ctx.fillStyle = this._computedColor;
+                        ctx.fillText(wText, wordX, y + textYOffset);
+                    }
+                    wordX += wWidth;
                 }
             } else {
-                ctx.fillRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4);
+                // Draw Regular Text
+                ctx.fillStyle = this._computedColor;
+                ctx.fillText(part, x, y + textYOffset);
             }
-            
-            // Draw Pill Text
-            ctx.fillStyle = colors.fg;
-            ctx.fillText(part, x, y + textYOffset);
-            
-        } else {
-            // Draw Regular Text
-            ctx.fillStyle = this._computedColor;
-            ctx.fillText(part, x, y + textYOffset);
         }
         
         x += partWidth;

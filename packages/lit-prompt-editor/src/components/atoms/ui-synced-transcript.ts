@@ -9,7 +9,7 @@ import { prepareWithSegments, layoutWithLines, type PreparedTextWithSegments, ty
 import {
   audioPlayerContext,
   type AudioPlayerState,
-} from '@ghchinoy/lit-audio-ui/utils/audio-context.js';
+} from '@ghchinoy/lit-audio-ui';
 
 /**
  * ATOM: Synced Transcript

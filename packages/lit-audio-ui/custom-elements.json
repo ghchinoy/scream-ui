@@ -667,6 +667,33 @@
             }
           ],
           "description": "Formats a duration in seconds into a standard MM:SS or HH:MM:SS string."
+        },
+        {
+          "kind": "function",
+          "name": "computeAudioPeaks",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          },
+          "parameters": [
+            {
+              "name": "audioUrl",
+              "type": {
+                "text": "string"
+              },
+              "description": "The URL of the audio file."
+            },
+            {
+              "name": "numPeaks",
+              "default": "100",
+              "type": {
+                "text": "number"
+              },
+              "description": "The number of peaks to generate."
+            }
+          ],
+          "description": "Computes an array of normalized RMS peaks from an audio URL using the Web Audio API."
         }
       ],
       "exports": [
@@ -717,6 +744,14 @@
             "name": "formatAudioTime",
             "module": "src/utils/audio-utils.ts"
           }
+        },
+        {
+          "kind": "js",
+          "name": "computeAudioPeaks",
+          "declaration": {
+            "name": "computeAudioPeaks",
+            "module": "src/utils/audio-utils.ts"
+          }
         }
       ]
     },
@@ -736,6 +771,51 @@
           "declaration": {
             "name": "speechContext",
             "module": "src/utils/speech-context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]
@@ -4290,6 +4370,13 @@
           "members": [
             {
               "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "data",
               "type": {
                 "text": "number[]"
@@ -4375,6 +4462,47 @@
             },
             {
               "kind": "field",
+              "name": "overlayText",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "overlayFont",
+              "type": {
+                "text": "string"
+              },
+              "default": "'14px Inter, sans-serif'"
+            },
+            {
+              "kind": "field",
+              "name": "overlayColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "'#ffffff'"
+            },
+            {
+              "kind": "field",
+              "name": "_computedPeaks",
+              "type": {
+                "text": "number[] | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_preparedOverlayText",
+              "type": {
+                "text": "PreparedTextWithSegments | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
               "name": "_canvas",
               "type": {
                 "text": "HTMLCanvasElement"
@@ -4448,51 +4576,6 @@
           "declaration": {
             "name": "UiWaveform",
             "module": "src/components/molecules/ui-waveform.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: fit-content; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: 200px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
           }
         }
       ]
@@ -4585,6 +4668,11 @@
               "name": "styles",
               "static": true,
               "default": "css` :host { display: contents; /* We are completely invisible, just wrapping children */ } audio { display: none; } `"
+            },
+            {
+              "kind": "method",
+              "name": "clearTextCache",
+              "privacy": "public"
             },
             {
               "kind": "method",

@@ -37,7 +37,6 @@ export declare class UiAudioTagEditor extends LitElement {
     private _lineHeight;
     private _paddingL;
     private _paddingR;
-    private _items;
     private _prepared;
     private _themeColors;
     static styles: import("lit").CSSResult;

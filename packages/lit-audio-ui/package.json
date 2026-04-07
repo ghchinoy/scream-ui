@@ -9,9 +9,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/scream-audio-ui.umd.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/scream-audio-ui.umd.js"
     },
     "./standalone": "./dist/standalone/scream-audio-ui.standalone.js",
     "./atoms/*": "./dist/components/atoms/*",

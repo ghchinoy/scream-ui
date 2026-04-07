@@ -1,6 +1,11 @@
 import {defineConfig} from 'vite';
 
 export default defineConfig({
+  server: {
+    fs: {
+      allow: ['../../..', '../../../../dev/github/pretext']
+    }
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: false,

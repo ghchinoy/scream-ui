@@ -13,6 +13,7 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false,
     "moduleDetection": "force",
+    "rootDir": "./src",
     "outDir": "./dist",
     "declaration": true,
     "emitDeclarationOnly": true,
@@ -24,5 +25,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "vite.config.ts", "vite.standalone.config.ts"]
+  "include": ["src"]
 }

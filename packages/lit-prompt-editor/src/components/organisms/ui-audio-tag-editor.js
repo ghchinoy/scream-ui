@@ -21,7 +21,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { prepareRichInline, walkRichInlineLineRanges, materializeRichInlineLineRange } from '@chenglou/pretext/rich-inline';
+import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext';
 export const AUDIO_TAGS = [
     { id: 'sigh', label: '[sigh]', category: 'Non-Speech', description: 'Inserts a sigh sound.' },
     { id: 'laughing', label: '[laughing]', category: 'Non-Speech', description: 'Inserts a laugh.' },
@@ -54,7 +54,6 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._lineHeight = 24;
         this._paddingL = 16;
         this._paddingR = 16;
-        this._items = [];
         this._prepared = null;
         // Theme colors parsed once
         this._themeColors = {
@@ -236,28 +235,8 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         this._lineHeight = parseFloat(computed.lineHeight) || 24;
         this._paddingL = parseFloat(computed.paddingLeft) || 16;
         this._paddingR = parseFloat(computed.paddingRight) || 16;
-        const parts = this.value.split(/(\[.*?\])/g);
-        this._items = [];
-        for (const part of parts) {
-            if (!part)
-                continue;
-            if (part.startsWith('[') && part.endsWith(']')) {
-                // Tags must not have extraWidth or break constraints, otherwise Pretext drifts from textarea
-                this._items.push({
-                    text: part,
-                    font: this._computedFont
-                });
-            }
-            else {
-                // Normal text
-                this._items.push({
-                    text: part,
-                    font: this._computedFont
-                });
-            }
-        }
-        // Prepare the Pretext layout engine with the parsed items
-        this._prepared = prepareRichInline(this._items);
+        // Prepare the Pretext layout engine with the plain string
+        this._prepared = prepareWithSegments(this.value, this._computedFont);
         this._triggerRender();
     }
     _triggerRender() {
@@ -291,36 +270,37 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         let y = 0;
         // Calculate cursor drop-down pos while we walk the layout
         let currentGlobalStrIndex = 0;
-        // Walk through the Pretext computed layout lines
-        walkRichInlineLineRanges(this._prepared, layoutWidth, (range) => {
-            const line = materializeRichInlineLineRange(this._prepared, range);
+        const layoutResult = layoutWithLines(this._prepared, layoutWidth, this._lineHeight);
+        for (const line of layoutResult.lines) {
             let x = 0;
-            for (const frag of line.fragments) {
-                x += frag.gapBefore;
+            const parts = line.text.split(/(\\[.*?\\])/g);
+            for (const part of parts) {
+                if (!part)
+                    continue;
+                ctx.font = this._computedFont;
+                const partWidth = ctx.measureText(part).width;
                 // Track coordinate for Autocomplete
-                if (this._isSuggesting && this._cursorIndex >= currentGlobalStrIndex && this._cursorIndex <= currentGlobalStrIndex + frag.text.length) {
+                if (this._isSuggesting && this._cursorIndex >= currentGlobalStrIndex && this._cursorIndex <= currentGlobalStrIndex + part.length) {
                     const localIndex = this._cursorIndex - currentGlobalStrIndex;
-                    ctx.font = this._computedFont;
-                    const subWidth = ctx.measureText(frag.text.substring(0, localIndex)).width;
+                    const subWidth = ctx.measureText(part.substring(0, localIndex)).width;
                     this._suggestionPos = {
                         x: x + subWidth - this._textarea.scrollLeft,
                         y: y + this._lineHeight - this._textarea.scrollTop
                     };
                 }
-                currentGlobalStrIndex += frag.text.length;
-                const item = this._items[frag.itemIndex];
-                const isTag = frag.text.startsWith('[') && frag.text.endsWith(']');
+                currentGlobalStrIndex += part.length;
+                const isTag = part.startsWith('[') && part.endsWith(']');
                 if (isTag) {
-                    const innerText = frag.text.slice(1, -1).toLowerCase();
+                    const innerText = part.slice(1, -1).toLowerCase();
                     const tag = AUDIO_TAGS.find(t => t.id === innerText);
                     const category = tag ? tag.category : 'Custom';
-                    const colors = this._themeColors[category];
+                    const colors = this._themeColors[category] || this._themeColors['Custom'];
                     // Draw Pill Background
                     ctx.fillStyle = colors.bg;
                     // polyfill for roundRect (Safari < 16 doesn't have it)
                     if (ctx.roundRect) {
                         ctx.beginPath();
-                        ctx.roundRect(x - 2, y + 2, frag.occupiedWidth + 4, this._lineHeight - 4, 4);
+                        ctx.roundRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4, 4);
                         ctx.fill();
                         if (category === 'Custom') {
                             ctx.strokeStyle = this._themeColors['Pacing'].fg;
@@ -330,23 +310,21 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
                         }
                     }
                     else {
-                        ctx.fillRect(x - 2, y + 2, frag.occupiedWidth + 4, this._lineHeight - 4);
+                        ctx.fillRect(x - 2, y + 2, partWidth + 4, this._lineHeight - 4);
                     }
                     // Draw Pill Text
                     ctx.fillStyle = colors.fg;
-                    ctx.font = item.font;
-                    ctx.fillText(frag.text, x, y + textYOffset);
+                    ctx.fillText(part, x, y + textYOffset);
                 }
                 else {
                     // Draw Regular Text
                     ctx.fillStyle = this._computedColor;
-                    ctx.font = item.font;
-                    ctx.fillText(frag.text, x, y + textYOffset);
+                    ctx.fillText(part, x, y + textYOffset);
                 }
-                x += frag.occupiedWidth;
+                x += partWidth;
             }
             y += this._lineHeight;
-        });
+        }
     }
     _renderSuggestions() {
         if (!this._isSuggesting)
