@@ -26,8 +26,7 @@ export default defineConfig({
           globals: {
             'lit': 'Lit',
             'lit/decorators.js': 'LitDecorators',
-            '@chenglou/pretext': 'Pretext',
-            '@chenglou/pretext/rich-inline': 'PretextRichInline'
+            '@chenglou/pretext': 'Pretext'
           },
         }
       ],

@@ -106,7 +106,7 @@ export class UiSyncedTranscript extends LitElement {
   override updated(changedProperties: PropertyValues) {
     if (changedProperties.has('playerState') || changedProperties.has('font') || changedProperties.has('lineHeight')) {
       const transcript = this.playerState?.transcript || [];
-      const fullText = transcript.map(t => t.text).join("");
+      const fullText = transcript.map((t: any) => t.text).join("");
       
       if (fullText !== this._lastTranscriptText || changedProperties.has('font')) {
         this._lastTranscriptText = fullText;
