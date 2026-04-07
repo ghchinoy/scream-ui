@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Tag Editor Test</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #eee;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        width: 800px;
+        border: 1px solid #333;
+        padding: 30px;
+        background: #1e1e1e;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #fff;
+      }
+      .description {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      .label {
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 8px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .output {
+        background: #2a2a2a;
+        border-radius: 8px;
+        padding: 16px;
+        font-family: monospace;
+        color: #ddd;
+        white-space: pre-wrap;
+        min-height: 60px;
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h2>&lt;ui-audio-tag-editor&gt;</h2>
+        <div class="description">Type '[' to open autocomplete for audio markup tags.</div>
+      </div>
+      
+      <div>
+        <div class="label">Prompt Editor</div>
+        <ui-audio-tag-editor id="editor" value="It was a dark and stormy night... [long pause] and then he saw it. [scared]"></ui-audio-tag-editor>
+      </div>
+
+      <div>
+        <div class="label">Raw Output (Sent to API)</div>
+        <div class="output" id="output">It was a dark and stormy night... [long pause] and then he saw it. [scared]</div>
+      </div>
+    </div>
+
+    <script type="module">
+      import './src/components/organisms/ui-audio-tag-editor.ts';
+
+      const editor = document.getElementById('editor');
+      const output = document.getElementById('output');
+
+      editor.addEventListener('change', (e) => {
+        output.textContent = e.detail.value || ' ';
+      });
+    </script>
+  </body>
+</html>
