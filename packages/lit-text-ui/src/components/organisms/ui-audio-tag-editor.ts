@@ -184,7 +184,7 @@ export class UiAudioTagEditor extends LitElement {
 
     .suggestion-item:hover,
     .suggestion-item.selected {
-      background: var(--md-sys-color-secondary-container, #e6f0fa);
+      background: var(--md-sys-color-primary-container, #e6f0fa);
     }
 
     .suggestion-label {
