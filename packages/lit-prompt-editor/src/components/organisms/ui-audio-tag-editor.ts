@@ -103,7 +103,6 @@ export class UiAudioTagEditor extends LitElement {
       box-sizing: border-box;
       transition: all 0.2s ease;
       cursor: text;
-      overflow: hidden;
     }
 
     .editor-wrapper:focus-within {
@@ -135,6 +134,7 @@ export class UiAudioTagEditor extends LitElement {
       left: 0;
       pointer-events: none; /* Let clicks pass through */
       z-index: 1;
+      border-radius: 12px;
     }
 
     .foreground-textarea {
@@ -149,6 +149,7 @@ export class UiAudioTagEditor extends LitElement {
       z-index: 2;
       white-space: pre-wrap;
       word-wrap: break-word;
+      border-radius: 12px;
     }
 
     .foreground-textarea::placeholder {
@@ -399,7 +400,9 @@ export class UiAudioTagEditor extends LitElement {
             
             // Draw Pill Text
             ctx.fillStyle = colors.fg;
-            ctx.fillText(part, x, y + textYOffset);
+            const innerTextWidth = ctx.measureText(innerText).width;
+            const textXOffset = (partWidth - innerTextWidth) / 2;
+            ctx.fillText(innerText, x + textXOffset, y + textYOffset);
             
             this._renderedTags.push({
                 x: x - paddingX,
