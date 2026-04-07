@@ -209,8 +209,8 @@ export class UiAudioTagEditor extends LitElement {
     .tag-tooltip {
       position: absolute;
       z-index: 20;
-      background: var(--md-sys-color-on-surface, #111);
-      color: var(--md-sys-color-surface, #fff);
+      background: var(--md-sys-color-inverse-surface, #313033);
+      color: var(--md-sys-color-inverse-on-surface, #f4eff4);
       padding: 6px 10px;
       border-radius: 6px;
       font-size: 12px;
