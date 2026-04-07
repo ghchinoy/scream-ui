@@ -126,7 +126,6 @@ export class UiAudioTagEditor extends LitElement {
       border: none;
       outline: none;
     }
-    }
 
     .background-canvas {
       position: absolute;
