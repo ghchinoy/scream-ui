@@ -96,6 +96,7 @@ export class UiAudioTagEditor extends LitElement {
     .editor-wrapper {
       position: relative;
       width: 100%;
+      height: 120px;
       min-height: 120px;
       background: var(--md-sys-color-surface-container-low, #f4f4f4);
       border: 1px solid var(--md-sys-color-outline-variant, #ccc);
@@ -103,6 +104,8 @@ export class UiAudioTagEditor extends LitElement {
       box-sizing: border-box;
       transition: all 0.2s ease;
       cursor: text;
+      resize: vertical;
+      overflow: hidden;
     }
 
     .editor-wrapper:focus-within {
@@ -132,16 +135,19 @@ export class UiAudioTagEditor extends LitElement {
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none; /* Let clicks pass through */
       z-index: 1;
-      border-radius: 12px;
     }
 
     .foreground-textarea {
       position: absolute;
       top: 0;
       left: 0;
-      resize: vertical;
+      width: 100%;
+      height: 100%;
+      resize: none;
       /* Make text transparent to reveal canvas beneath */
       color: transparent;
       background: transparent;
@@ -149,7 +155,6 @@ export class UiAudioTagEditor extends LitElement {
       z-index: 2;
       white-space: pre-wrap;
       word-wrap: break-word;
-      border-radius: 12px;
     }
 
     .foreground-textarea::placeholder {
@@ -180,11 +185,23 @@ export class UiAudioTagEditor extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 2px;
+      transition: background-color 0.15s ease;
     }
 
     .suggestion-item:hover,
     .suggestion-item.selected {
       background: var(--md-sys-color-primary-container, #e6f0fa);
+    }
+
+    .suggestion-item:hover .suggestion-label,
+    .suggestion-item.selected .suggestion-label {
+      color: var(--md-sys-color-on-primary-container, #001d35);
+    }
+
+    .suggestion-item:hover .suggestion-desc,
+    .suggestion-item.selected .suggestion-desc {
+      color: var(--md-sys-color-on-primary-container, #001d35);
+      opacity: 0.8;
     }
 
     .suggestion-label {
@@ -233,7 +250,14 @@ export class UiAudioTagEditor extends LitElement {
   `;
 
   render() {
-    return html`<div class="editor-wrapper" @mouseleave=${this._handleMouseLeave}><canvas class="background-canvas"></canvas><textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @mousemove=${this._handleMouseMove} @scroll=${this._triggerRender} spellcheck="false"></textarea>${this._renderTooltip()}</div>${this._renderSuggestions()}`;
+    return html`
+      <div class="editor-wrapper" @mouseleave=${this._handleMouseLeave}>
+        <canvas class="background-canvas"></canvas>
+        <textarea class="foreground-textarea shared-text-styles" .value=${this.value} placeholder=${this.placeholder} @input=${this._handleInput} @keydown=${this._handleKeyDown} @click=${this._updateCursor} @keyup=${this._updateCursor} @mousemove=${this._handleMouseMove} @scroll=${this._triggerRender} spellcheck="false"></textarea>
+      </div>
+      ${this._renderTooltip()}
+      ${this._renderSuggestions()}
+    `;
   }
   
   firstUpdated() {
