@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: (format) => `scream-prompt-editor.${format}.js`,
     },
     rollupOptions: {
-      external: [/^lit/, /^@material\/web/, '@chenglou/pretext'],
+      external: [/^lit/, /^@material\/web/, /^@chenglou\/pretext/],
       output: [
         {
           format: 'es',
