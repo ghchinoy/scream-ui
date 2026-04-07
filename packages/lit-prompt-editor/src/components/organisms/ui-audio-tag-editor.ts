@@ -207,8 +207,9 @@ export class UiAudioTagEditor extends LitElement {
     
     // Extract exact computed font details for Pretext measurement
     const computed = window.getComputedStyle(this._textarea);
+    const hostComputed = window.getComputedStyle(this);
     this._computedFont = `${computed.fontWeight} ${computed.fontSize} ${computed.fontFamily}`;
-    this._computedColor = computed.color;
+    this._computedColor = hostComputed.color;
     this._lineHeight = parseFloat(computed.lineHeight) || 24;
     this._padding = parseFloat(computed.paddingTop) || 16;
     
