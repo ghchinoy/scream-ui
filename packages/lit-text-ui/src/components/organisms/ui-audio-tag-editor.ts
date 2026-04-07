@@ -323,6 +323,8 @@ export class UiAudioTagEditor extends LitElement {
     const dpr = window.devicePixelRatio || 1;
     this._canvas.width = rect.width * dpr;
     this._canvas.height = rect.height * dpr;
+    this._canvas.style.width = `${rect.width}px`;
+    this._canvas.style.height = `${rect.height}px`;
     ctx.scale(dpr, dpr);
     
     ctx.clearRect(0, 0, rect.width, rect.height);
