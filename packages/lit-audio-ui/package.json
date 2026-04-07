@@ -49,6 +49,9 @@
     "lit": "^3.3.1",
     "three": ">=0.150.0"
   },
+  "dependencies": {
+    "@chenglou/pretext": "^0.0.4"
+  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@lit/context": "^1.1.6",
