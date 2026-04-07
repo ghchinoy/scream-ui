@@ -115,6 +115,7 @@ export class UiAudioTagEditor extends LitElement {
       font-size: 16px;
       line-height: 1.5;
       letter-spacing: normal;
+      text-align: left;
       box-sizing: border-box;
       width: 100%;
       height: 100%;
@@ -265,12 +266,10 @@ export class UiAudioTagEditor extends LitElement {
       if (!part) continue;
       
       if (part.startsWith('[') && part.endsWith(']')) {
-        // Tags are atomic (break: 'never') and reserve extra width for pill padding
+        // Tags must not have extraWidth or break constraints, otherwise Pretext drifts from textarea
         this._items.push({
             text: part,
-            font: this._computedFont,
-            break: 'never',
-            extraWidth: 8 // 4px padding on each side
+            font: this._computedFont
         });
       } else {
         // Normal text
@@ -292,6 +291,10 @@ export class UiAudioTagEditor extends LitElement {
 
   private _renderCanvas() {
     if (!this._canvas || !this._textarea || !this._prepared) return;
+    
+    // Refresh theme colors on each render to support dynamic dark-mode toggling
+    this._parseThemeColors();
+    this._computedColor = window.getComputedStyle(this).color;
     
     const ctx = this._canvas.getContext('2d');
     if (!ctx) return;
@@ -345,7 +348,7 @@ export class UiAudioTagEditor extends LitElement {
         currentGlobalStrIndex += frag.text.length;
         
         const item = this._items[frag.itemIndex];
-        const isTag = item.extraWidth !== undefined;
+        const isTag = frag.text.startsWith('[') && frag.text.endsWith(']');
         
         if (isTag) {
             const innerText = frag.text.slice(1, -1).toLowerCase();
@@ -359,7 +362,7 @@ export class UiAudioTagEditor extends LitElement {
             // polyfill for roundRect (Safari < 16 doesn't have it)
             if (ctx.roundRect) {
                 ctx.beginPath();
-                ctx.roundRect(x, y + 2, frag.occupiedWidth, this._lineHeight - 4, 4);
+                ctx.roundRect(x - 2, y + 2, frag.occupiedWidth + 4, this._lineHeight - 4, 4);
                 ctx.fill();
                 if (category === 'Custom') {
                     ctx.strokeStyle = this._themeColors['Pacing'].fg;
@@ -368,13 +371,13 @@ export class UiAudioTagEditor extends LitElement {
                     ctx.setLineDash([]);
                 }
             } else {
-                ctx.fillRect(x, y + 2, frag.occupiedWidth, this._lineHeight - 4);
+                ctx.fillRect(x - 2, y + 2, frag.occupiedWidth + 4, this._lineHeight - 4);
             }
             
             // Draw Pill Text
             ctx.fillStyle = colors.fg;
             ctx.font = item.font;
-            ctx.fillText(frag.text, x + (item.extraWidth! / 2), y + textYOffset);
+            ctx.fillText(frag.text, x, y + textYOffset);
             
         } else {
             // Draw Regular Text
