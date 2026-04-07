@@ -36,7 +36,8 @@
     "lit": "^3.3.1"
   },
   "dependencies": {
-    "@chenglou/pretext": "file:../../../../dev/github/pretext"
+    "@chenglou/pretext": "file:../../../../dev/github/pretext",
+    "@ghchinoy/lit-audio-ui": "workspace:*"
   },
   "devDependencies": {
     "@types/three": "^0.182.0",
