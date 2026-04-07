@@ -21,8 +21,9 @@
       "@ghchinoy/lit-audio-ui/molecules/*.js": ["../../packages/lit-audio-ui/src/components/molecules/*.ts"],
       "@ghchinoy/lit-audio-ui/organisms/*.js": ["../../packages/lit-audio-ui/src/components/organisms/*.ts"],
       "@ghchinoy/lit-audio-ui/providers/*.js": ["../../packages/lit-audio-ui/src/components/providers/*.ts"],
-      "@ghchinoy/lit-audio-ui/utils/*.js": ["../../packages/lit-audio-ui/src/utils/*.ts"]
+      "@ghchinoy/lit-audio-ui/utils/*.js": ["../../packages/lit-audio-ui/src/utils/*.ts"],
+      "@ghchinoy/lit-prompt-editor": ["../../packages/lit-prompt-editor/src/index.ts"]
     }
   },
-  "include": ["**/*.ts", "vite.config.ts", "../../packages/lit-audio-ui/src/**/*.ts"]
+  "include": ["**/*.ts", "vite.config.ts", "../../packages/lit-audio-ui/src/**/*.ts", "../../packages/lit-prompt-editor/src/**/*.ts"]
 }
