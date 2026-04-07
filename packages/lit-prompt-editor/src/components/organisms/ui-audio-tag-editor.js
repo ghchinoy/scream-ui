@@ -99,11 +99,15 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
       line-height: 1.5;
       letter-spacing: normal;
       text-align: left;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
       box-sizing: border-box;
       width: 100%;
       height: 100%;
       border: none;
       outline: none;
+    }
     }
 
     .background-canvas {
