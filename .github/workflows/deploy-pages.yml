@@ -34,7 +34,7 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: rm -f package-lock.json && npm install
       - name: Build Demo
         run: |
           npm run build -w @ghchinoy/lit-audio-ui
