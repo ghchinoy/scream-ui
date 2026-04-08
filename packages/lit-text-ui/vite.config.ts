@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: (format) => `scream-text-ui.${format}.js`,
     },
     rollupOptions: {
-      external: [/^@material\/web\/.*/, 'lit', 'lit/decorators.js', '@chenglou/pretext'],
+      external: [/^@material\/web\/.*/, 'lit', 'lit/decorators.js', '@chenglou/pretext', /^@ghchinoy\/lit-audio-ui.*/, /^@lit\/context.*/],
       output: [
         {
           format: 'es',

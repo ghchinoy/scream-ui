@@ -8,8 +8,8 @@ import { computeAudioPeaks, applyCanvasEdgeFade } from '@ghchinoy/lit-audio-ui/u
 
 @customElement('demo-kinetic-lyrics')
 export class DemoKineticLyrics extends LitElement {
-  @property({type: String}) src = '';
-  @property({type: String}) lyrics = '';
+  @property({type: String}) src = 'https://storage.googleapis.com/scream-ui-samples/speech_sample-Aoede-20260212-183352.wav';
+  @property({type: String}) lyrics = 'Welcome to the Lit Audio UI showcase.\n\nThis text responds dynamically to the audio volume!';
   @property({type: String}) font = '16px Inter, sans-serif';
   @property({type: String}) color = '#e8def8';
 
@@ -129,9 +129,24 @@ export class DemoKineticLyrics extends LitElement {
     this._animationFrameId = requestAnimationFrame(() => this._renderLoop());
   }
 
+  private _activeColor = '#ffffff';
+  private _inactiveColor = '#888888';
+
+  private _updateThemeColors() {
+    const style = getComputedStyle(this);
+    const primary = style.getPropertyValue('--md-sys-color-primary').trim();
+    const onSurfaceVariant = style.getPropertyValue('--md-sys-color-on-surface-variant').trim();
+    
+    // Fallbacks if CSS variables aren't defined
+    this._activeColor = primary || '#0066cc';
+    this._inactiveColor = onSurfaceVariant || '#888888';
+  }
+
   private _updateLayout() {
     if (!this._preparedText || !this._container || !this._canvas) return;
     
+    this._updateThemeColors();
+
     const width = this._container.getBoundingClientRect().width;
     const height = 150; // fixed for demo
 
@@ -164,7 +179,6 @@ export class DemoKineticLyrics extends LitElement {
 
     ctx.font = this.font;
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = this.color;
     ctx.textAlign = 'left';
 
     const duration = this._audioEl?.duration || 1;
@@ -202,12 +216,12 @@ export class DemoKineticLyrics extends LitElement {
       // But we can tint the text that has already "played"
       const lineProgressStart = i / this._layoutLines.length;
       if (progress > lineProgressStart) {
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = this._activeColor;
         // Add a slight glow
-        ctx.shadowColor = '#ffffff';
+        ctx.shadowColor = this._activeColor;
         ctx.shadowBlur = currentPeak * 20;
       } else {
-        ctx.fillStyle = '#888888';
+        ctx.fillStyle = this._inactiveColor;
         ctx.shadowBlur = 0;
       }
 

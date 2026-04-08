@@ -7,7 +7,7 @@ import { prepareWithSegments, layoutWithLines, type PreparedTextWithSegments, ty
 
 @customElement('demo-masked-gradient')
 export class DemoMaskedGradient extends LitElement {
-  @property({type: String}) text = '';
+  @property({type: String}) text = 'This is a masked gradient visualizer.\n\nThe canvas is filled with black, but the text is drawn in white.\n\nWith mix-blend-mode: multiply, the black hides the background, and the white text lets the animated gradient shine through!';
   @property({type: String}) font = '18px Inter, sans-serif';
 
   @query('canvas') private _canvas!: HTMLCanvasElement;
@@ -58,7 +58,7 @@ export class DemoMaskedGradient extends LitElement {
       <div class="container">
         <!-- The vibrant animated background -->
         <div class="gradient-bg">
-          <ui-moving-gradient agentState="thinking" .colors=${['#FF3B30', '#0077FF', '#00C853']}></ui-moving-gradient>
+          <ui-moving-gradient agentState="thinking" baseHeight="1.0" .colors=${['#FF3B30', '#0077FF', '#00C853']}></ui-moving-gradient>
         </div>
         <!-- The canvas that draws white text on a black background, multiplied over the gradient -->
         <canvas></canvas>

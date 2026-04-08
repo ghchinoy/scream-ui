@@ -57,7 +57,6 @@ export class DemoAudioTagEditor extends LitElement {
   render() {
     return html`
       <div class="demo-container">
-        <ui-showcase-card title="Audio Tag Editor" description="Type '[' to open autocomplete for audio markup tags.">
             <div>
                 <div class="label">Prompt Editor</div>
                 <ui-audio-tag-editor
@@ -70,7 +69,6 @@ export class DemoAudioTagEditor extends LitElement {
                 <div class="label">Raw Output (Sent to API)</div>
                 <div class="output">${this._text || ' '}</div>
             </div>
-        </ui-showcase-card>
       </div>
     `;
   }
