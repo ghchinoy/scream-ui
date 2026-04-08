@@ -1,0 +1,794 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "module": "src/components/atoms/ui-synced-transcript.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "module": "src/components/organisms/ui-audio-tag-editor.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "module": "src/components/organisms/ui-chat-log.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-synced-transcript.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "ATOM: Synced Transcript\nRenders a transcript with word-level highlighting synchronized to audio playback using pretext on a Canvas.\nConsumes AudioPlayerState for timing and transcript data.",
+          "name": "UiSyncedTranscript",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "_canvas",
+              "type": {
+                "text": "HTMLCanvasElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "font",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'16px Inter, sans-serif'"
+            },
+            {
+              "kind": "field",
+              "name": "lineHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "default": "24"
+            },
+            {
+              "kind": "field",
+              "name": "textColor",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'#444444'"
+            },
+            {
+              "kind": "field",
+              "name": "activeTextColor",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'#1d192b'"
+            },
+            {
+              "kind": "field",
+              "name": "activeBgColor",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'#e8def8'"
+            },
+            {
+              "kind": "field",
+              "name": "pastTextColor",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'#aaaaaa'"
+            },
+            {
+              "kind": "field",
+              "name": "_resizeObserver",
+              "type": {
+                "text": "ResizeObserver"
+              },
+              "privacy": "private",
+              "default": "new ResizeObserver(() => { this._updateLayout(); this._renderCanvas(); })"
+            },
+            {
+              "kind": "field",
+              "name": "_preparedText",
+              "type": {
+                "text": "PreparedTextWithSegments | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_lastTranscriptText",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_layoutLines",
+              "type": {
+                "text": "LayoutLine[] | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_layoutHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; } .container { width: 100%; position: relative; } canvas { display: block; width: 100%; } `"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_updateLayout",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderCanvas",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-synced-transcript",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiSyncedTranscript",
+          "declaration": {
+            "name": "UiSyncedTranscript",
+            "module": "src/components/atoms/ui-synced-transcript.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-tag-editor.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "AUDIO_TAGS",
+          "type": {
+            "text": "AudioTag[]"
+          },
+          "default": "[ {id: 'sigh', label: '[sigh]', category: 'Non-Speech', description: 'Inserts a sigh sound.'}, {id: 'laughing', label: '[laughing]', category: 'Non-Speech', description: 'Inserts a laugh.'}, {id: 'uhm', label: '[uhm]', category: 'Non-Speech', description: 'Inserts a hesitation sound.'}, {id: 'sarcasm', label: '[sarcasm]', category: 'Style', description: 'Sarcastic tone on subsequent phrase.'}, {id: 'robotic', label: '[robotic]', category: 'Style', description: 'Makes subsequent speech sound robotic.'}, {id: 'shouting', label: '[shouting]', category: 'Style', description: 'Increases volume.'}, {id: 'whispering', label: '[whispering]', category: 'Style', description: 'Decreases volume.'}, {id: 'extremely fast', label: '[extremely fast]', category: 'Style', description: 'Increases speed.'}, {id: 'scared', label: '[scared]', category: 'Vocalized', description: 'Word is spoken; scared tone.'}, {id: 'curious', label: '[curious]', category: 'Vocalized', description: 'Word is spoken; curious tone.'}, {id: 'bored', label: '[bored]', category: 'Vocalized', description: 'Word is spoken; bored delivery.'}, {id: 'short pause', label: '[short pause]', category: 'Pacing', description: '~250ms pause.'}, {id: 'medium pause', label: '[medium pause]', category: 'Pacing', description: '~500ms pause.'}, {id: 'long pause', label: '[long pause]', category: 'Pacing', description: '~1000ms pause.'}, ]"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiAudioTagEditor",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type here... Use [ to add tags.'"
+            },
+            {
+              "kind": "field",
+              "name": "tags",
+              "type": {
+                "text": "AudioTag[]"
+              },
+              "default": "[ {id: 'sigh', label: '[sigh]', category: 'Non-Speech', description: 'Inserts a sigh sound.'}, {id: 'laughing', label: '[laughing]', category: 'Non-Speech', description: 'Inserts a laugh.'}, {id: 'uhm', label: '[uhm]', category: 'Non-Speech', description: 'Inserts a hesitation sound.'}, {id: 'sarcasm', label: '[sarcasm]', category: 'Style', description: 'Sarcastic tone on subsequent phrase.'}, {id: 'robotic', label: '[robotic]', category: 'Style', description: 'Makes subsequent speech sound robotic.'}, {id: 'shouting', label: '[shouting]', category: 'Style', description: 'Increases volume.'}, {id: 'whispering', label: '[whispering]', category: 'Style', description: 'Decreases volume.'}, {id: 'extremely fast', label: '[extremely fast]', category: 'Style', description: 'Increases speed.'}, {id: 'scared', label: '[scared]', category: 'Vocalized', description: 'Word is spoken; scared tone.'}, {id: 'curious', label: '[curious]', category: 'Vocalized', description: 'Word is spoken; curious tone.'}, {id: 'bored', label: '[bored]', category: 'Vocalized', description: 'Word is spoken; bored delivery.'}, {id: 'short pause', label: '[short pause]', category: 'Pacing', description: '~250ms pause.'}, {id: 'medium pause', label: '[medium pause]', category: 'Pacing', description: '~500ms pause.'}, {id: 'long pause', label: '[long pause]', category: 'Pacing', description: '~1000ms pause.'}, ]"
+            },
+            {
+              "kind": "field",
+              "name": "pillPadding",
+              "type": {
+                "text": "number"
+              },
+              "default": "4"
+            },
+            {
+              "kind": "field",
+              "name": "_isSuggesting",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_suggestionQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_cursorIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_selectedIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_suggestionPos",
+              "type": {
+                "text": "object"
+              },
+              "privacy": "private",
+              "default": "{ x: 0, y: 0 }"
+            },
+            {
+              "kind": "field",
+              "name": "_hoveredTag",
+              "type": {
+                "text": "any"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_hoverPos",
+              "type": {
+                "text": "object"
+              },
+              "privacy": "private",
+              "default": "{ x: 0, y: 0 }"
+            },
+            {
+              "kind": "field",
+              "name": "_textarea",
+              "type": {
+                "text": "HTMLTextAreaElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_canvas",
+              "type": {
+                "text": "HTMLCanvasElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resizeObserver",
+              "type": {
+                "text": "ResizeObserver | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_computedFont",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'16px system-ui'"
+            },
+            {
+              "kind": "field",
+              "name": "_computedColor",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'#000000'"
+            },
+            {
+              "kind": "field",
+              "name": "_lineHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "24"
+            },
+            {
+              "kind": "field",
+              "name": "_paddingL",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "16"
+            },
+            {
+              "kind": "field",
+              "name": "_paddingR",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "16"
+            },
+            {
+              "kind": "field",
+              "name": "_prepared",
+              "type": {
+                "text": "PreparedTextWithSegments | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_renderedTags",
+              "type": {
+                "text": "Array<{x: number, y: number, w: number, h: number, tag: any}>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_themeColors",
+              "type": {
+                "text": "Record<string, {bg: string, fg: string}>"
+              },
+              "privacy": "private",
+              "default": "{ 'Non-Speech': { bg: '#c8e6c9', fg: '#003300' }, // fallback greens 'Style': { bg: '#bbdefb', fg: '#002266' }, // fallback blues 'Pacing': { bg: '#e0e0e0', fg: '#333333' }, // fallback grays 'Vocalized': { bg: '#ffe0b2', fg: '#660000' }, // fallback reds 'Custom': { bg: '#f5f5f5', fg: '#000000' } // fallback light gray }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; position: relative; font-family: var(--md-sys-typescale-body-large-font-family-name, system-ui); color: var(--md-sys-color-on-surface, #111111); } .editor-wrapper { position: relative; width: 100%; height: 120px; min-height: 120px; background: var(--md-sys-color-surface-container-low, #f4f4f4); border: 1px solid var(--md-sys-color-outline-variant, #ccc); border-radius: 12px; box-sizing: border-box; transition: all 0.2s ease; cursor: text; resize: vertical; overflow: hidden; } .editor-wrapper:focus-within { border-color: var(--md-sys-color-primary, #0066cc); box-shadow: 0 0 0 2px var(--md-sys-color-primary-container, #cce0ff); } .shared-text-styles { margin: 0; padding: 16px; font-family: inherit; font-size: 16px; line-height: 1.5; letter-spacing: normal; text-align: left; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap; box-sizing: border-box; width: 100%; height: 100%; border: none; outline: none; } .background-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; /* Let clicks pass through */ z-index: 1; } .foreground-textarea { position: absolute; top: 0; left: 0; width: 100%; height: 100%; resize: none; /* Make text transparent to reveal canvas beneath */ color: transparent; background: transparent; caret-color: var(--md-sys-color-primary, #0066cc); z-index: 2; white-space: pre-wrap; word-wrap: break-word; } .foreground-textarea::placeholder { color: var(--md-sys-color-on-surface-variant, #666); opacity: 0.6; } /* Suggestions Menu */ .suggestions-menu { position: absolute; z-index: 10; background: var(--md-sys-color-surface-container-high, #fff); border: 1px solid var(--md-sys-color-outline-variant, #ddd); border-radius: 8px; box-shadow: var(--md-sys-elevation-3, 0 4px 6px rgba(0,0,0,0.1)); max-height: 250px; overflow-y: auto; width: max-content; min-width: 250px; display: flex; flex-direction: column; padding: 4px 0; } .suggestion-item { padding: 8px 16px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; transition: background-color 0.15s ease; } .suggestion-item:hover, .suggestion-item.selected { background: var(--md-sys-color-primary-container, #e6f0fa); } .suggestion-item:hover .suggestion-label, .suggestion-item.selected .suggestion-label { color: var(--md-sys-color-on-primary-container, #001d35); } .suggestion-item:hover .suggestion-desc, .suggestion-item.selected .suggestion-desc { color: var(--md-sys-color-on-primary-container, #001d35); opacity: 0.8; } .suggestion-label { font-weight: 600; color: var(--md-sys-color-on-surface, #000); font-size: 14px; } .suggestion-desc { font-size: 12px; color: var(--md-sys-color-on-surface-variant, #666); } .suggestion-category { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--md-sys-color-primary, #0066cc); } /* Tag Tooltip */ .tag-tooltip { position: absolute; z-index: 20; background: var(--md-sys-color-inverse-surface, #313033); color: var(--md-sys-color-inverse-on-surface, #f4eff4); padding: 6px 10px; border-radius: 6px; font-size: 12px; pointer-events: none; transform: translate(-50%, -100%); box-shadow: var(--md-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.2)); white-space: nowrap; } .tooltip-category { font-weight: bold; color: var(--md-sys-color-primary, #8ab4f8); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; } .tooltip-desc { opacity: 0.9; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "refresh",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "_parseThemeColors",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_parseValue",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_triggerRender",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderCanvas",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleMouseMove",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleMouseLeave",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderTooltip",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderSuggestions",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_getFilteredTags",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_updateCursor",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_checkForTrigger",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleKeyDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_insertTag",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "fullTagLabel",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_closeSuggestions",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AUDIO_TAGS",
+          "declaration": {
+            "name": "AUDIO_TAGS",
+            "module": "src/components/organisms/ui-audio-tag-editor.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "UiAudioTagEditor",
+          "declaration": {
+            "name": "UiAudioTagEditor",
+            "module": "src/components/organisms/ui-audio-tag-editor.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-chat-log.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiChatLog",
+          "members": [
+            {
+              "kind": "field",
+              "name": "messages",
+              "type": {
+                "text": "ChatMessage[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_virtualItems",
+              "type": {
+                "text": "VirtualItem[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_visibleItems",
+              "type": {
+                "text": "VirtualItem[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_totalHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_viewport",
+              "type": {
+                "text": "HTMLDivElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_availableTextWidth",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "FONT_STRING",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "\"16px Inter, sans-serif\""
+            },
+            {
+              "kind": "field",
+              "name": "LINE_HEIGHT",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "24"
+            },
+            {
+              "kind": "field",
+              "name": "PADDING_Y",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "24"
+            },
+            {
+              "kind": "field",
+              "name": "GAP",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "12"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; height: 400px; } .viewport { width: 100%; height: 100%; overflow-y: auto; background: var(--md-sys-color-surface, #121212); border-radius: 8px; position: relative; box-sizing: border-box; border: 1px solid var(--md-sys-color-outline-variant, #444); } .scroll-sizer { width: 100%; position: absolute; top: 0; left: 0; pointer-events: none; } .chat-bubble { position: absolute; left: 16px; right: 16px; background: var(--md-sys-color-surface-container-highest, #3a3a3a); border-radius: 8px; box-sizing: border-box; overflow: hidden; } .chat-bubble.user { background: var(--md-sys-color-primary-container, #004499); color: var(--md-sys-color-on-primary-container, #fff); margin-left: 20%; } .chat-bubble.agent { background: var(--md-sys-color-surface-container-highest, #3a3a3a); color: var(--md-sys-color-on-surface, #eee); margin-right: 20%; } .chat-text { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 24px; padding: 12px 16px; white-space: pre-wrap; word-break: normal; overflow-wrap: break-word; margin: 0; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_measureAvailableWidth",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_calculateDimensions",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "{ height: number, offsetTop: number }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "currentOffset",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_recalculateAllItems",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_findStartIndex",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "scrollTop",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiChatLog",
+          "declaration": {
+            "name": "UiChatLog",
+            "module": "src/components/organisms/ui-chat-log.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
