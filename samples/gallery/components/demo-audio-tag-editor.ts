@@ -57,7 +57,7 @@ export class DemoAudioTagEditor extends LitElement {
   render() {
     return html`
       <div class="demo-container">
-        <ui-showcase-card title="Gemini TTS Tag Editor" description="Type '[' to open autocomplete for audio markup tags.">
+        <ui-showcase-card title="Audio Tag Editor" description="Type '[' to open autocomplete for audio markup tags.">
             <div>
                 <div class="label">Prompt Editor</div>
                 <ui-audio-tag-editor
