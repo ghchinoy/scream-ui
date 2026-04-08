@@ -43,6 +43,8 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
         super(...arguments);
         this.value = '';
         this.placeholder = 'Type here... Use [ to add tags.';
+        this.tags = AUDIO_TAGS;
+        this.pillPadding = 4;
         this._isSuggesting = false;
         this._suggestionQuery = '';
         this._cursorIndex = 0;
@@ -355,13 +357,13 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
                 const isTag = part.startsWith('[') && part.endsWith(']');
                 if (isTag) {
                     const innerText = part.slice(1, -1).toLowerCase();
-                    const tag = AUDIO_TAGS.find(t => t.id === innerText);
+                    const tag = this.tags.find(t => t.id === innerText);
                     const category = tag ? tag.category : 'Custom';
                     const colors = this._themeColors[category] || this._themeColors['Custom'];
                     // Draw Pill Background for the tag itself
                     ctx.fillStyle = colors.bg;
                     const radius = (this._lineHeight - 4) / 2;
-                    const paddingX = 4; // visual padding inside the pill
+                    const paddingX = this.pillPadding; // visual padding inside the pill
                     if (ctx.roundRect) {
                         ctx.beginPath();
                         ctx.roundRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4, radius);
@@ -459,7 +461,7 @@ let UiAudioTagEditor = class UiAudioTagEditor extends LitElement {
     }
     _getFilteredTags() {
         const query = this._suggestionQuery.toLowerCase();
-        return AUDIO_TAGS.filter((tag) => tag.label.toLowerCase().includes(query) || tag.id.includes(query));
+        return this.tags.filter((tag) => tag.label.toLowerCase().includes(query) || tag.id.includes(query));
     }
     _handleInput(e) {
         const target = e.target;
@@ -558,6 +560,12 @@ __decorate([
 __decorate([
     property({ type: String })
 ], UiAudioTagEditor.prototype, "placeholder", void 0);
+__decorate([
+    property({ type: Array })
+], UiAudioTagEditor.prototype, "tags", void 0);
+__decorate([
+    property({ type: Number })
+], UiAudioTagEditor.prototype, "pillPadding", void 0);
 __decorate([
     state()
 ], UiAudioTagEditor.prototype, "_isSuggesting", void 0);

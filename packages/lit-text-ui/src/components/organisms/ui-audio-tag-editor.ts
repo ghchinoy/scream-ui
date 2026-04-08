@@ -51,6 +51,8 @@ export const AUDIO_TAGS: AudioTag[] = [
 export class UiAudioTagEditor extends LitElement {
   @property({type: String}) value = '';
   @property({type: String}) placeholder = 'Type here... Use [ to add tags.';
+  @property({type: Array}) tags: AudioTag[] = AUDIO_TAGS;
+  @property({type: Number}) pillPadding = 4;
 
   @state() private _isSuggesting = false;
   @state() private _suggestionQuery = '';
@@ -401,14 +403,14 @@ export class UiAudioTagEditor extends LitElement {
         
         if (isTag) {
             const innerText = part.slice(1, -1).toLowerCase();
-            const tag = AUDIO_TAGS.find(t => t.id === innerText);
+            const tag = this.tags.find(t => t.id === innerText);
             const category = tag ? tag.category : 'Custom';
             const colors = this._themeColors[category] || this._themeColors['Custom'];
             
             // Draw Pill Background for the tag itself
             ctx.fillStyle = colors.bg;
             const radius = (this._lineHeight - 4) / 2;
-            const paddingX = 4; // visual padding inside the pill
+            const paddingX = this.pillPadding; // visual padding inside the pill
             
             if (ctx.roundRect) {
                 ctx.beginPath();
@@ -519,7 +521,7 @@ export class UiAudioTagEditor extends LitElement {
 
   private _getFilteredTags() {
     const query = this._suggestionQuery.toLowerCase();
-    return AUDIO_TAGS.filter((tag) =>
+    return this.tags.filter((tag) =>
       tag.label.toLowerCase().includes(query) || tag.id.includes(query)
     );
   }

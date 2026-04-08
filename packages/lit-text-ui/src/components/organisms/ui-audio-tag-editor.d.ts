@@ -24,6 +24,8 @@ export declare const AUDIO_TAGS: AudioTag[];
 export declare class UiAudioTagEditor extends LitElement {
     value: string;
     placeholder: string;
+    tags: AudioTag[];
+    pillPadding: number;
     private _isSuggesting;
     private _suggestionQuery;
     private _cursorIndex;
