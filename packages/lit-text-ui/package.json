@@ -30,7 +30,6 @@
     "build:lib": "tsc && vite build",
     "lint": "gts lint",
     "fix": "gts fix",
-    "prepare": "npm run build:lib",
     "analyze": "cem analyze --globs \"src/**/*.ts\" --outdir ."
   },
   "peerDependencies": {

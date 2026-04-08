@@ -40,8 +40,7 @@
     "build:standalone": "vite build -c vite.standalone.config.ts",
     "preview": "vite preview",
     "lint": "gts lint",
-    "fix": "gts fix",
-    "prepare": "npm run build:lib"
+    "fix": "gts fix"
   },
   "peerDependencies": {
     "@lit/context": "^1.1.6",
