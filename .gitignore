@@ -125,3 +125,6 @@ samples/**/*.d.ts
 
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
+
+# TypeScript cache
+*.tsbuildinfo
