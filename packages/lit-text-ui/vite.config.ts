@@ -23,10 +23,14 @@ export default defineConfig({
           format: 'umd',
           name: 'ScreamTextUI',
           entryFileNames: 'scream-text-ui.umd.js',
-          globals: {
-            'lit': 'Lit',
-            'lit/decorators.js': 'LitDecorators',
-            '@chenglou/pretext': 'Pretext'
+          globals: (id) => {
+            if (id === 'lit') return 'Lit';
+            if (id === 'lit/decorators.js') return 'LitDecorators';
+            if (id === '@chenglou/pretext') return 'Pretext';
+            if (id.startsWith('@material/web/')) {
+               return id.replace('@material/web/', 'MaterialWeb_').replace(/[-\/]/g, '_');
+            }
+            return id;
           },
         }
       ],
