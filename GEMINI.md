@@ -41,8 +41,10 @@ If `bd` commands fail with "database disk image is malformed" or legacy errors:
 
 ### Monorepo & Workspace Guidelines
 - **TSConfig Robustness:** Always use bare specifiers for extensions (e.g., `"extends": "gts/tsconfig-google.json"`) instead of relative paths like `./node_modules/...`. This ensures TypeScript can find configs regardless of hoisting.
-- **CI/CD Consistency:** Use `npm install --ignore-scripts` at the project root in CI environments (GitHub Actions) to prevent `prepare` or `preinstall` scripts from triggering premature builds before the workspace is fully linked.
-- **Lockfile Sync:** If package names or workspace structures change, run `npm install` at the root to regenerate the `package-lock.json` before pushing.
+- **CI/CD Consistency:** Avoid using `"prepare": "npm run build"` scripts inside individual workspace packages. During root `npm install`, npm may trigger these out of order, causing missing type errors (e.g., `TS2307`) if a dependency hasn't built yet. Rely on explicit, ordered build scripts in your CI pipeline instead.
+- **Lockfile Sync & Native Bindings:** If package names or workspace structures change, run `npm install` at the root to regenerate the `package-lock.json`. In cross-platform CI environments (e.g., macOS dev to Linux CI), strict `npm ci` can sometimes fail to download architecture-specific native bindings (like `@rolldown/binding-linux-x64-gnu`). If this happens, use `rm -f package-lock.json && npm install` in your CI workflow to force resolution for the runner's architecture.
+- **No Local File Dependencies for Publishing:** Never use local `file:../../` paths in `package.json` for dependencies if the package will be published to npm. Always use published npm versions (e.g., `^0.0.4`) to prevent installation failures for end users.
+- **Stale JS Files in Source:** When porting or building with Vite/Rolldown, be aware that importing with `.js` extensions (e.g., `import './foo.js'`) can cause the bundler to silently pick up stale, previously compiled `.js` files if they are accidentally left in the `src/` directory alongside the `.ts` files. Always ensure `src/` is clean of build artifacts, and use a `"prepublishOnly": "npm run build"` script to guarantee fresh output.
 
 ### Asset Management (GCS vs Git)
 - **Large Assets:** NEVER commit large audio files, high-res images, or video to the git repository.
