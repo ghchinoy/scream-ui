@@ -204,6 +204,16 @@
           <option value="Georgia, serif">Serif (Georgia)</option>
           <option value="'Comic Sans MS', monospace">Comic Sans MS</option>
         </select>
+        
+        <div style="width: 24px;"></div>
+        
+        <label class="label" style="margin-bottom: 0;" for="paddingSlider">Pill Padding: <span id="paddingVal">4</span>px</label>
+        <input type="range" id="paddingSlider" min="0" max="16" value="4" step="1">
+        
+        <div style="width: 24px;"></div>
+        
+        <label class="label" style="margin-bottom: 0;" for="offsetSlider">Y-Offset: <span id="offsetVal">0</span>px</label>
+        <input type="range" id="offsetSlider" min="-10" max="10" value="0" step="1">
       </div>
       
       <div>
@@ -224,6 +234,24 @@
       const output = document.getElementById('output');
       const fontSelect = document.getElementById('fontSelect');
       const themeToggle = document.getElementById('themeToggle');
+      const paddingSlider = document.getElementById('paddingSlider');
+      const paddingVal = document.getElementById('paddingVal');
+      const offsetSlider = document.getElementById('offsetSlider');
+      const offsetVal = document.getElementById('offsetVal');
+
+      paddingSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        paddingVal.textContent = val;
+        editor.pillPadding = val;
+        requestAnimationFrame(() => editor.refresh());
+      });
+
+      offsetSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        offsetVal.textContent = val;
+        editor.pillOffsetY = val;
+        requestAnimationFrame(() => editor.refresh());
+      });
 
       editor.addEventListener('change', (e) => {
         output.textContent = e.detail.value || ' ';

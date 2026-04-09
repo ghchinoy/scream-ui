@@ -53,6 +53,7 @@ export class UiAudioTagEditor extends LitElement {
   @property({type: String}) placeholder = 'Type here... Use [ to add tags.';
   @property({type: Array}) tags: AudioTag[] = AUDIO_TAGS;
   @property({type: Number}) pillPadding = 4;
+  @property({type: Number}) pillOffsetY = 0;
 
   @state() private _isSuggesting = false;
   @state() private _suggestionQuery = '';
@@ -411,10 +412,11 @@ export class UiAudioTagEditor extends LitElement {
             ctx.fillStyle = colors.bg;
             const radius = (this._lineHeight - 4) / 2;
             const paddingX = this.pillPadding; // visual padding inside the pill
+            const bgY = y + 2 + this.pillOffsetY;
             
             if (ctx.roundRect) {
                 ctx.beginPath();
-                ctx.roundRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4, radius);
+                ctx.roundRect(x - paddingX, bgY, partWidth + (paddingX * 2), this._lineHeight - 4, radius);
                 ctx.fill();
                 if (category === 'Custom') {
                     ctx.strokeStyle = this._themeColors['Pacing'].fg;
@@ -423,7 +425,7 @@ export class UiAudioTagEditor extends LitElement {
                     ctx.setLineDash([]);
                 }
             } else {
-                ctx.fillRect(x - paddingX, y + 2, partWidth + (paddingX * 2), this._lineHeight - 4);
+                ctx.fillRect(x - paddingX, bgY, partWidth + (paddingX * 2), this._lineHeight - 4);
             }
             
             // Draw Pill Text
@@ -434,7 +436,7 @@ export class UiAudioTagEditor extends LitElement {
             
             this._renderedTags.push({
                 x: x - paddingX,
-                y: y + 2,
+                y: bgY,
                 w: partWidth + (paddingX * 2),
                 h: this._lineHeight - 4,
                 tag: tag || { id: innerText, label: part, category: 'Custom', description: 'Custom user tag' }
