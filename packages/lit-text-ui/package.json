@@ -1,6 +1,6 @@
 {
   "name": "@ghchinoy/lit-text-ui",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A high-performance Canvas-based text editor for AI prompt experiences, powered by Pretext",
   "author": "G. Hussain Chinoy",
   "license": "Apache-2.0",
@@ -30,6 +30,7 @@
     "build:lib": "tsc && vite build",
     "lint": "gts lint",
     "fix": "gts fix",
+    "prepublishOnly": "npm run build",
     "analyze": "cem analyze --globs \"src/**/*.ts\" --outdir ."
   },
   "peerDependencies": {

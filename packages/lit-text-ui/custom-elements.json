@@ -264,6 +264,14 @@
             },
             {
               "kind": "field",
+              "name": "pillOffsetY",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
               "name": "_isSuggesting",
               "type": {
                 "text": "boolean"
