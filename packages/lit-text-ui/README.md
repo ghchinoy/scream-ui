@@ -55,6 +55,7 @@ The `ui-audio-tag-editor` component supports custom audio markup tags and adjust
 <ui-audio-tag-editor 
   .tags=${myCustomTags} 
   pillPadding="8"
+  pillOffsetY="-2"
   @change=${(e) => console.log('Raw prompt sent to API:', e.detail.value)}
 ></ui-audio-tag-editor>
 ```
