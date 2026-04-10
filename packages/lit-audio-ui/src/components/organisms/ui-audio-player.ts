@@ -34,7 +34,9 @@ export class UiAudioPlayer extends LitElement {
       padding: var(--ui-audio-player-padding, 12px 24px);
       background: var(--md-sys-color-surface-container-high, #e2e2e2);
       border-radius: 999px; /* Pill shape */
-      width: fit-content;
+      width: var(--ui-audio-player-width, fit-content);
+      max-width: 100%;
+      box-sizing: border-box;
       font-family: inherit;
     }
 
@@ -43,7 +45,9 @@ export class UiAudioPlayer extends LitElement {
     }
 
     .slider-container {
-      width: 200px;
+      width: var(--ui-audio-player-slider-width, 200px);
+      flex: 1;
+      min-width: 50px;
       display: flex;
       align-items: center;
     }

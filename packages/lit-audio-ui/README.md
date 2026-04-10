@@ -106,6 +106,8 @@ Customize colors, typography, and layout density via standard CSS variables:
   /* Density & Spacing */
   --ui-audio-player-padding: 8px 16px; /* Create a compact player */
   --ui-audio-player-gap: 8px;
+  --ui-audio-player-width: 100%; /* Allow player pill to be responsive */
+  --ui-audio-player-slider-width: 200px; /* Base width for the slider, which flexes */
   --ui-message-bubble-padding: 12px 16px;
 }
 ```
