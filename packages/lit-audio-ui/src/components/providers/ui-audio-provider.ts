@@ -18,6 +18,7 @@ export class UiAudioProvider extends LitElement {
   @property({type: String}) src = '';
   @property({type: Array}) items: PlaylistTrack[] = [];
   @property({type: Boolean}) autoAdvance = true;
+  @property({type: Boolean}) autoplay = false;
 
   @query('audio') private _audioEl!: HTMLAudioElement;
 
@@ -115,8 +116,8 @@ export class UiAudioProvider extends LitElement {
     if (changed.has('src') && this._audioEl) {
       // Force the browser to load the new audio file!
       this._audioEl.load();
-      // If it was playing, keep playing
-      if (this.state.isPlaying) {
+      // If it was playing, or if autoplay is explicitly enabled, keep playing
+      if (this.state.isPlaying || this.autoplay) {
         // Defer play to allow the browser's media pipeline to settle from the load() call,
         // preventing "The play() request was interrupted by a new load request" AbortErrors.
         setTimeout(() => {
@@ -312,6 +313,7 @@ export interface AudioProviderElement extends HTMLElement {
   src: string;
   items: PlaylistTrack[];
   autoAdvance: boolean;
+  autoplay: boolean;
   state: AudioPlayerState;
   play(): void;
   pause(): void;
