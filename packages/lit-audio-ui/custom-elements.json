@@ -777,1015 +777,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-next-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An atomic navigation button that triggers the 'next' track in a playlist.\nConsumes the AudioPlayerState from the nearest ui-audio-provider.",
-          "name": "UiAudioNextButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-audio-next-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioNextButton",
-          "declaration": {
-            "name": "UiAudioNextButton",
-            "module": "src/components/atoms/ui-audio-next-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-play-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UiAudioPlayButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-flex; position: relative; align-items: center; justify-content: center; font-family: inherit; } md-filled-icon-button { --md-filled-icon-button-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-hover-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-focus-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-pressed-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-toggle-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-selected-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-selected-icon-color: var( --md-sys-color-on-primary, #ffffff ); color: var(--md-sys-color-on-primary, #ffffff); } md-filled-icon-button.error { --md-filled-icon-button-container-color: var( --ui-audio-error-color, var(--md-sys-color-error, #ba1a1a) ); --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff); } md-circular-progress { --md-circular-progress-size: 24px; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClick",
-              "privacy": "private"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayButton",
-          "declaration": {
-            "name": "UiAudioPlayButton",
-            "module": "src/components/atoms/ui-audio-play-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-player-error.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An atomic component that displays a visual error indicator and message\nwhen the audio player encounters a resource loading or playback error.",
-          "name": "UiAudioPlayerError",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-flex; align-items: center; color: var(--ui-audio-error-color, var(--md-sys-color-error, #ba1a1a)); font-size: 12px; font-family: inherit; gap: 4px; animation: fadeIn 0.3s ease forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } } .error-icon { font-size: 18px; } .error-text { max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-audio-player-error",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayerError",
-          "declaration": {
-            "name": "UiAudioPlayerError",
-            "module": "src/components/atoms/ui-audio-player-error.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-prev-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An atomic navigation button that triggers the 'previous' track in a playlist.\nConsumes the AudioPlayerState from the nearest ui-audio-provider.",
-          "name": "UiAudioPrevButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-audio-prev-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPrevButton",
-          "declaration": {
-            "name": "UiAudioPrevButton",
-            "module": "src/components/atoms/ui-audio-prev-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-progress-slider.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UiAudioProgressSlider",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "_isDragging",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_dragValue",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "hoverTimestamp",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_hoverX",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "_showHover",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_hoverTime",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "_sliderEl",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: flex; width: 100%; align-items: center; min-width: 0; position: relative; } .hover-tooltip { position: absolute; top: -32px; transform: translateX(-50%); background: var(--md-sys-color-inverse-surface, #313033); color: var(--md-sys-color-inverse-on-surface, #f4eff4); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; pointer-events: none; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.1s ease; z-index: 100; } .hover-tooltip.show { opacity: 1; visibility: visible; } /* Little downward pointing triangle */ .hover-tooltip::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-width: 4px 4px 0; border-style: solid; border-color: var(--md-sys-color-inverse-surface, #313033) transparent transparent transparent; } md-slider { width: 100%; min-width: 0; flex: 1; /* Give the slider track better contrast against backgrounds */ --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e); } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_handleMouseMove",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_handleInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioProgressSlider",
-          "declaration": {
-            "name": "UiAudioProgressSlider",
-            "module": "src/components/atoms/ui-audio-progress-slider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-time-display.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A reactive time display component that shows playback progress.\nConsumes AudioPlayerState from the nearest ui-audio-provider.",
-          "name": "UiAudioTimeDisplay",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "format",
-              "type": {
-                "text": "string"
-              },
-              "default": "'combined'",
-              "description": "Display mode: 'elapsed', 'remaining', or 'combined' (default)."
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "' / '",
-              "description": "The string to use between current and total time in 'combined' mode (default: ' / ')."
-            },
-            {
-              "kind": "field",
-              "name": "compact",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "If true, omits leading zeros and hours for a cleaner look."
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; font-variant-numeric: tabular-nums; font-size: 14px; color: var(--md-sys-color-on-surface-variant, #444); font-family: inherit; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_formatTime",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "seconds",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-audio-time-display",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioTimeDisplay",
-          "declaration": {
-            "name": "UiAudioTimeDisplay",
-            "module": "src/components/atoms/ui-audio-time-display.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-audio-volume-slider.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UiAudioVolumeSlider",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'inline' | 'popover'"
-              },
-              "default": "'inline'"
-            },
-            {
-              "kind": "field",
-              "name": "_isOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host([variant=\"popover\"]) { display: inline-block; width: auto; position: relative; } :host([variant=\"popover\"]) .slider-container { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--md-sys-color-surface-container-high, #e2e2e2); padding: 16px 8px; border-radius: 100px; height: 120px; width: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; } :host([variant=\"popover\"]) .slider-container.open { opacity: 1; visibility: visible; } :host([variant=\"popover\"]) .slider-wrapper { width: 4px; height: 100px; display: flex; align-items: center; justify-content: center; position: relative; } /* Native range input styling for vertical support */ :host([variant=\"popover\"]) input[type=\"range\"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; width: 100px; height: 4px; transform: rotate(-90deg); margin: 0; position: absolute; } :host([variant=\"popover\"]) input[type=\"range\"]::-webkit-slider-runnable-track { background: var(--md-sys-color-primary, #0066cc); height: 4px; border-radius: 2px; } :host([variant=\"popover\"]) input[type=\"range\"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -6px; /* center thumb on track */ background-color: var(--md-sys-color-primary, #0066cc); height: 16px; width: 16px; border-radius: 50%; } :host { display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; } md-slider { flex: 1; min-width: 0; /* Prevent flex overflow */ width: 100%; --md-slider-inactive-track-color: var( --md-sys-color-outline-variant, #c4c7c5 ); } md-icon-button { color: var(--md-sys-color-on-surface-variant, #444); } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_handleInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_toggleMute",
-              "privacy": "private"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioVolumeSlider",
-          "declaration": {
-            "name": "UiAudioVolumeSlider",
-            "module": "src/components/atoms/ui-audio-volume-slider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-message-bubble.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "ATOM: Message Bubble\nA presentational container for chat message text.\nPorted from ElevenLabs 'MessageContent'.",
-          "name": "UiMessageBubble",
-          "members": [
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "string"
-              },
-              "default": "'contained'",
-              "description": "'contained' (default) or 'flat'."
-            },
-            {
-              "kind": "field",
-              "name": "direction",
-              "type": {
-                "text": "string"
-              },
-              "default": "'inbound'",
-              "description": "'inbound' (agent) or 'outbound' (user)."
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-flex; max-width: 85%; font-family: inherit; color-scheme: light dark; } .bubble { display: flex; flex-direction: column; gap: var(--ui-message-bubble-gap, 8px); padding: var(--ui-message-bubble-padding, 14px 18px); font-size: 0.95rem; line-height: 1.5; box-sizing: border-box; transition: background-color 0.2s, color 0.2s; } /* Variant: Contained */ :host([variant='contained']) .bubble { border-radius: var(--ui-message-bubble-radius, 16px); } :host([variant='contained'][direction='inbound']) .bubble { background: var( --ui-message-bubble-inbound-bg, var(--md-sys-color-surface-container-high, #e2e2e2) ); color: var(--md-sys-color-on-surface); border-bottom-left-radius: var(--ui-message-bubble-corner-radius, 4px); } :host([variant='contained'][direction='outbound']) .bubble { background: var( --ui-message-bubble-outbound-bg, var(--md-sys-color-primary, #0066cc) ); color: var(--md-sys-color-on-primary, #ffffff); border-bottom-right-radius: var(--ui-message-bubble-corner-radius, 4px); } /* Variant: Flat */ :host([variant='flat']) .bubble { padding: var(--ui-message-bubble-flat-padding, 8px 0); background: transparent; color: var(--md-sys-color-on-surface); } :host([variant='flat'][direction='outbound']) .bubble { padding: var(--ui-message-bubble-flat-outbound-padding, 12px 16px); background: var(--md-sys-color-surface-container-highest); border-radius: var(--ui-message-bubble-flat-radius, 12px); } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-message-bubble",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiMessageBubble",
-          "declaration": {
-            "name": "UiMessageBubble",
-            "module": "src/components/atoms/ui-message-bubble.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-shimmering-text.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A native Lit WebComponent that provides a shimmering text animation.",
-          "name": "UiShimmeringText",
-          "members": [
-            {
-              "kind": "field",
-              "name": "text",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "duration",
-              "type": {
-                "text": "number"
-              },
-              "default": "2"
-            },
-            {
-              "kind": "field",
-              "name": "delay",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "repeat",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "repeatDelay",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.5"
-            },
-            {
-              "kind": "field",
-              "name": "startOnView",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "once",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "spread",
-              "type": {
-                "text": "number"
-              },
-              "default": "2"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "shimmerColor",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isInView",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_intersectionObserver",
-              "type": {
-                "text": "IntersectionObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; font-family: inherit; } span { position: relative; display: inline-block; --base-color: color-mix( in srgb, var(--md-sys-color-on-surface, #1e1e1e) 20%, transparent ); --shimmer-color: var(--md-sys-color-on-surface, #1e1e1e); --shimmer-bg: linear-gradient( 90deg, transparent calc(50% - var(--spread)), var(--shimmer-color) 50%, transparent calc(50% + var(--spread)) ); background-image: var(--shimmer-bg), linear-gradient(var(--base-color), var(--base-color)); background-size: 250% 100%, auto; background-position: 100% center; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; opacity: 0; transition: opacity 0.3s ease; } span.active { opacity: 1; } @keyframes shimmer { 0% { background-position: 100% center; } 100% { background-position: 0% center; } } `"
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiShimmeringText",
-          "declaration": {
-            "name": "UiShimmeringText",
-            "module": "src/components/atoms/ui-shimmering-text.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-speech-cancel-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UiSpeechCancelButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_context",
-              "type": {
-                "text": "SpeechContext | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; opacity: 0; visibility: hidden; transition: all 0.3s ease; width: 0; overflow: hidden; } :host([active]) { opacity: 1; visibility: visible; width: 40px; } md-icon-button { --md-icon-button-icon-color: var( --md-sys-color-on-surface-variant, #444444 ); } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClick",
-              "privacy": "private"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiSpeechCancelButton",
-          "declaration": {
-            "name": "UiSpeechCancelButton",
-            "module": "src/components/atoms/ui-speech-cancel-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-speech-record-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UiSpeechRecordButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_context",
-              "type": {
-                "text": "SpeechContext | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'sm' | 'default' | 'lg'"
-              },
-              "default": "'default'"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; } md-filled-icon-button { --md-filled-icon-button-container-width: 48px; --md-filled-icon-button-container-height: 48px; --md-filled-icon-button-icon-size: 24px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); } :host([size='sm']) md-filled-icon-button { --md-filled-icon-button-container-width: 32px; --md-filled-icon-button-container-height: 32px; --md-filled-icon-button-icon-size: 18px; } :host([size='lg']) md-filled-icon-button { --md-filled-icon-button-container-width: 64px; --md-filled-icon-button-container-height: 64px; --md-filled-icon-button-icon-size: 32px; } .recording { --md-filled-icon-button-container-color: var( --ui-speech-record-color, var(--md-sys-color-error, #ba1a1a) ); } .processing { --md-filled-icon-button-container-color: var( --ui-speech-processing-color, var(--md-sys-color-secondary, #0066cc) ); animation: pulse 2s infinite; } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClick",
-              "privacy": "private"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiSpeechRecordButton",
-          "declaration": {
-            "name": "UiSpeechRecordButton",
-            "module": "src/components/atoms/ui-speech-record-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-timed-text.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "ATOM: Timed Text\nRenders a transcript with word-level highlighting synchronized to audio playback.\nConsumes AudioPlayerState for timing and transcript data.",
-          "name": "UiTimedText",
-          "members": [
-            {
-              "kind": "field",
-              "name": "playerState",
-              "type": {
-                "text": "AudioPlayerState | undefined"
-              },
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: block; font-family: inherit; line-height: 1.6; } .transcript { display: flex; flex-wrap: wrap; gap: 4px 6px; } .word { transition: all 0.2s ease; color: var( --ui-timed-text-color, var(--md-sys-color-on-surface-variant, #444) ); border-radius: 4px; padding: 0 2px; } .word.active { color: var( --ui-timed-text-active-color, var(--md-sys-color-on-secondary-container, #1d192b) ); background: var( --ui-timed-text-active-bg, var(--md-sys-color-secondary-container, #e8def8) ); transform: scale(1.05); } .word.past { color: var( --ui-timed-text-past-color, var(--md-sys-color-on-surface, #1e1e1e) ); } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "_renderWord",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "word",
-                  "type": {
-                    "text": "TranscriptWord"
-                  }
-                },
-                {
-                  "name": "currentTime",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-timed-text",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiTimedText",
-          "declaration": {
-            "name": "UiTimedText",
-            "module": "src/components/atoms/ui-timed-text.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-typing-dot.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "ATOM: Typing Dot\nA simple animated dot used for typing indicators.",
-          "name": "UiTypingDot",
-          "members": [
-            {
-              "kind": "field",
-              "name": "delay",
-              "type": {
-                "text": "string"
-              },
-              "default": "'0s'",
-              "description": "CSS animation delay (e.g., '0.2s')."
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; } .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ui-typing-dot-color, currentColor); animation: pulse 1.2s infinite ease-in-out; } @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.4; } 50% { transform: scale(1.2); opacity: 1; } } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-typing-dot",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiTypingDot",
-          "declaration": {
-            "name": "UiTypingDot",
-            "module": "src/components/atoms/ui-typing-dot.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/atoms/ui-voice-waveform.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A specialized version of ui-live-waveform that automatically consumes\nstate from a nearby ui-speech-provider.",
-          "name": "UiVoiceWaveform",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_context",
-              "type": {
-                "text": "SpeechContext | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "barWidth",
-              "type": {
-                "text": "number"
-              },
-              "default": "2"
-            },
-            {
-              "kind": "field",
-              "name": "barGap",
-              "type": {
-                "text": "number"
-              },
-              "default": "1"
-            },
-            {
-              "kind": "field",
-              "name": "barColor",
-              "type": {
-                "text": "string"
-              },
-              "default": "'currentColor'"
-            },
-            {
-              "kind": "field",
-              "name": "height",
-              "type": {
-                "text": "number"
-              },
-              "default": "20"
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: block; width: 100%; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "ui-voice-waveform",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiVoiceWaveform",
-          "declaration": {
-            "name": "UiVoiceWaveform",
-            "module": "src/components/atoms/ui-voice-waveform.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/molecules/scream-voice-button.ts",
       "declarations": [
         {
@@ -4537,51 +3528,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/organisms/ui-audio-player.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
-          "name": "UiAudioPlayer",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "AudioPlayerItem | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: var(--ui-audio-player-width, fit-content); max-width: 100%; box-sizing: border-box; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: var(--ui-audio-player-slider-width, 200px); flex: 1; min-width: 50px; display: flex; align-items: center; } `"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UiAudioPlayer",
-          "declaration": {
-            "name": "UiAudioPlayer",
-            "module": "src/components/organisms/ui-audio-player.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/providers/ui-audio-provider.ts",
       "declarations": [
         {
@@ -5090,6 +4036,1060 @@
           "declaration": {
             "name": "UiSpeechProvider",
             "module": "src/components/providers/ui-speech-provider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/organisms/ui-audio-player.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A monolithic backward-compatibility wrapper that renders the classic ElevenLabs\npill-shaped audio player. Internally, it relies completely on the new\ncompound <ui-audio-provider> architecture.",
+          "name": "UiAudioPlayer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "AudioPlayerItem | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: 100%; max-width: 400px; } .player-pill { display: flex; align-items: center; gap: var(--ui-audio-player-gap, 16px); padding: var(--ui-audio-player-padding, 12px 24px); background: var(--md-sys-color-surface-container-high, #e2e2e2); border-radius: 999px; /* Pill shape */ width: var(--ui-audio-player-width, fit-content); max-width: 100%; box-sizing: border-box; font-family: inherit; } .time-container { min-width: 85px; /* prevent jitter when times change */ } .slider-container { width: var(--ui-audio-player-slider-width, 200px); flex: 1; min-width: 50px; display: flex; align-items: center; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayer",
+          "declaration": {
+            "name": "UiAudioPlayer",
+            "module": "src/components/organisms/ui-audio-player.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-next-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An atomic navigation button that triggers the 'next' track in a playlist.\nConsumes the AudioPlayerState from the nearest ui-audio-provider.",
+          "name": "UiAudioNextButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-audio-next-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioNextButton",
+          "declaration": {
+            "name": "UiAudioNextButton",
+            "module": "src/components/atoms/ui-audio-next-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-play-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiAudioPlayButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-flex; position: relative; align-items: center; justify-content: center; font-family: inherit; } md-filled-icon-button { --md-filled-icon-button-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-hover-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-focus-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-pressed-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-toggle-icon-color: var( --md-sys-color-on-primary, #ffffff ); --md-filled-icon-button-selected-container-color: var( --md-sys-color-primary, #0066cc ); --md-filled-icon-button-selected-icon-color: var( --md-sys-color-on-primary, #ffffff ); color: var(--md-sys-color-on-primary, #ffffff); } md-filled-icon-button.error { --md-filled-icon-button-container-color: var( --ui-audio-error-color, var(--md-sys-color-error, #ba1a1a) ); --md-filled-icon-button-icon-color: var(--md-sys-color-on-error, #ffffff); } md-circular-progress { --md-circular-progress-size: 24px; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayButton",
+          "declaration": {
+            "name": "UiAudioPlayButton",
+            "module": "src/components/atoms/ui-audio-play-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-player-error.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An atomic component that displays a visual error indicator and message\nwhen the audio player encounters a resource loading or playback error.",
+          "name": "UiAudioPlayerError",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-flex; align-items: center; color: var(--ui-audio-error-color, var(--md-sys-color-error, #ba1a1a)); font-size: 12px; font-family: inherit; gap: 4px; animation: fadeIn 0.3s ease forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } } .error-icon { font-size: 18px; } .error-text { max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-audio-player-error",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPlayerError",
+          "declaration": {
+            "name": "UiAudioPlayerError",
+            "module": "src/components/atoms/ui-audio-player-error.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-prev-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An atomic navigation button that triggers the 'previous' track in a playlist.\nConsumes the AudioPlayerState from the nearest ui-audio-provider.",
+          "name": "UiAudioPrevButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-audio-prev-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioPrevButton",
+          "declaration": {
+            "name": "UiAudioPrevButton",
+            "module": "src/components/atoms/ui-audio-prev-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-progress-slider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiAudioProgressSlider",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "_isDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_dragValue",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "hoverTimestamp",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_hoverX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_showHover",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_hoverTime",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_sliderEl",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: flex; width: 100%; align-items: center; min-width: 0; position: relative; } .hover-tooltip { position: absolute; top: -32px; transform: translateX(-50%); background: var(--md-sys-color-inverse-surface, #313033); color: var(--md-sys-color-inverse-on-surface, #f4eff4); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; pointer-events: none; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.1s ease; z-index: 100; } .hover-tooltip.show { opacity: 1; visibility: visible; } /* Little downward pointing triangle */ .hover-tooltip::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-width: 4px 4px 0; border-style: solid; border-color: var(--md-sys-color-inverse-surface, #313033) transparent transparent transparent; } md-slider { width: 100%; min-width: 0; flex: 1; /* Give the slider track better contrast against backgrounds */ --md-slider-inactive-track-color: var(--md-sys-color-outline, #79747e); } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleMouseMove",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioProgressSlider",
+          "declaration": {
+            "name": "UiAudioProgressSlider",
+            "module": "src/components/atoms/ui-audio-progress-slider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-time-display.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A reactive time display component that shows playback progress.\nConsumes AudioPlayerState from the nearest ui-audio-provider.",
+          "name": "UiAudioTimeDisplay",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "format",
+              "type": {
+                "text": "string"
+              },
+              "default": "'combined'",
+              "description": "Display mode: 'elapsed', 'remaining', or 'combined' (default)."
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "' / '",
+              "description": "The string to use between current and total time in 'combined' mode (default: ' / ')."
+            },
+            {
+              "kind": "field",
+              "name": "compact",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "If true, omits leading zeros and hours for a cleaner look."
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; font-variant-numeric: tabular-nums; font-size: 14px; color: var(--md-sys-color-on-surface-variant, #444); font-family: inherit; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_formatTime",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "seconds",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-audio-time-display",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioTimeDisplay",
+          "declaration": {
+            "name": "UiAudioTimeDisplay",
+            "module": "src/components/atoms/ui-audio-time-display.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-audio-volume-slider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiAudioVolumeSlider",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'inline' | 'popover'"
+              },
+              "default": "'inline'"
+            },
+            {
+              "kind": "field",
+              "name": "_isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host([variant=\"popover\"]) { display: inline-block; width: auto; position: relative; } :host([variant=\"popover\"]) .slider-container { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--md-sys-color-surface-container-high, #e2e2e2); padding: 16px 8px; border-radius: 100px; height: 120px; width: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; } :host([variant=\"popover\"]) .slider-container.open { opacity: 1; visibility: visible; } :host([variant=\"popover\"]) .slider-wrapper { width: 4px; height: 100px; display: flex; align-items: center; justify-content: center; position: relative; } /* Native range input styling for vertical support */ :host([variant=\"popover\"]) input[type=\"range\"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; width: 100px; height: 4px; transform: rotate(-90deg); margin: 0; position: absolute; } :host([variant=\"popover\"]) input[type=\"range\"]::-webkit-slider-runnable-track { background: var(--md-sys-color-primary, #0066cc); height: 4px; border-radius: 2px; } :host([variant=\"popover\"]) input[type=\"range\"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -6px; /* center thumb on track */ background-color: var(--md-sys-color-primary, #0066cc); height: 16px; width: 16px; border-radius: 50%; } :host { display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; } md-slider { flex: 1; min-width: 0; /* Prevent flex overflow */ width: 100%; --md-slider-inactive-track-color: var( --md-sys-color-outline-variant, #c4c7c5 ); } md-icon-button { color: var(--md-sys-color-on-surface-variant, #444); } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_toggleMute",
+              "privacy": "private"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiAudioVolumeSlider",
+          "declaration": {
+            "name": "UiAudioVolumeSlider",
+            "module": "src/components/atoms/ui-audio-volume-slider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-message-bubble.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "ATOM: Message Bubble\nA presentational container for chat message text.\nPorted from ElevenLabs 'MessageContent'.",
+          "name": "UiMessageBubble",
+          "members": [
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "'contained'",
+              "description": "'contained' (default) or 'flat'."
+            },
+            {
+              "kind": "field",
+              "name": "direction",
+              "type": {
+                "text": "string"
+              },
+              "default": "'inbound'",
+              "description": "'inbound' (agent) or 'outbound' (user)."
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-flex; max-width: 85%; font-family: inherit; color-scheme: light dark; } .bubble { display: flex; flex-direction: column; gap: var(--ui-message-bubble-gap, 8px); padding: var(--ui-message-bubble-padding, 14px 18px); font-size: 0.95rem; line-height: 1.5; box-sizing: border-box; transition: background-color 0.2s, color 0.2s; } /* Variant: Contained */ :host([variant='contained']) .bubble { border-radius: var(--ui-message-bubble-radius, 16px); } :host([variant='contained'][direction='inbound']) .bubble { background: var( --ui-message-bubble-inbound-bg, var(--md-sys-color-surface-container-high, #e2e2e2) ); color: var(--md-sys-color-on-surface); border-bottom-left-radius: var(--ui-message-bubble-corner-radius, 4px); } :host([variant='contained'][direction='outbound']) .bubble { background: var( --ui-message-bubble-outbound-bg, var(--md-sys-color-primary, #0066cc) ); color: var(--md-sys-color-on-primary, #ffffff); border-bottom-right-radius: var(--ui-message-bubble-corner-radius, 4px); } /* Variant: Flat */ :host([variant='flat']) .bubble { padding: var(--ui-message-bubble-flat-padding, 8px 0); background: transparent; color: var(--md-sys-color-on-surface); } :host([variant='flat'][direction='outbound']) .bubble { padding: var(--ui-message-bubble-flat-outbound-padding, 12px 16px); background: var(--md-sys-color-surface-container-highest); border-radius: var(--ui-message-bubble-flat-radius, 12px); } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-message-bubble",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiMessageBubble",
+          "declaration": {
+            "name": "UiMessageBubble",
+            "module": "src/components/atoms/ui-message-bubble.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-shimmering-text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A native Lit WebComponent that provides a shimmering text animation.",
+          "name": "UiShimmeringText",
+          "members": [
+            {
+              "kind": "field",
+              "name": "text",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "duration",
+              "type": {
+                "text": "number"
+              },
+              "default": "2"
+            },
+            {
+              "kind": "field",
+              "name": "delay",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "repeat",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "repeatDelay",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.5"
+            },
+            {
+              "kind": "field",
+              "name": "startOnView",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "once",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "spread",
+              "type": {
+                "text": "number"
+              },
+              "default": "2"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "shimmerColor",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isInView",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_intersectionObserver",
+              "type": {
+                "text": "IntersectionObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; font-family: inherit; } span { position: relative; display: inline-block; --base-color: color-mix( in srgb, var(--md-sys-color-on-surface, #1e1e1e) 20%, transparent ); --shimmer-color: var(--md-sys-color-on-surface, #1e1e1e); --shimmer-bg: linear-gradient( 90deg, transparent calc(50% - var(--spread)), var(--shimmer-color) 50%, transparent calc(50% + var(--spread)) ); background-image: var(--shimmer-bg), linear-gradient(var(--base-color), var(--base-color)); background-size: 250% 100%, auto; background-position: 100% center; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; opacity: 0; transition: opacity 0.3s ease; } span.active { opacity: 1; } @keyframes shimmer { 0% { background-position: 100% center; } 100% { background-position: 0% center; } } `"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiShimmeringText",
+          "declaration": {
+            "name": "UiShimmeringText",
+            "module": "src/components/atoms/ui-shimmering-text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-speech-cancel-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiSpeechCancelButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; opacity: 0; visibility: hidden; transition: all 0.3s ease; width: 0; overflow: hidden; } :host([active]) { opacity: 1; visibility: visible; width: 40px; } md-icon-button { --md-icon-button-icon-color: var( --md-sys-color-on-surface-variant, #444444 ); } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiSpeechCancelButton",
+          "declaration": {
+            "name": "UiSpeechCancelButton",
+            "module": "src/components/atoms/ui-speech-cancel-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-speech-record-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UiSpeechRecordButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'sm' | 'default' | 'lg'"
+              },
+              "default": "'default'"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } md-filled-icon-button { --md-filled-icon-button-container-width: 48px; --md-filled-icon-button-container-height: 48px; --md-filled-icon-button-icon-size: 24px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); } :host([size='sm']) md-filled-icon-button { --md-filled-icon-button-container-width: 32px; --md-filled-icon-button-container-height: 32px; --md-filled-icon-button-icon-size: 18px; } :host([size='lg']) md-filled-icon-button { --md-filled-icon-button-container-width: 64px; --md-filled-icon-button-container-height: 64px; --md-filled-icon-button-icon-size: 32px; } .recording { --md-filled-icon-button-container-color: var( --ui-speech-record-color, var(--md-sys-color-error, #ba1a1a) ); } .processing { --md-filled-icon-button-container-color: var( --ui-speech-processing-color, var(--md-sys-color-secondary, #0066cc) ); animation: pulse 2s infinite; } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiSpeechRecordButton",
+          "declaration": {
+            "name": "UiSpeechRecordButton",
+            "module": "src/components/atoms/ui-speech-record-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-timed-text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "ATOM: Timed Text\nRenders a transcript with word-level highlighting synchronized to audio playback.\nConsumes AudioPlayerState for timing and transcript data.",
+          "name": "UiTimedText",
+          "members": [
+            {
+              "kind": "field",
+              "name": "playerState",
+              "type": {
+                "text": "AudioPlayerState | undefined"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; font-family: inherit; line-height: 1.6; } .transcript { display: flex; flex-wrap: wrap; gap: 4px 6px; } .word { transition: all 0.2s ease; color: var( --ui-timed-text-color, var(--md-sys-color-on-surface-variant, #444) ); border-radius: 4px; padding: 0 2px; } .word.active { color: var( --ui-timed-text-active-color, var(--md-sys-color-on-secondary-container, #1d192b) ); background: var( --ui-timed-text-active-bg, var(--md-sys-color-secondary-container, #e8def8) ); transform: scale(1.05); } .word.past { color: var( --ui-timed-text-past-color, var(--md-sys-color-on-surface, #1e1e1e) ); } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "_renderWord",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "word",
+                  "type": {
+                    "text": "TranscriptWord"
+                  }
+                },
+                {
+                  "name": "currentTime",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-timed-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiTimedText",
+          "declaration": {
+            "name": "UiTimedText",
+            "module": "src/components/atoms/ui-timed-text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-typing-dot.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "ATOM: Typing Dot\nA simple animated dot used for typing indicators.",
+          "name": "UiTypingDot",
+          "members": [
+            {
+              "kind": "field",
+              "name": "delay",
+              "type": {
+                "text": "string"
+              },
+              "default": "'0s'",
+              "description": "CSS animation delay (e.g., '0.2s')."
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ui-typing-dot-color, currentColor); animation: pulse 1.2s infinite ease-in-out; } @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.4; } 50% { transform: scale(1.2); opacity: 1; } } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-typing-dot",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiTypingDot",
+          "declaration": {
+            "name": "UiTypingDot",
+            "module": "src/components/atoms/ui-typing-dot.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/atoms/ui-voice-waveform.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A specialized version of ui-live-waveform that automatically consumes\nstate from a nearby ui-speech-provider.",
+          "name": "UiVoiceWaveform",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_context",
+              "type": {
+                "text": "SpeechContext | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "barWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "2"
+            },
+            {
+              "kind": "field",
+              "name": "barGap",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "barColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "'currentColor'"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "20"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; width: 100%; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ui-voice-waveform",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UiVoiceWaveform",
+          "declaration": {
+            "name": "UiVoiceWaveform",
+            "module": "src/components/atoms/ui-voice-waveform.ts"
           }
         }
       ]
